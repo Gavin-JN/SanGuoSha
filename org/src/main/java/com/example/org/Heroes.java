@@ -4,73 +4,6 @@ import java.util.List;
 
 public class Heroes {
 
-    //手牌数量
-    private double cards;
-    //体力
-    private double blood;
-    //装备，之后用类型改为card
-    private double equipmentNumber;
-    //还有一个私有属性为玩家的卡牌数量列表
-
-
-    //初始化每位武将的公共属性
-    public Heroes(int cards, int blood) {
-        this.cards = cards;
-        this.blood = blood;
-        this.equipmentNumber = 0;  // 初始化为没有装备
-    }
-
-    //判断武将武器库内是否有武器
-     public boolean ifEquipment()
-     {
-        if(getEquipmentNumber()!=0)
-        {
-            return true;
-        }
-        return false;
-     }
-
-     public int showEquipment()
-     {
-         if(ifEquipment())
-         {
-             return 1;//替换为装备武器的ID
-         }
-         else return 0;
-     }
-
-     public boolean ifHaveBlood()   //判断当前武将是否还有体力
-     {
-         if(getBlood()!=0) {
-             return true;
-         }
-         return false;
-     }
-
-
-    public double getEquipmentNumber() {
-        return equipmentNumber;
-    }
-
-    public void setEquipmentNumber(double equipmentNumber) {
-        this.equipmentNumber = equipmentNumber;
-    }
-
-    public double getCards() {
-        return cards;
-    }
-
-    public void setCards(double cards) {
-        this.cards = cards;
-    }
-
-    public double getBlood() {
-        return blood;
-    }
-
-    public void setBlood(double blood) {
-        this.blood = blood;
-    }
 }
 
 class sunQuan extends Heroes {
@@ -81,7 +14,7 @@ class sunQuan extends Heroes {
     }
 
     //1、制衡。弃任意牌，摸等量牌，每回合一次
-    public void zhiheng(int discardCards){  //制衡（使用制衡之前要先判断玩家是否还有牌）{
+    public void zhiheng(Player player,int discardCards){  //制衡（使用制衡之前要先判断玩家是否还有牌）{
         if (balanceUsed) {
             System.out.println("本回合制衡已经使用过了！");
             return;
@@ -94,6 +27,7 @@ class sunQuan extends Heroes {
         // 弃牌并摸等量牌
         setCards(getCards() - discardCards);
         // 模拟摸等量牌  【摸排：从剩余卡堆中获得等量的卡牌数量加入到玩家目前已有的卡牌列表中】
+
         setCards(getCards() + discardCards);
         balanceUsed = true;
         System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
