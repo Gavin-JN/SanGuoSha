@@ -7,6 +7,7 @@ public class Heroes {
 }
 
 class sunQuan extends Heroes {
+
     private boolean balanceUsed=false;  // 布尔类型用于记录记录制衡是否已使用,初始化为未使用过制衡
 
     //1、制衡。弃任意牌，摸等量牌，每回合一次
@@ -23,7 +24,7 @@ class sunQuan extends Heroes {
         // 弃牌并摸等量牌
         player.setHandCardList();
         // 摸等量牌  【摸排：从剩余卡堆中获得等量的卡牌数量加入到玩家目前已有的卡牌列表中】
-
+        player.DrawCard()
         balanceUsed = true;
         System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
     }
