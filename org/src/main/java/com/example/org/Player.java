@@ -17,6 +17,50 @@ public class Player {
         this.volume = volume;
     }
 
+    public int getHeroId() {
+        return heroId;
+    }
+
+    public void setHeroId(int heroId) {
+        this.heroId = heroId;
+    }
+
+    public void setSeatId(int seatId) {
+        this.seatId = seatId;
+    }
+
+    public List<Card> getHandCardList() {
+        return handCardList;
+    }
+
+    public void setHandCardList(List<Card> handCardList) {
+        this.handCardList = handCardList;
+    }
+
+    public List<Card> getEquipCardList() {
+        return equipCardList;
+    }
+
+    public void setEquipCardList(List<Card> equipCardList) {
+        this.equipCardList = equipCardList;
+    }
+
+    public List<Card> getJudgeCardList() {
+        return judgeCardList;
+    }
+
+    public void setJudgeCardList(List<Card> judgeCardList) {
+        this.judgeCardList = judgeCardList;
+    }
+
+    public int getAttackDistance() {
+        return attackDistance;
+    }
+
+    public void setAttackDistance(int attackDistance) {
+        this.attackDistance = attackDistance;
+    }
+
     public int getSeatId() {
         return seatId;
     }
