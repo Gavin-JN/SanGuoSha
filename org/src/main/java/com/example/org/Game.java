@@ -1,5 +1,5 @@
 package com.example.org;
-
+///
 public class Game {
     private int round;
     enum gameStatus {judgeStatus,drawStatus,playStatus,discardStatus,responseStatus,rescueStatus};
