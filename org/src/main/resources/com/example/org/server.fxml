@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="510.0" prefWidth="679.0"
+            xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.org.controller.ServerController">
+   <children>
+      <AnchorPane layoutX="29.0" layoutY="20.0" prefHeight="455.0" prefWidth="614.0">
+         <children>
+            <Button onAction="#startServer" fx:id="btnStart" layoutX="34.0" layoutY="48.0" mnemonicParsing="false" prefHeight="141.0" prefWidth="152.0" text="启动游戏服务器" />
+            <Button fx:id="btnStop" layoutX="227.0" layoutY="48.0" mnemonicParsing="false" prefHeight="141.0" prefWidth="161.0" text="关闭游戏服务器" />
+            <Button fx:id="btnStatus" layoutX="432.0" layoutY="48.0" mnemonicParsing="false" prefHeight="141.0" prefWidth="152.0" text="查看服务器状态" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
