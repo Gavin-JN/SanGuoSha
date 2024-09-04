@@ -15,6 +15,22 @@ public class Card {
 
    public Card() {
    }
+
+   public int getId() {
+      return id;
+   }
+
+   public void setId(int id) {
+      this.id = id;
+   }
+
+   public int getTypeId() {
+      return typeId;
+   }
+
+   public void setTypeId(int typeId) {
+      this.typeId = typeId;
+   }
 }
 
 /*所有牌共100张，
@@ -22,6 +38,8 @@ public class Card {
 锦囊牌类：顺手牵羊5张，过河拆桥6张，无中生有4张，借刀杀人2张，决斗3张，无懈可击3张，
         乐不思蜀3张，兵粮寸断2张，南蛮入侵3张，万箭齐发1张；
 装备牌类：诸葛连弩2张，寒冰剑1张，古锭刀1张，青龙偃月刀1张，丈八蛇矛1张，+1马2张，-1马2张。*/
+
+
 
 /*杀：出牌阶段对敌方使用，可造成一点伤害，可在对方决斗，南蛮入侵，借刀杀人时打出，
     一般情况下每回合仅可使用1张，id 0~29 ，typeId 1 */
@@ -38,7 +56,7 @@ class Sha extends Card{
             }
          }
       }
-      else return false;
+       return false;
    }
 
    public boolean IsAttackValid(int seatId){
