@@ -45,9 +45,11 @@ public class Card {
     一般情况下每回合仅可使用1张，id 0~29 ，typeId 1 */
 class Sha extends Card{
    private int times;
+
    public Sha(int typeId) {
       super(typeId);
    }
+
    public boolean IsShaInitiate(){
       if(CurrentRound==seatId){
          if(CurrentStatus==PlayStatus){

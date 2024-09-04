@@ -87,7 +87,7 @@ public class Player {
     }
 
     //抽牌
-    public int  DrawCard(List<Card> cards,int num){   //cards为当前这局游戏的剩余的所有的待摸牌
+    public int  DrawCard(List<Card> cards){   //cards为当前这局游戏的剩余的所有的待摸牌
         Collections.shuffle(cards);  //打乱剩余牌的次序
         if(!cards.isEmpty())
         {
