@@ -89,7 +89,7 @@ class Sha extends Card{
                }
             }
          }
-         return isValid
+         return isValid;
    }
    public void UseSha(int seatId){
       if(IsAttackValid(seatId)); //choose whether to use;

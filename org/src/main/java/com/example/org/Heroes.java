@@ -36,9 +36,9 @@ class sunQuan extends Heroes {
 class  caoCao extends Heroes {
     //1、奸雄。获得对自己造成伤害的牌
     // (当角色收到伤害的时候调用该函数）
-    public void jianXiong(String card) {
+    public void jianXiong(Card card,Player player) {  //card为对对该角色造成伤害的卡牌
         // 获得对自己造成伤害的牌
-        setCards(getCards() + 1);  // 模拟获得一张牌
+        player.getHandCardList().add(card);  // 模拟获得一张牌
         System.out.println("曹操发动奸雄，获得了" + card + "牌。");
     }
 }
