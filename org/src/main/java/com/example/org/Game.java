@@ -13,5 +13,9 @@ public class Game {
         return status;
     }
     public void CardHandle(int source,int target, int typeId){
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6880b873136ab6792d23c32f2be526361f2b8415
     }
 }
