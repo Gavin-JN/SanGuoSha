@@ -46,7 +46,7 @@ public class Player {
     public int  DrawCard(List<Card> cards,int num){   //cards为当前这局游戏的剩余的所有的待摸牌
         Collections.shuffle(cards);  //打乱剩余牌的次序
         if(!cards.isEmpty())
-        {//
+        {
             Card GetCard=cards.remove(0);
             int typeOfCard=GetCard.getTypeId();
             return typeOfCard;  //返回所抽中卡片的类型编号
