@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class fireWindow extends Parent {
 
@@ -67,7 +68,7 @@ public class fireWindow extends Parent {
         //记录选中卡片的编号
         List<Integer> checkedCards = new ArrayList<Integer>();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
             Image imageCard = new Image(getClass().getResourceAsStream("img/card.png"));
@@ -76,18 +77,33 @@ public class fireWindow extends Parent {
             cardPane.setBackground(cardBackground);
             cardPane.setLayoutX(340 + i * 110);
             cardPane.setLayoutY(0);
+
             cardPane.setOnMouseEntered(event -> {
-                cardPane.setLayoutY(-20);
+             cardPane.setLayoutY(-20);
             });
             ;
             cardPane.setOnMouseExited(event2 -> {
                 cardPane.setLayoutY(0);
+
             });
             int finalI = i;
-            cardPane.setOnMouseClicked(event -> {
-                cardPane.setTranslateY(-38);
+            Integer finaLi=i;
+            AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
 
-                checkedCards.add(finalI);
+            cardPane.setOnMouseClicked(event -> {
+                if(!isClicked.get()) {
+                    cardPane.setTranslateY(-38);
+                    isClicked.set(true);
+
+                    System.out.println(finalI);
+
+                    checkedCards.add(finalI);
+                }
+                else {
+                    cardPane.setTranslateY(0);
+                    isClicked.set(false);
+                    checkedCards.remove(finaLi);
+                }
                 //被点击后标记事件，即该张牌可能会出
             });
             player1Pane.getChildren().add(cardPane);
@@ -101,7 +117,7 @@ public class fireWindow extends Parent {
         BackgroundImage heroImage2 = new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background heroBackground2 = new Background(heroImage2);
         heroCardPane2.setBackground(heroBackground2);
-        heroCardPane2.setLayoutX(300);
+        heroCardPane2.setLayoutX(450);
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
 
@@ -113,7 +129,7 @@ public class fireWindow extends Parent {
             BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCardBack);
             Background cardBackground = new Background(cardImage);
             cardPane.setBackground(cardBackground);
-            cardPane.setLayoutX(450 + i * 40);
+            cardPane.setLayoutX(650 + i * 45);
             cardPane.setLayoutY(0);
             player2Pane.getChildren().add(cardPane);
         }
@@ -123,35 +139,41 @@ public class fireWindow extends Parent {
         Button up = new Button();
         up.setPrefSize(80, 40);
         up.setText("出牌");
-        up.setLayoutX(200);
+        up.setLayoutX(250);
         up.setLayoutY(320);
         up.backgroundProperty();
         up.setStyle("-fx-background-color: #000fff");
         up.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         up.setOnAction(event -> {
             System.out.println("决定出牌");
-            //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
 
+            for(int i=0;i<checkedCards.size();i++) {
+                System.out.println(checkedCards.get(i));
+            }
+
+            //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
+            checkedCards.clear();
         });
 
         //结束回合按钮
         Button down = new Button();
         down.setPrefSize(80, 40);
         down.setText("结束回合");
-        down.setLayoutX(600);
+        down.setLayoutX(850);
         down.setLayoutY(320);
         down.backgroundProperty();
         down.setStyle("-fx-background-color: #000fff");
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         down.setOnAction(event -> {
             System.out.println("回合结束进入下一回合");
+            checkedCards.clear();
         });
 
         //弃牌按钮
         Button fold = new Button();
         fold.setPrefSize(80, 40);
-        fold.setText("结束回合");
-        fold.setLayoutX(400);
+        fold.setText("决定弃牌");
+        fold.setLayoutX(550);
         fold.setLayoutY(320);
         fold.backgroundProperty();
         fold.setStyle("-fx-background-color: #000fff");
@@ -159,6 +181,7 @@ public class fireWindow extends Parent {
         fold.setOnAction(event -> {
             System.out.println("决定弃牌");
             //将checkedCard列表中的编号的卡牌从玩家目前已有的卡牌中remove
+            checkedCards.clear();
 
         });
 
@@ -174,15 +197,18 @@ public class fireWindow extends Parent {
         back.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         back.setOnAction(event -> {
             System.out.println("返回开始页面");
+            checkedCards.clear();
         });
 
 
         player2Pane.getChildren().add(back);
         gameAreaPane.getChildren().add(up);
         gameAreaPane.getChildren().add(down);
+        gameAreaPane.getChildren().add(fold);
+
 
         //设置Scane和Stage的大小
-        Scene scene = new Scene(root, 1000, 700);
+        Scene scene = new Scene(root, 1250, 700);
         Stage stage = new Stage();
         stage.setMaxWidth(1000);
         stage.setMaxHeight(700);
