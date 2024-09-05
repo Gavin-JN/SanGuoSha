@@ -136,6 +136,7 @@ public class Player {
         if(!IsAbleToPlay()) return;
         if(!CheckHandCardList()) return;
         do{
+
         }while(AbandonPlayCard()==true||!CheckHandCardList());
     }
     public void UseCard(int typeId){         //选取手牌区牌并将其typeId作为参数

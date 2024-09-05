@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 
 public class RegController {
 
@@ -41,7 +40,7 @@ public class RegController {
             StackPane stackPane = new StackPane();
 
             // 设置背景图
-            Image backgroundImage = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("images/bg.png"))); // 确保图片路径正确
+            Image backgroundImage = new Image(this.getClass().getResourceAsStream("images/bg.png")); // 确保图片路径正确
 
             BackgroundImage background = new BackgroundImage(
                     backgroundImage,
