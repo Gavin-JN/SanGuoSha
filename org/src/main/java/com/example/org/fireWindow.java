@@ -2,6 +2,7 @@ package com.example.org;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -101,6 +102,10 @@ public class fireWindow extends Parent {
             cardPane.setLayoutY(0);
             player2Pane.getChildren().add(cardPane);
         }
+
+        Button up=new Button();
+        up.setText("出牌");
+        
 
         //设置Scane和Stage的大小
         Scene scene=new Scene(root,1000,700);
