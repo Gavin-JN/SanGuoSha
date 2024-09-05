@@ -187,10 +187,10 @@ public class Heroes {
 
                 //遗计——你每受到1点伤害，可摸两张牌
                 //当受到伤害时该技能直接发动
-                public void yiJi() {
+                public void yiJi(Player player) {
+
                 }
-                //参数为指定给予手牌的两名玩家
-                //获得两张牌\
+
             }
         }
     }

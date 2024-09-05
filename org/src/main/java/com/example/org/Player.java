@@ -110,8 +110,12 @@ public class Player {
     }
 
     public boolean IsAbleToDraw(){
-        //若兵粮寸断判定成功则返回false
-        return true;
+        //若兵粮寸断判定成功则返回false,弹出一张非梅花牌图片及“兵粮寸断生效”字样
+        if(Math.random()>0.75)
+                    return false;
+
+        else  //弹出一张梅花牌图片及“兵粮寸断失效”字样
+                   return true;
     }
 
     //抽牌
@@ -134,8 +138,12 @@ public class Player {
 
 
     public boolean IsAbleToPlay(){
-        //若乐不思蜀判定成功则返回false
-        return true;
+        //若乐不思蜀判定成功则返回false ，弹出一张非红桃牌及“乐不思蜀生效”字样
+        if(Math.random()>0.75)
+            return false;
+
+        else  //弹出一张红桃牌及“乐不思蜀失效”字样
+            return true;
     }
 
     public void PlayCard(){
