@@ -20,15 +20,6 @@ public class Card {
    public boolean RequireTarget(){
       return false;
    }
-   public void Use(){
-
-   }
-   public void RespWithTarget(Player player, Player targetPlayer, int typeId){
-
-   }
-   public void RespWithoutTarget(Player player , int typeId){
-
-   }
 }
 
 /*所有牌共99张，

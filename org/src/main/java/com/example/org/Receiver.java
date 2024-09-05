@@ -1,5 +1,6 @@
 package com.example.org;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Receiver {
@@ -35,9 +36,18 @@ public class Receiver {
             }
         }
         player.setHandCardList(newHandCardList);
-        card.RespWithTarget(player,targetPlayer,typeId);
+        room.RespWithTarget(player,targetPlayer,typeId);
     }
-
+    public boolean CheckPlayCard(Player player,int typeId) {
+        if (room.respPlayers.contains(player) && room.respPlayers.get(0) == player) return true;
+        if (room.turn == player.getSeatId()) return true;
+        ArrayList<Integer> handCardTypeId = new ArrayList<>();
+        for(int i=0;i<player.getHandCardList().size();i++){
+            handCardTypeId.add(player.getHandCardList().get(i).getTypeId());
+            if(!handCardTypeId.contains(typeId)) return false;
+        }
+        return false;
+    }
     public void PlayCardWithoutTarget(Player player,int typeId){
 
     }

@@ -62,12 +62,20 @@ public class Room {
         for (Player player : players) {
             List<Card> cardList1 = new ArrayList<>();
             for(int i=0;i<4;i++){
-                cardList1.add(i,new Card(player.DrawCard(cardList)));
+                cardList1.add(new Card(player.DrawCard(cardList)));
             }
             player.setHandCardList(cardList1);
         }
     }
     public Player getPlayerBySeatId(int seatId){
         return players.get(seatId);
+    }
+    public void RespWithTarget(Player player,Player targetPlayer,int typeId){
+        getRoom().respPlayers.add(targetPlayer);
+        getRoom().setStatus(roomStatus.ResponseStatus);
+        getRoom().curretCard= new Card(typeId);
+    }
+    public void RespWithoutTarget(Player player,int typeId){
+
     }
 }
