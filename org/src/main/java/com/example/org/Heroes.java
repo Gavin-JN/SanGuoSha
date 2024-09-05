@@ -57,10 +57,10 @@ class sunQuan extends Heroes {
         player.DrawCard();
         balanceUsed = true;
         System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
-=======
+
     public Heroes(Player player) {
         this.player = player;
->>>>>>> 40086650255f8818e99091ae0fcf878691ba904d
+
     }
 
     public Player getPlayer() {
