@@ -1,5 +1,6 @@
 package com.example.org;
 
+import java.net.HttpRetryException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -9,9 +10,17 @@ public class Player {
     private List<Card> handCardList;
     private List<Card> equipCardList;
     private List<Card> judgeCardList;
+
     private int hp;
-    private int hpLimit;
-    private int attackDistance;
+    //    final static int hp= ;设置一个静态变量代表当前血量
+    private int hpLimit;//血量上限
+    //血量
+    public void setHp(){
+
+    }
+    public void setHpLimit(){
+
+    }
     public int getHp() {
         return hp;
     }
@@ -19,6 +28,9 @@ public class Player {
     public int getHpLimit() {
         return hpLimit;
     }
+
+    private int attackDistance;
+
 
     public int getCardsNum(){
         return handCardList.size();
@@ -110,7 +122,10 @@ public class Player {
         if(!IsAbleToPlay()) return;
         if(!CheckHandCardList()) return;
         do{
+<<<<<<< HEAD
 
+=======
+>>>>>>> 677db82c613e69db1d6127f3111c932e0bac9b9e
         }while(AbandonPlayCard()==true||!CheckHandCardList());
     }
     public void UseCard(int typeId){         //选取手牌区牌并将其typeId作为参数
@@ -125,9 +140,14 @@ public class Player {
         return true;
     }
     public void Discard(){
+        if(this.getCardsNum()>this.getHp())
+            for(int i=0;i<handCardList.size();i++)
+             handCardList.remove(this.getHp()+i);//暂时设定弃掉超过血量范围的牌，后续设置可选取
+        this.setHandCardList(handCardList);//更新当前手牌
 
     }
-    public boolean IsSkillInitiate(){
+    public boolean IsSkillInitiate(Heroes hero){
+
         return true;
     }
     public boolean CheckHandCardList(){
