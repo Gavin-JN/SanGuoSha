@@ -104,20 +104,30 @@ public class Player {
     }
 
     public void PlayCard(){
-    }
+        if(!IsAbleToPlay()) return;
+        if(!CheckHandCardList()) return;
+        if(!AbandonPlayCard()) return;
 
+    }
     public boolean IsPlayFinish(){
         return true;
     }
-
-    public boolean IsRequireDisCard(){
+    public boolean IsRequireDiscard(){
         return true;
     }
+    public void Discard(){
 
-    public void DisCard(){
     }
     public boolean IsSkillInitiate(){
         return true;
     }
-
+    public boolean CheckHandCardList(){
+        for(int i=0;i<handCardList.size();i++){
+            if(handCardList.get(i).CanInitiative()) return true;
+        }
+        return false;
+    }
+    public boolean AbandonPlayCard(){
+        return false;
+    }
 }
