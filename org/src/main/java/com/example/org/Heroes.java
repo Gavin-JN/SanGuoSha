@@ -24,7 +24,7 @@ class sunQuan extends Heroes {
         // 弃牌并摸等量牌
         player.setHandCardList();
         // 摸等量牌  【摸排：从剩余卡堆中获得等量的卡牌数量加入到玩家目前已有的卡牌列表中】
-        player.DrawCard()
+        player.DrawCard();
         balanceUsed = true;
         System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
     }
@@ -75,8 +75,8 @@ class zhangFei extends Heroes {
 class  zhuGeLiang extends Heroes {
   //空城——锁定技，当你没有手牌时，你不能成为【杀】或【决斗】的目标。◆当你在“决斗”过程中没有手牌无法打出杀时，你仍然会受到【决斗】的伤害。
   //返回的布尔类型决定角色是否可以被杀
-  public boolean kongCheng() {
-      if (getCards() == 0) {
+  public boolean kongCheng(Player player) {
+      if (player.getCardsNum() == 0) {
           System.out.println("诸葛亮发动了空城，不能成为杀或决斗的目标。");
           return true;
       }
@@ -117,10 +117,10 @@ class daQiao extends Heroes {
 }
 
 class  guoJia  extends Heroes {
-  //遗计——你每受到1点伤害，可摸两张牌，将其中的一张交给任意一名角色，然后将另一张交给任意一名角色。
-  //当受到伤害时该技能主动发动
+  //遗计——你每受到1点伤害，可摸两张牌
+  //当受到伤害时该技能直接发动
   public void yiJi()  //参数为指定给予手牌的两名玩家
   {
-   //指定两名玩家的手牌+1
+   //获得两张牌
   }
 }
