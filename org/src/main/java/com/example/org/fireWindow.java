@@ -118,20 +118,27 @@ public class fireWindow extends Parent {
         up.setPrefSize(80,40);
         up.setText("出牌");
         up.setLayoutX(300);
-        up.setLayoutY(340);
+        up.setLayoutY(320);
         up.backgroundProperty();
         up.setStyle("-fx-background-color: #000fff");
         up.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
+        up.setOnAction(event -> {
+            System.out.println("决定出牌");
+        });
 
         //结束回合按钮
         Button down=new Button();
         down.setPrefSize(80,40);
         down.setText("结束回合");
         down.setLayoutX(600);
-        down.setLayoutY(340);
+        down.setLayoutY(320);
         down.backgroundProperty();
         down.setStyle("-fx-background-color: #000fff");
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
+        down.setOnAction(event -> {
+            System.out.println("回合结束进入下一回合");
+        });
+
 
         //返回按钮
         Button back=new Button();
@@ -142,11 +149,16 @@ public class fireWindow extends Parent {
         back.backgroundProperty();
         back.setStyle("-fx-background-color: #000fff");
         back.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
+        back.setOnAction(event -> {
+            System.out.println("返回开始页面");
+        });
+
+
+
 
         player2Pane.getChildren().add(back);
         gameAreaPane.getChildren().add(up);
         gameAreaPane.getChildren().add(down);
-
 
         //设置Scane和Stage的大小
         Scene scene=new Scene(root,1000,700);
