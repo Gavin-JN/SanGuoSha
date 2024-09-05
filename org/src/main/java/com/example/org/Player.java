@@ -98,8 +98,9 @@ public class Player {
     public void PlayCard(){
         if(!IsAbleToPlay()) return;
         if(!CheckHandCardList()) return;
-        if(!AbandonPlayCard()) return;
+        do{
 
+        }while(AbandonPlayCard()==true||!CheckHandCardList());
     }
     public boolean IsPlayFinish(){
         return true;
@@ -120,6 +121,7 @@ public class Player {
         return false;
     }
     public boolean AbandonPlayCard(){
+        if(IsAbandonPlay()) return true;
         return false;
     }
 }
