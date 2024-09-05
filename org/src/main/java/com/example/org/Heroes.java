@@ -38,6 +38,7 @@ public class Heroes {
     Player player;    //将武将与玩家绑定
 
 
+
     class sunQuan extends Heroes {
         private boolean balanceUsed = false;  // 布尔类型用于记录记录制衡是否已使用,初始化为未使用过制衡
 

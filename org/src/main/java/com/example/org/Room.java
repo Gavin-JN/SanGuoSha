@@ -57,5 +57,12 @@ public class Room {
         cardList=new ArrayList<>();
         sid=1;
     }
-
+    public void InitHandCard(){
+        for (Player player : players) {
+            List<Card> cardList1 = new ArrayList<>();
+            for(int i=0;i<4;i++){
+                cardList1.add(i,new Card(player.DrawCard(CardManager.cardsPile)));
+            }
+        }
+    }
 }
