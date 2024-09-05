@@ -132,4 +132,7 @@ public class CardManager {
 
     }
 
+//    public InitHandCard();
+
+
 }
