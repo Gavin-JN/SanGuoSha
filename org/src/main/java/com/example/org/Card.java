@@ -22,11 +22,11 @@ public class Card {
    }
 }
 
-/*所有牌共100张，
+/*所有牌共99张，
 基本牌类：杀30张，闪15张，桃8张，酒5张；
 锦囊牌类：顺手牵羊5张，过河拆桥6张，无中生有4张，借刀杀人2张，决斗3张，无懈可击3张，
         乐不思蜀3张，兵粮寸断2张，南蛮入侵3张，万箭齐发1张；
-装备牌类：诸葛连弩2张，寒冰剑1张，古锭刀1张，青龙偃月刀1张，丈八蛇矛1张，+1马2张，-1马2张。*/
+装备牌类：诸葛连弩2张，寒冰剑1张，古锭刀1张，青龙偃月刀1张，+1马2张，-1马2张。*/
 
 /*杀：出牌阶段对敌方使用，可造成一点伤害，可在对方决斗，南蛮入侵，借刀杀人时打出，
     一般情况下每回合仅可使用1张，typeId 1 */
@@ -263,18 +263,9 @@ class QingLongYanYueDao extends Card{
    }
 }
 
-//丈八蛇矛：攻击距离为3，装备后可将任意两张牌当作杀使用或打出， typeId 19
-class ZhangBaSheMao extends Card{
-   public ZhangBaSheMao(int typeId) {
-      super(typeId);
-   }
 
-   public boolean CanInitiative() {
-      return true;
-   }
-}
 
-//加1马：装备后别人计算与你的距离+1，typeId 20
+//加1马：装备后别人计算与你的距离+1，typeId 19
 class HorseIncrease1 extends Card{
    public HorseIncrease1(int typeId) {
       super(typeId);
@@ -285,7 +276,7 @@ class HorseIncrease1 extends Card{
    }
 }
 
-//减1马：装备后别人计算与你的距离-1， typeId 21
+//减1马：装备后别人计算与你的距离-1， typeId 20
 class HorseDecrease1 extends Card{
    public HorseDecrease1(int typeId) {
       super(typeId);

@@ -63,13 +63,11 @@ public class CardManager {
         card = new QingLongYanYueDao(18);
         cardsMap.put(card.getTypeId(),card);
 
-        card = new ZhangBaSheMao(19);
+
+        card = new HorseIncrease1(19);
         cardsMap.put(card.getTypeId(),card);
 
-        card = new HorseIncrease1(20);
-        cardsMap.put(card.getTypeId(),card);
-
-        card = new HorseDecrease1(21);
+        card = new HorseDecrease1(20);
         cardsMap.put(card.getTypeId(),card);
 
         CreateCardList();
@@ -123,14 +121,14 @@ public class CardManager {
         cardsPile.add(new Card(16));
         cardsPile.add(new Card(17));
         cardsPile.add(new Card(18));
-        cardsPile.add(new Card(19));
+        for(int i=0;i<2;i++){
+            cardsPile.add(new Card(19));
+        }
         for(int i=0;i<2;i++){
             cardsPile.add(new Card(20));
         }
-        for(int i=0;i<2;i++){
-            cardsPile.add(new Card(21));
-        }
-
     }
+
+    public InitHandCard()
 
 }
