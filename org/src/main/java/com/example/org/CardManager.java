@@ -1,5 +1,4 @@
 package com.example.org;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -129,6 +128,5 @@ public class CardManager {
         }
     }
 
-    public InitHandCard()
 
 }
