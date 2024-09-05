@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.org.controller.RegController">
+   <children>
+      <AnchorPane layoutX="7.0" layoutY="11.0" prefHeight="441.0" prefWidth="596.0">
+         <children>
+            <Label layoutX="95.0" layoutY="218.0" text="确认密码">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="117.0" layoutY="85.0" text="用户名">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="139.0" layoutY="154.0" text="密码">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="187.0" layoutY="14.0" text="公主/王子请注册">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnLogin" layoutX="88.0" layoutY="359.0" mnemonicParsing="false" onAction="#login" prefHeight="45.0" prefWidth="168.0" text="已有账号？点此登录">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnReg" layoutX="349.0" layoutY="359.0" mnemonicParsing="false" onAction="#register" prefHeight="45.0" prefWidth="168.0" text="注册并登录">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Label layoutX="128.0" layoutY="285.0" text="邮箱">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtEmail" layoutX="203.0" layoutY="277.0" prefHeight="45.0" prefWidth="263.0" />
+            <TextField fx:id="txtName" layoutX="203.0" layoutY="77.0" prefHeight="45.0" prefWidth="263.0" />
+            <PasswordField fx:id="txtPassword" layoutX="203.0" layoutY="146.0" prefHeight="45.0" prefWidth="263.0" />
+            <PasswordField fx:id="txtConfirm" layoutX="203.0" layoutY="210.0" prefHeight="45.0" prefWidth="263.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

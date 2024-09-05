@@ -79,16 +79,7 @@ public class LoginController {
         //关闭当前窗口
         stage2.close();
 
-//        Pane pane = new Pane();
-////            Image backgroundImage = new Image(this.getClass().getResourceAsStream("bg2.png")); // 确保图片路径正确
-//        pane.setStyle("-fx-background-image: url('profile1.png');");
-//        BackgroundImage picture = new BackgroundImage(
-//                backgroundImage,
-//                BackgroundRepeat.NO_REPEAT,
-//                BackgroundRepeat.NO_REPEAT,
-//                BackgroundPosition.CENTER,
-//                BackgroundSize.DEFAULT
-//        );
+
 
     }
 }

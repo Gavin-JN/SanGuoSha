@@ -22,7 +22,7 @@ public class GameApplication extends Application {
         StackPane stackPane = new StackPane();
 
         // 设置背景图
-        Image backgroundImage = new Image(this.getClass().getResourceAsStream("img/bg.png")); // 确保图片路径正确
+        Image backgroundImage = new Image(this.getClass().getResourceAsStream("images/bg.png")); // 确保图片路径正确
         BackgroundImage background = new BackgroundImage(
                 backgroundImage,
                 BackgroundRepeat.NO_REPEAT,
@@ -41,7 +41,7 @@ public class GameApplication extends Application {
         Scene scene = new Scene(stackPane);
 
         // 设置舞台图标和标题
-        InputStream in = this.getClass().getResourceAsStream("img/title.png");
+        InputStream in = this.getClass().getResourceAsStream("images/title.png");
         Image image = new Image(in);
         stage.getIcons().add(image);
         stage.setTitle("注册页");
