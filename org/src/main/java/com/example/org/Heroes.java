@@ -6,6 +6,7 @@ public class Heroes {
     public int hp;
     //    final static int hp= ;设置一个静态变量代表当前血量
     public int hpLimit;//血量上限
+    private Player player;    //将武将与玩家绑定
 
     //血量
     public void setHp() {
@@ -34,21 +35,20 @@ public class Heroes {
         return hpLimit;
     }//返回血量上限
 
-
-    Player player;    //将武将与玩家绑定
-
-
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
     class sunQuan extends Heroes {
         private boolean balanceUsed = false;  // 布尔类型用于记录记录制衡是否已使用,初始化为未使用过制衡
-
         public sunQuan() {
             this.setSkillInitiate(true);
             this.setHpLimit(4);
         }
 
         //1、制衡。弃任意牌，摸等量牌，每回合一次
-        public void zhiheng(Player player, int discardCards) {  //制衡（使用制衡之前要先判断玩家是否还有牌）{
+        public void zhiheng( List<Integer> checkedCard) {//制衡（使用制衡之前要先判断玩家是否还有牌）
+            int discardCards=checkedCard.size();
             if (balanceUsed) {
                 System.out.println("本回合制衡已经使用过了！");
                 return;
@@ -57,7 +57,14 @@ public class Heroes {
                 System.out.println("手牌不足以弃牌！");
                 return;
             }
-
+            for(int i=0;i<checkedCard.size();i++) {
+                player.getHandCardList().remove(checkedCard.get(i));
+            }
+          for(int i=0;i<discardCards;i++) {   //抽取与弃牌数量相同的新牌
+              int typeOfCard=player.DrawCard(cardList);//cardList为待抽取的剩余的所有卡牌
+              Card cardIn=
+              player.getHandCardList().add()
+          }
             // 弃牌并摸等量牌
 //            player.setHandCardList();
 //            // 摸等量牌  【摸排：从剩余卡堆中获得等量的卡牌数量加入到玩家目前已有的卡牌列表中】
