@@ -15,8 +15,8 @@ public class Player {
     //    final static int hp= ;设置一个静态变量代表当前血量
     private int hpLimit;//血量上限
     //血量
-    public void setHp(){
-
+    public void setHp(int CurrentHp){
+        this.hp=CurrentHp;
     }
     public void setHpLimit(){
 

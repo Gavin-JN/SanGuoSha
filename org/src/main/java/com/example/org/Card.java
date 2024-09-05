@@ -1,4 +1,7 @@
 package com.example.org;
+
+import java.util.Currency;
+
 public class Card {
    private int typeId;
 
@@ -63,6 +66,12 @@ class Tao extends Card{
    public Tao(int typeId) {
       super(typeId);
    }
+   public void UseTao(Player player){
+      if(player.getHp()<player.getHpLimit()) {//血量+1
+         int CurrentHp=player.getHp();
+         player.setHp(CurrentHp);
+      }
+   }
 
    public boolean CanInitiative(){
       return true;
@@ -73,6 +82,12 @@ class Tao extends Card{
 class Jiu extends Card{
    public Jiu(int typeId) {
       super(typeId);
+   }
+   public void UseJiu(Player player){
+      if(player.getHp()==0) {//濒死回血
+         player.setHp(1);
+      }
+      //杀的伤害+1
    }
 
    public boolean CanInitiative(){
