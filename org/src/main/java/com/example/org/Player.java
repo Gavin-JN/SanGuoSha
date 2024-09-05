@@ -5,24 +5,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class Player {
-    private int heroId;
     private int seatId;
     private List<Card> handCardList;
     private List<Card> equipCardList;
     private List<Card> judgeCardList;
-    private int volume;
+    private int hp;
+    private int hpLimit;
     private int attackDistance;
 
-    public void setVolume(int volume) {
-        this.volume = volume;
+    public int getHp() {
+        return hp;
     }
 
-    public int getHeroId() {
-        return heroId;
-    }
-
-    public void setHeroId(int heroId) {
-        this.heroId = heroId;
+    public int getHpLimit() {
+        return hpLimit;
     }
 
     public void setSeatId(int seatId) {
@@ -63,10 +59,6 @@ public class Player {
 
     public int getSeatId() {
         return seatId;
-    }
-
-    public int getVolume() {
-        return volume;
     }
 
     public boolean IsCurrentRound(){
