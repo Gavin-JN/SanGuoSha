@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -214,6 +215,9 @@ public class fireWindow extends Parent {
         stage.setMaxHeight(700);
         stage.setResizable(false); //固定窗口的大小
         stage.setScene(scene);
+        InputStream in = this.getClass().getResourceAsStream("img/title.png");
+        Image icon = new Image(in);
+        stage.getIcons().add(icon);
         stage.setTitle("FireWindow");
         stage.show();
 

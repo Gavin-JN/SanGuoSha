@@ -171,10 +171,11 @@ public class Player {
         this.setHandCardList(handCardList);//更新当前手牌
 
     }
-    public boolean IsSkillInitiate(Heroes hero){
-
-        return true;
-    }
+    //技能是否能主动释放已在Hero中定义
+//    public boolean IsSkillInitiate(Heroes hero){
+//
+//        return true;
+//    }
     public boolean CheckHandCardList(){
         for(int i=0;i<handCardList.size();i++){
             if(handCardList.get(i).CanInitiative()) return true;
