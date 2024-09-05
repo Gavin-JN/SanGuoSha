@@ -117,13 +117,16 @@ public class Player {
     //抽牌
     public int  DrawCard(List<Card> cardList){   //cardList为当前这局游戏的剩余的所有的待摸牌
         Collections.shuffle(cardList);  //打乱剩余牌的次序
+        int typeOfCard=0;
         if(!cardList.isEmpty())
         {
             Card GetCard=cardList.remove(0);
-            int typeOfCard=GetCard.getTypeId();
-            return typeOfCard;
+            typeOfCard=GetCard.getTypeId();
         }
-        return 0;
+        else{
+            System.out.println("卡牌数量不足");
+        }
+        return typeOfCard;
     }
 
 
