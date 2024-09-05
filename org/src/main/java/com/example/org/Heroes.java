@@ -4,14 +4,32 @@ import java.util.List;
 
 public class Heroes {
 
+    Player player;    //将武将与玩家绑定
+
+    public Heroes(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }
+
 
 class sunQuan extends Heroes {
 
     private boolean balanceUsed=false;  // 布尔类型用于记录记录制衡是否已使用,初始化为未使用过制衡
 
+    public sunQuan(Player player) {
+        super(player);
+    }
+
     //1、制衡。弃任意牌，摸等量牌，每回合一次
-    public void zhiheng(Player player,int discardCards){  //制衡（使用制衡之前要先判断玩家是否还有牌）{
+    public void zhiheng(int discardCards){  //制衡（使用制衡之前要先判断玩家是否还有牌）{
         if (balanceUsed) {
             System.out.println("本回合制衡已经使用过了！");
             return;
@@ -22,9 +40,9 @@ class sunQuan extends Heroes {
         }
 
         // 弃牌并摸等量牌
-        player.setHandCardList();
+        player.getHandCardList();
         // 摸等量牌  【摸排：从剩余卡堆中获得等量的卡牌数量加入到玩家目前已有的卡牌列表中】
-        player.DrawCard();
+        player.DrawCard(,discardCards); //剩余牌的List
         balanceUsed = true;
         System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
     }
@@ -35,6 +53,10 @@ class sunQuan extends Heroes {
 }
 
 class  caoCao extends Heroes {
+    public caoCao(Player player) {
+        super(player);
+    }
+
     //1、奸雄。获得对自己造成伤害的牌
     // (当角色收到伤害的时候调用该函数）
     public void jianXiong(Card card,Player player) {  //card为对对该角色造成伤害的卡牌
@@ -45,6 +67,10 @@ class  caoCao extends Heroes {
 }
 
 class  zhaoYun extends Heroes {
+    public zhaoYun(Player player) {
+        super(player);
+    }
+
     //1、龙胆——你可以将你手牌的【杀】当【闪】、【闪】当【杀】使用或打出。
     //(该技能需要角色自己主动选择是否使用）
     public void longDan(String cardType) {
@@ -59,13 +85,17 @@ class  zhaoYun extends Heroes {
 }
 
 class zhangFei extends Heroes {
+    public zhangFei(Player player) {
+        super(player);
+    }
+
     //咆哮——出牌阶段，你可以使用任意数量的【杀】。
     //该技能角色需主动选择使用
     //killCount 魏角色要出杀的数量
     public void paoXiao(int killCount) {
-        if (getCards() >= killCount) {   //此处的getCards函数应改为牌中杀的数量
-            System.out.println("张飞使用了" + killCount + "张杀。");
-            setCards(getCards() - killCount);  // 扣除使用的杀
+        if ()
+        {
+
         } else {
             System.out.println("张飞没有足够的杀牌。");
         }
@@ -73,7 +103,11 @@ class zhangFei extends Heroes {
 }
 
 class  zhuGeLiang extends Heroes {
-  //空城——锁定技，当你没有手牌时，你不能成为【杀】或【决斗】的目标。◆当你在“决斗”过程中没有手牌无法打出杀时，你仍然会受到【决斗】的伤害。
+    public zhuGeLiang(Player player) {
+        super(player);
+    }
+
+    //空城——锁定技，当你没有手牌时，你不能成为【杀】或【决斗】的目标。◆当你在“决斗”过程中没有手牌无法打出杀时，你仍然会受到【决斗】的伤害。
   //返回的布尔类型决定角色是否可以被杀
   public boolean kongCheng() {
       if (getCards() == 0) {
@@ -85,6 +119,10 @@ class  zhuGeLiang extends Heroes {
 }
 
 class  zhangLiao extends Heroes {
+    public zhangLiao(Player player) {
+        super(player);
+    }
+
     //突袭——摸牌阶段，你可以放弃摸牌，然后从至多两名（至少一名）角色的手牌里各抽取一张牌。◆摸牌阶段，你一旦发动突袭，就不能从牌堆获得牌；只剩一名其他角色时，你就只能选择这一名角色；若此时其他任何人都没有手牌，你就不能发动突袭。
     public void tuXi(List<Heroes> players) {
         int number=0;
@@ -105,7 +143,11 @@ class  zhangLiao extends Heroes {
 }
 
 class daQiao extends Heroes {
-  //流离——当你成为【杀】的目标时，你可以弃一张牌，并将此【杀】转移给你攻击范围内的另一名角色。（该角色不得是【杀】的使用者）
+    public daQiao(Player player) {
+        super(player);
+    }
+
+    //流离——当你成为【杀】的目标时，你可以弃一张牌，并将此【杀】转移给你攻击范围内的另一名角色。（该角色不得是【杀】的使用者）
   //当玩家被杀时，可自主选择是否使用该技能
     public void liuLi(){
         setCards(getCards() -1);
@@ -117,7 +159,11 @@ class daQiao extends Heroes {
 }
 
 class  guoJia  extends Heroes {
-  //遗计——你每受到1点伤害，可摸两张牌，将其中的一张交给任意一名角色，然后将另一张交给任意一名角色。
+    public guoJia(Player player) {
+        super(player);
+    }
+
+    //遗计——你每受到1点伤害，可摸两张牌，将其中的一张交给任意一名角色，然后将另一张交给任意一名角色。
   //当受到伤害时该技能主动发动
   public void yiJi()  //参数为指定给予手牌的两名玩家
   {

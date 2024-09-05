@@ -12,6 +12,15 @@ public class Player {
     private int hp;
     private int hpLimit;
     private int attackDistance;
+    private Heroes hero;
+
+    public Heroes getHero() {
+        return hero;
+    }
+
+    public void setHero(Heroes hero) {
+        this.hero = hero;
+    }
 
     public int getHp() {
         return hp;
@@ -60,6 +69,9 @@ public class Player {
     public int getSeatId() {
         return seatId;
     }
+
+
+
 
     public boolean IsCurrentRound(){
         return true;
