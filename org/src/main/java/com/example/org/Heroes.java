@@ -191,7 +191,7 @@ class  guoJia  extends Heroes {
    //获得两张牌
   }
 }
-=======
+
 //
 //class sunQuan extends Heroes {
 //
