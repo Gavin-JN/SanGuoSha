@@ -141,8 +141,14 @@ public class Player {
     }
     public void UseCard(int typeId){         //选取手牌区牌并将其typeId作为参数
         for(int i=0;i<handCardList.size();i++){
+<<<<<<< Updated upstream
             if(handCardList.get(i).getTypeId()==typeId)
             {}
+=======
+            if(handCardList.get(i).getTypeId()==typeId){
+
+            }
+>>>>>>> Stashed changes
         }
     }
     public boolean IsPlayFinish(){
