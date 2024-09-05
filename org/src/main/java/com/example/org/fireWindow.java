@@ -91,7 +91,7 @@ public class fireWindow extends Parent {
                 //被点击后标记事件，即该张牌可能会出
             });
             player1Pane.getChildren().add(cardPane);
-            player1Pane.getChildren().add(cardPane);
+//            player1Pane.getChildren().add(cardPane);
         }
 
         //敌方武将

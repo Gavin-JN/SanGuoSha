@@ -40,7 +40,7 @@ public class RegController {
             StackPane stackPane = new StackPane();
 
             // 设置背景图
-            Image backgroundImage = new Image(this.getClass().getResourceAsStream("images/bg.png")); // 确保图片路径正确
+            Image backgroundImage = new Image(this.getClass().getResourceAsStream("img/bg.png")); // 确保图片路径正确
 
             BackgroundImage background = new BackgroundImage(
                     backgroundImage,
@@ -64,7 +64,7 @@ public class RegController {
             //弹出模式
             loginStage.initModality(Modality.WINDOW_MODAL);
             //设置场景scene
-            InputStream in = this.getClass().getResourceAsStream("images/title.png");
+            InputStream in = this.getClass().getResourceAsStream("img/title.png");
             Image image = new Image(in);
             loginStage.getIcons().add(image);
             loginStage.setTitle("登录页");
