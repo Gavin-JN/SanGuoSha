@@ -57,10 +57,10 @@ class sunQuan extends Heroes {
         player.DrawCard();
         balanceUsed = true;
         System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
-=======
+
     public Heroes(Player player) {
         this.player = player;
->>>>>>> 40086650255f8818e99091ae0fcf878691ba904d
+
     }
 
     public Player getPlayer() {
@@ -72,7 +72,6 @@ class sunQuan extends Heroes {
     }
 }
 
-<<<<<<< HEAD
 class  caoCao extends Heroes {
     //1、奸雄。获得对自己造成伤害的牌
     // (当角色收到伤害的时候调用该函数）
@@ -191,7 +190,7 @@ class  guoJia  extends Heroes {
    //获得两张牌
   }
 }
-=======
+
 //
 //class sunQuan extends Heroes {
 //
