@@ -128,6 +128,9 @@ public class CardManager {
         }
     }
 
+    public static void PushCard(){
+
+    }
 
 //    public InitHandCard();
 
