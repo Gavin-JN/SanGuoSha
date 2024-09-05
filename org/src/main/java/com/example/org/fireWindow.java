@@ -103,9 +103,22 @@ public class fireWindow extends Parent {
             player2Pane.getChildren().add(cardPane);
         }
 
+        //出牌按钮
         Button up=new Button();
+        up.setMaxWidth(60);
+        up.setMaxHeight(40);
         up.setText("出牌");
-        
+        up.setLayoutX(400);
+        up.setLayoutY(200);
+
+        //结束回合按钮
+        Button down=new Button();
+        down.setMaxWidth(60);
+        down.setMaxHeight(40);
+        down.setText("结束回合");
+        down.setLayoutX(600);
+        down.setLayoutY(200);
+
 
         //设置Scane和Stage的大小
         Scene scene=new Scene(root,1000,700);
