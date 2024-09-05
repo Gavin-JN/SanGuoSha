@@ -117,14 +117,20 @@ public class Player {
     //抽牌
     public int  DrawCard(List<Card> cardList){   //cardList为当前这局游戏的剩余的所有的待摸牌
         Collections.shuffle(cardList);  //打乱剩余牌的次序
+        int typeOfCard;
         if(!cardList.isEmpty())
         {
             Card GetCard=cardList.remove(0);
-            int typeOfCard=GetCard.getTypeId();
-            return typeOfCard;  //返回所抽中卡片的类型编号
+            typeOfCard=GetCard.getTypeId();
         }
-        return 0;
+        else{
+            CardManager.PushCard();
+            Card GetCard=cardList.remove(0);
+            typeOfCard=GetCard.getTypeId();
+        }
+        return typeOfCard;
     }
+
 
 
     public boolean IsAbleToPlay(){
