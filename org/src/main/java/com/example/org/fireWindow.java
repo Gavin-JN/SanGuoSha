@@ -72,9 +72,19 @@ public class fireWindow extends Parent {
             cardPane.setBackground(cardBackground);
             cardPane.setLayoutX(340+i*110);
             cardPane.setLayoutY(0);
-            cardPane.setOnMouseClicked(event -> {
+            cardPane.setOnMouseEntered(event -> {
                 cardPane.setLayoutY(-20);
             });;
+            cardPane.setOnMouseExited(event2 -> {
+                cardPane.setLayoutY(0);
+            });
+            cardPane.setOnMouseClicked(event -> {
+                cardPane.setTranslateY(-38);
+
+                //被点击后标记事件，即该张牌可能会出
+
+            });
+            player1Pane.getChildren().add(cardPane);
             player1Pane.getChildren().add(cardPane);
         }
 
@@ -105,19 +115,37 @@ public class fireWindow extends Parent {
 
         //出牌按钮
         Button up=new Button();
-        up.setMaxWidth(60);
-        up.setMaxHeight(40);
+        up.setPrefSize(80,40);
         up.setText("出牌");
-        up.setLayoutX(400);
-        up.setLayoutY(200);
+        up.setLayoutX(300);
+        up.setLayoutY(340);
+        up.backgroundProperty();
+        up.setStyle("-fx-background-color: #000fff");
+        up.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
 
         //结束回合按钮
         Button down=new Button();
-        down.setMaxWidth(60);
-        down.setMaxHeight(40);
+        down.setPrefSize(80,40);
         down.setText("结束回合");
         down.setLayoutX(600);
-        down.setLayoutY(200);
+        down.setLayoutY(340);
+        down.backgroundProperty();
+        down.setStyle("-fx-background-color: #000fff");
+        down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
+
+        //返回按钮
+        Button back=new Button();
+        back.setPrefSize(100,60);
+        back.setText("返回");
+        back.setLayoutX(0);
+        back.setLayoutY(0);
+        back.backgroundProperty();
+        back.setStyle("-fx-background-color: #000fff");
+        back.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
+
+        player2Pane.getChildren().add(back);
+        gameAreaPane.getChildren().add(up);
+        gameAreaPane.getChildren().add(down);
 
 
         //设置Scane和Stage的大小
