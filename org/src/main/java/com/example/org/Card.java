@@ -99,6 +99,7 @@ class JieDaoShaRen extends Card{
       return true;
    }
 
+
    public boolean RequireTarget() {
       return true;
    }

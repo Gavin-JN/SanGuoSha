@@ -61,8 +61,7 @@ public class fireWindow extends Application {
         equipmentPane.setLayoutY(0);
         player1Pane.getChildren().add(equipmentPane);
 
-        //for 循环的次数我我方玩家手牌的数量
-        //牌的图片应为一个存放URL的String类型的玩家目前手牌的种类的handCardList
+
         for(int i=0;i<6;i++)
         {
             Pane cardPane=new Pane();
@@ -89,8 +88,6 @@ public class fireWindow extends Application {
         heroCardPane2.setLayoutX(300);
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
-
-        //for循环的次数应是敌方玩家的目前手牌的数量
 
         for(int i=0;i<6;i++)
         {

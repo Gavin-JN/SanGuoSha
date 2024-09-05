@@ -12,16 +12,6 @@ public class Player {
     private int hp;
     private int hpLimit;
     private int attackDistance;
-    private Heroes hero;
-
-    public Heroes getHero() {
-        return hero;
-    }
-
-    public void setHero(Heroes hero) {
-        this.hero = hero;
-    }
-
     public int getHp() {
         return hp;
     }
@@ -30,6 +20,13 @@ public class Player {
         return hpLimit;
     }
 
+    public int getCardsNum(){
+        return handCardList.size();
+    }//当前玩家手牌数量
+
+    public List<Card> getCardList(){
+        return this.handCardList;
+    }//返回当前玩家手牌
     public void setSeatId(int seatId) {
         this.seatId = seatId;
     }
@@ -70,9 +67,6 @@ public class Player {
         return seatId;
     }
 
-
-
-
     public boolean IsCurrentRound(){
         return true;
     }
@@ -110,8 +104,14 @@ public class Player {
     public void PlayCard(){
         if(!IsAbleToPlay()) return;
         if(!CheckHandCardList()) return;
-        if(!AbandonPlayCard()) return;
-
+        do{
+            room.
+        }while(AbandonPlayCard()==true||!CheckHandCardList());
+    }
+    public void UseCard(int typeId){         //选取手牌区牌并将其typeId作为参数
+        for(int i=0;i<handCardList.size();i++){
+            if(handCardList.get(i).getTypeId()==typeId)
+        }
     }
     public boolean IsPlayFinish(){
         return true;
@@ -132,6 +132,7 @@ public class Player {
         return false;
     }
     public boolean AbandonPlayCard(){
+        if(IsAbandonPlay()) return true; //btn事件
         return false;
     }
 }
