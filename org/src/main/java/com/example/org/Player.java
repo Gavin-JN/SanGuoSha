@@ -96,6 +96,7 @@ public class Player {
     public boolean IsCurrentRound(){
         return true;
     }
+
     public void JudgeCardList(Player player){
         if(player.judgeCardList.size()==0)
             return ;
