@@ -12,7 +12,6 @@ public class Player {
     private int hp;
     private int hpLimit;
     private int attackDistance;
-
     public int getHp() {
         return hp;
     }
@@ -21,6 +20,13 @@ public class Player {
         return hpLimit;
     }
 
+    public int getCardsNum(){
+        return handCardList.size();
+    }//当前玩家手牌数量
+
+    public List<Card> getCardList(){
+        return this.handCardList;
+    }//返回当前玩家手牌
     public void setSeatId(int seatId) {
         this.seatId = seatId;
     }
