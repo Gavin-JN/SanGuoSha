@@ -51,9 +51,9 @@
                   <Font size="52.0" />
                </font>
             </Label>
-            <ImageView fitHeight="246.0" fitWidth="257.0" layoutX="674.0" layoutY="119.0">
+            <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="702.0" layoutY="129.0">
                <image>
-                  <Image url="@profile1.png" />
+                  <Image url="@../img/profile1.png" />
                </image>
             </ImageView>
          </children>
