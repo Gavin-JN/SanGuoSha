@@ -4,6 +4,9 @@ import com.example.org.server.GameServer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class ServerController {
     @FXML
@@ -14,14 +17,12 @@ public class ServerController {
     private Button btnStatus;
 
 
-    public void startServer(ActionEvent event) {
-        System.out.println("Server started");
-        Thread thread = new Thread(new Runnable(){
-            public void run() {
-                GameServer gameServer = new GameServer();
-                gameServer.start();
-            }
-        });
-        thread.start();
+    private Socket socket;
+    public ServerController(Socket socket) {
+        this.socket = socket;
+    }
+
+    public void startServer(ActionEvent event) throws IOException {
+        GameServer gameServer = new GameServer();
     }
 }
