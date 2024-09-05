@@ -20,6 +20,15 @@ public class Card {
    public boolean RequireTarget(){
       return false;
    }
+   public void Use(){
+
+   }
+   public void RespWithTarget(Player player, Player targetPlayer, int typeId){
+
+   }
+   public void RespWithoutTarget(Player player , int typeId){
+
+   }
 }
 
 /*所有牌共99张，
@@ -44,7 +53,8 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-
+   public void Use(){
+   }
 }
 
 //闪：可在对方杀，万箭齐发时打出，防止受到伤害， typeId 2
