@@ -24,9 +24,23 @@ public class Player {
         return handCardList.size();
     }//当前玩家手牌数量
 
+    public int getShaNum ()
+    {
+        int number = 0;
+        for(int i=0;i<handCardList.size();i++)
+        {
+            if(handCardList.get(i).getTypeId()==1)
+            {
+                number++;
+            }
+        }
+        return number;
+    }
+
     public List<Card> getCardList(){
         return this.handCardList;
     }//返回当前玩家手牌
+
     public void setSeatId(int seatId) {
         this.seatId = seatId;
     }
@@ -110,6 +124,7 @@ public class Player {
     public void UseCard(int typeId){         //选取手牌区牌并将其typeId作为参数
         for(int i=0;i<handCardList.size();i++){
             if(handCardList.get(i).getTypeId()==typeId)
+            {}
         }
     }
     public boolean IsPlayFinish(){
