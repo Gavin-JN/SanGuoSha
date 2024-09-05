@@ -32,7 +32,6 @@ public class Heroes {
 
     Player player;    //将武将与玩家绑定
 
-<<<<<<< HEAD
 class sunQuan extends Heroes {
     private boolean balanceUsed=false;  // 布尔类型用于记录记录制衡是否已使用,初始化为未使用过制衡
     public sunQuan(){
@@ -56,23 +55,9 @@ class sunQuan extends Heroes {
         // 摸等量牌  【摸排：从剩余卡堆中获得等量的卡牌数量加入到玩家目前已有的卡牌列表中】
         player.DrawCard();
         balanceUsed = true;
-        System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
-=======
-    public Heroes(Player player) {
-        this.player = player;
->>>>>>> 40086650255f8818e99091ae0fcf878691ba904d
-    }
 
-    public Player getPlayer() {
-        return player;
-    }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-}
 
-<<<<<<< HEAD
 class  caoCao extends Heroes {
     //1、奸雄。获得对自己造成伤害的牌
     // (当角色收到伤害的时候调用该函数）

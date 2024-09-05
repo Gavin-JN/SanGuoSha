@@ -4,8 +4,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.w3c.dom.events.MouseEvent;
 
 public class fireWindow extends Parent {
 
@@ -78,10 +80,18 @@ public class fireWindow extends Parent {
             cardPane.setOnMouseExited(event2 -> {
                 cardPane.setLayoutY(0);
             });
+
+            //监听鼠标点击事件
+            int finalI = i;
             cardPane.setOnMouseClicked(event -> {
                 cardPane.setTranslateY(-38);
 
                 //被点击后标记事件，即该张牌可能会出
+                cardPane.addEventFilter(MouseDragEvent.MOUSE_CLICKED,clickedEvent->{
+
+                    System.out.println("Location；"+ finalI);
+
+                });
 
             });
             player1Pane.getChildren().add(cardPane);
