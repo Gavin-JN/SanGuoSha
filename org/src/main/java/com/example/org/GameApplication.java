@@ -41,7 +41,7 @@ public class GameApplication extends Application {
         Scene scene = new Scene(stackPane);
 
         // 设置舞台图标和标题
-        InputStream in = this.getClass().getResourceAsStream("images/title.png");
+        InputStream in = this.getClass().getResourceAsStream("img/title.png");
         Image image = new Image(in);
         stage.getIcons().add(image);
         stage.setTitle("注册页");
