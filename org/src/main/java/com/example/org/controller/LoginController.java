@@ -40,7 +40,7 @@ public class LoginController {
             // 创建一个StackPane作为新的根布局
             StackPane stackPane = new StackPane();
             // 设置背景图
-            Image backgroundImage = new Image(this.getClass().getResourceAsStream("bg2.png")); // 确保图片路径正确
+            Image backgroundImage = new Image(this.getClass().getResourceAsStream("images/bg2.png")); // 确保图片路径正确
 
             BackgroundImage background = new BackgroundImage(
                     backgroundImage,
@@ -64,7 +64,7 @@ public class LoginController {
             Stage StartStage=new Stage();
             //弹出模式
             StartStage.initModality(Modality.WINDOW_MODAL);
-            InputStream in = this.getClass().getResourceAsStream("title.png");
+            InputStream in = this.getClass().getResourceAsStream("images/title.png");
             Image image = new Image(in);
             StartStage.getIcons().add(image);
             StartStage.setTitle("三国杀·全明星");
