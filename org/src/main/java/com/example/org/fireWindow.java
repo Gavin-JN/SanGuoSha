@@ -85,7 +85,7 @@ public class fireWindow extends Parent {
 
             });
             player1Pane.getChildren().add(cardPane);
-            player1Pane.getChildren().add(cardPane);
+//            player1Pane.getChildren().add(cardPane);
         }
 
         //敌方武将

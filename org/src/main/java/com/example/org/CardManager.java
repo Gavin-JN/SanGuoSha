@@ -129,6 +129,6 @@ public class CardManager {
         }
     }
 
-    public InitHandCard()
+//    public InitHandCard();
 
 }
