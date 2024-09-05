@@ -11,6 +11,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class GameApplication extends Application {
     @Override
@@ -22,7 +23,7 @@ public class GameApplication extends Application {
         StackPane stackPane = new StackPane();
 
         // 设置背景图
-        Image backgroundImage = new Image(this.getClass().getResourceAsStream("images/bg.png")); // 确保图片路径正确
+        Image backgroundImage = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("images/bg.png"))); // 确保图片路径正确
         BackgroundImage background = new BackgroundImage(
                 backgroundImage,
                 BackgroundRepeat.NO_REPEAT,
@@ -42,6 +43,7 @@ public class GameApplication extends Application {
 
         // 设置舞台图标和标题
         InputStream in = this.getClass().getResourceAsStream("images/title.png");
+        assert in != null;
         Image image = new Image(in);
         stage.getIcons().add(image);
         stage.setTitle("注册页");

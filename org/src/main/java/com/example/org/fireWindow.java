@@ -23,7 +23,7 @@ public class fireWindow extends Parent {
         Pane gameAreaPane=new Pane();
         //设置根区域的背景图片
         BorderPane root = new BorderPane();
-        Image image=new Image(getClass().getResourceAsStream("img/background.jpg"));
+        Image image=new Image(getClass().getResourceAsStream("images/background.jpg"));
         BackgroundImage backgroundImage=new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         Background background=new Background(backgroundImage);
         root.setBackground(background);
@@ -32,7 +32,7 @@ public class fireWindow extends Parent {
         root.setBottom(player1Pane);
         root.setCenter(gameAreaPane);
         //设置己方区域的背景图片
-        Image image2=new Image(getClass().getResourceAsStream("img/campImage.jpg"));
+        Image image2=new Image(getClass().getResourceAsStream("images/campImage.jpg"));
         BackgroundSize backgroundSize = new BackgroundSize(40, 40, false, false, true, true); // 缩小图片的尺寸
         BackgroundImage backgroundImage2 = new BackgroundImage(
                 image2,
@@ -45,7 +45,7 @@ public class fireWindow extends Parent {
         //编辑己方区域的内容
         Pane heroCardPane=new Pane();
         heroCardPane.setPrefSize(100,150);
-        Image imageHero=new Image(getClass().getResourceAsStream("img/hero.png"));
+        Image imageHero=new Image(getClass().getResourceAsStream("images/hero.png"));
         BackgroundImage heroImage=new BackgroundImage(imageHero, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         Background heroBackground=new Background(heroImage);
         heroCardPane.setBackground(heroBackground);
@@ -55,7 +55,7 @@ public class fireWindow extends Parent {
 
         Pane equipmentPane=new Pane();
         equipmentPane.setPrefSize(100,150);
-        Image imageEquipment=new Image(getClass().getResourceAsStream("img/equipment.png"));
+        Image imageEquipment=new Image(getClass().getResourceAsStream("images/equipment.png"));
         BackgroundImage equipmentImage=new BackgroundImage(imageEquipment,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         Background equipmentBackground=new Background(equipmentImage);
         equipmentPane.setBackground(equipmentBackground);
@@ -68,7 +68,7 @@ public class fireWindow extends Parent {
         {
             Pane cardPane=new Pane();
             cardPane.setPrefSize(100,150);
-            Image imageCard=new Image(getClass().getResourceAsStream("img/card.png"));
+            Image imageCard=new Image(getClass().getResourceAsStream("images/card.png"));
             BackgroundImage cardImage=new BackgroundImage(imageCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
             Background cardBackground=new Background(cardImage);
             cardPane.setBackground(cardBackground);
@@ -101,7 +101,7 @@ public class fireWindow extends Parent {
         //敌方武将
         Pane heroCardPane2=new Pane();
         heroCardPane2.setPrefSize(100,150);
-        Image imageHero2=new Image(getClass().getResourceAsStream("img/hero.png"));
+        Image imageHero2=new Image(getClass().getResourceAsStream("images/hero.png"));
         BackgroundImage heroImage2=new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         Background heroBackground2=new Background(heroImage2);
         heroCardPane2.setBackground(heroBackground2);
@@ -113,7 +113,7 @@ public class fireWindow extends Parent {
         {
             Pane cardPane=new Pane();
             cardPane.setPrefSize(100,150);
-            Image imageCard=new Image(getClass().getResourceAsStream("img/cardBack.png"));
+            Image imageCard=new Image(getClass().getResourceAsStream("images/cardBack.png"));
             BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
             BackgroundImage cardImage=new BackgroundImage(imageCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
             Background cardBackground=new Background(cardImage);
@@ -132,6 +132,11 @@ public class fireWindow extends Parent {
         up.backgroundProperty();
         up.setStyle("-fx-background-color: #000fff");
         up.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
+        //即确定出牌，将玩家选择的要出的牌展示到出牌区域
+
+
+
+
 
         //结束回合按钮
         Button down=new Button();
@@ -156,6 +161,25 @@ public class fireWindow extends Parent {
         player2Pane.getChildren().add(back);
         gameAreaPane.getChildren().add(up);
         gameAreaPane.getChildren().add(down);
+
+
+        //对战区域展示牌
+        //展示出牌的数量是依据玩家出牌的数量，不同类型的牌反馈给不同的图片资源
+        for(int i=0;i<6;i++) {
+            Pane showCardPane = new Pane();
+            showCardPane.setPrefSize(100, 150);
+            Image imageShowCard = new Image(getClass().getResourceAsStream("images/cardBack.png"));
+            BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
+            BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
+            Background showCardBackground=new Background(showCardImage);
+            showCardPane.setBackground(showCardBackground);
+            showCardPane.setLayoutX(400+i*20);
+            showCardPane.setLayoutY(100);
+            gameAreaPane.getChildren().add(showCardPane);
+        }
+
+
+
 
 
         //设置Scane和Stage的大小
