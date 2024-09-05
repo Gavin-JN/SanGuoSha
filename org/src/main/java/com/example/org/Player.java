@@ -172,4 +172,8 @@ public class Player {
         if(IsAbandonPlay()) return true; //btn事件
         return false;
     }
+
+    private boolean IsAbandonPlay() {
+        return true;
+    }
 }
