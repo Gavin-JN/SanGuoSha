@@ -12,6 +12,7 @@ public class Game {
     public gameStatus getStatus() {
         return status;
     }
+
     public void CardHandle(int source,int target, int typeId){
     }
 }

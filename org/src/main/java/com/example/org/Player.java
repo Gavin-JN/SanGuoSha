@@ -116,8 +116,13 @@ public class Player {
     public void PlayCard(){
         if(!IsAbleToPlay()) return;
         if(!CheckHandCardList()) return;
-        if(!AbandonPlayCard()) return;
-
+        do{
+        }while(AbandonPlayCard()==true||!CheckHandCardList());
+    }
+    public void UseCard(int typeId){         //选取手牌区牌并将其typeId作为参数
+        for(int i=0;i<handCardList.size();i++){
+            if(handCardList.get(i).getTypeId()==typeId)
+        }
     }
     public boolean IsPlayFinish(){
         return true;
@@ -143,6 +148,7 @@ public class Player {
         return false;
     }
     public boolean AbandonPlayCard(){
+        if(IsAbandonPlay()) return true; //btn事件
         return false;
     }
 }
