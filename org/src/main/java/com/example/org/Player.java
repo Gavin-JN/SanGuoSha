@@ -96,6 +96,7 @@ public class Player {
     public boolean IsCurrentRound(){
         return true;
     }
+
     public void JudgeCardList(Player player){
         if(player.judgeCardList.size()==0)
             return ;
@@ -121,16 +122,14 @@ public class Player {
     //抽牌
     public int  DrawCard(List<Card> cardList){   //cardList为当前这局游戏的剩余的所有的待摸牌
         Collections.shuffle(cardList);  //打乱剩余牌的次序
-        int typeOfCard;
+        int typeOfCard=0;
         if(!cardList.isEmpty())
         {
             Card GetCard=cardList.remove(0);
             typeOfCard=GetCard.getTypeId();
         }
         else{
-            CardManager.PushCard();
-            Card GetCard=cardList.remove(0);
-            typeOfCard=GetCard.getTypeId();
+            System.out.println("卡牌数量不足");
         }
         return typeOfCard;
     }
