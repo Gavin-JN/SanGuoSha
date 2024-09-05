@@ -22,7 +22,7 @@ public class GameApplication extends Application {
         StackPane stackPane = new StackPane();
 
         // 设置背景图
-        Image backgroundImage = new Image(this.getClass().getResourceAsStream("images/bg.png")); // 确保图片路径正确
+        Image backgroundImage = new Image(this.getClass().getResourceAsStream("img/bg.png")); // 确保图片路径正确
         BackgroundImage background = new BackgroundImage(
                 backgroundImage,
                 BackgroundRepeat.NO_REPEAT,
