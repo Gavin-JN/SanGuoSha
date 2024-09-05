@@ -96,26 +96,30 @@ public class Player {
     public boolean IsCurrentRound(){
         return true;
     }
-    public boolean IsJudgeCardListEmpty(){
-        //^^^^^^^^^^^^^^^^^^^^^^^^^
-        return true;
-    }
-
-    public boolean IsJudgeMade(){
-        //^^^^^^^^^^^^^^^^^^^^
-        return true;
+    public void JudgeCardList(Player player){
+        if(player.judgeCardList.size()==0)
+            return ;
+        else{
+                switch (judgeCardList.get(0).getTypeId()){
+                    case 11: ;//执行乐不思蜀判定
+                    case 12: ;//执行兵粮寸断判定
+                }
+                player.judgeCardList.remove(0);
+                JudgeCardList(player);
+            }
     }
 
     public boolean IsAbleToDraw(){
+        //若兵粮寸断判定成功则返回false
         return true;
     }
 
     //抽牌
-    public int  DrawCard(List<Card> cards){   //cards为当前这局游戏的剩余的所有的待摸牌
-        Collections.shuffle(cards);  //打乱剩余牌的次序
-        if(!cards.isEmpty())
+    public int  DrawCard(List<Card> cardList){   //cards为当前这局游戏的剩余的所有的待摸牌
+        Collections.shuffle(cardList);  //打乱剩余牌的次序
+        if(!cardList.isEmpty())
         {
-            Card GetCard=cards.remove(0);
+            Card GetCard=cardList.remove(0);
             int typeOfCard=GetCard.getTypeId();
             return typeOfCard;  //返回所抽中卡片的类型编号
         }
@@ -124,6 +128,7 @@ public class Player {
 
 
     public boolean IsAbleToPlay(){
+        //若乐不思蜀判定成功则返回false
         return true;
     }
 
@@ -131,6 +136,10 @@ public class Player {
         if(!IsAbleToPlay()) return;
         if(!CheckHandCardList()) return;
         do{
+<<<<<<< HEAD
+
+=======
+>>>>>>> 677db82c613e69db1d6127f3111c932e0bac9b9e
         }while(AbandonPlayCard()==true||!CheckHandCardList());
     }
     public void UseCard(int typeId){         //选取手牌区牌并将其typeId作为参数

@@ -31,7 +31,6 @@ public class Card {
 /*杀：出牌阶段对敌方使用，可造成一点伤害，可在对方决斗，南蛮入侵，借刀杀人时打出，
     一般情况下每回合仅可使用1张，typeId 1 */
 class Sha extends Card{
-   private int times;
    public boolean CanInitiative(){
       return true;
    }
@@ -41,6 +40,7 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
+
 }
 
 //闪：可在对方杀，万箭齐发时打出，防止受到伤害， typeId 2
