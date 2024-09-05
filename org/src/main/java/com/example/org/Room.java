@@ -9,7 +9,7 @@ public class Room {
     public int roomId;
     public List<Card> cardList;  //牌堆
     public List<Card> discardList;  //弃牌堆
-    public Card curretCard;  //当前处理的牌
+    public Card currentCard;  //当前处理的牌
     public List<Player> players; //房间内所有玩家
     public List<Player> respPlayers;  //房间内待响应的玩家
     public List<Player> helpPlayers;  //房间内考虑救援的玩家
@@ -73,7 +73,7 @@ public class Room {
     public void RespWithTarget(Player player,Player targetPlayer,int typeId){
         getRoom().respPlayers.add(targetPlayer);
         getRoom().setStatus(roomStatus.ResponseStatus);
-        getRoom().curretCard= new Card(typeId);
+        getRoom().currentCard= new Card(typeId);
     }
     public void RespWithoutTarget(Player player,int typeId){
 
