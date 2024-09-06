@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Player {
     public int seatId;
-    private List<Card> handCardList;
+    public List<Card> handCardList;
     public List<Card> equipCardList;
     public List<Card> judgeCardList;
 
@@ -15,6 +15,7 @@ public class Player {
     //    final static int hp= ;设置一个静态变量代表当前血量
     public int hpLimit;//血量上限
     public boolean isUseJiu=false;
+    public boolean isNextShaAddDamage=false;
     public boolean ifUseGuoHeChaiQiao=false;
 
     public boolean isIfUseGuoHeChaiQiao() {
@@ -65,30 +66,6 @@ public class Player {
         this.seatId = seatId;
     }
 
-    public List<Card> getHandCardList() {
-        return handCardList;
-    }
-
-    public void setHandCardList(List<Card> handCardList) {
-        this.handCardList = handCardList;
-    }
-
-    public List<Card> getEquipCardList() {
-        return equipCardList;
-    }
-
-    public void setEquipCardList(List<Card> equipCardList) {
-        this.equipCardList = equipCardList;
-    }
-
-    public List<Card> getJudgeCardList() {
-        return judgeCardList;
-    }
-
-    public void setJudgeCardList(List<Card> judgeCardList) {
-        this.judgeCardList = judgeCardList;
-    }
-
     public int getAttackDistance() {
         return attackDistance;
     }
@@ -105,24 +82,21 @@ public class Player {
         if (player.judgeCardList.size() == 0)
             return;
         else {
+            int judge = (int)(Math.random()*4);
             switch (judgeCardList.get(0).getTypeId()) {
                 case 11:
-                    ;//执行乐不思蜀判定
+                    player.IsAbleToPlay(judge);
                 case 12:
-                    ;//执行兵粮寸断判定
+                    player.IsAbleToDraw(judge);
             }
             player.judgeCardList.remove(0);
             JudgeCardList(player);
         }
     }
 
-    public boolean IsAbleToDraw() {
-        //若兵粮寸断判定成功则返回false,弹出一张非梅花牌图片及“兵粮寸断生效”字样
-        if (Math.random() > 0.75)
-            return false;
-
-        else  //弹出一张梅花牌图片及“兵粮寸断失效”字样
-            return true;
+    public boolean IsAbleToDraw(int judge) {
+        if(judge==0) return false;
+        return true;
     }
 
     //抽牌
@@ -139,29 +113,9 @@ public class Player {
     }
 
 
-    public boolean IsAbleToPlay() {
-        //若乐不思蜀判定成功则返回false ，弹出一张非红桃牌及“乐不思蜀生效”字样
-        if (Math.random() > 0.75)
-            return false;
-
-        else  //弹出一张红桃牌及“乐不思蜀失效”字样
-            return true;
-    }
-
-    public void PlayCard() {
-        if (!IsAbleToPlay()) return;
-        if (!CheckHandCardList()) return;
-            /*do {
-
-            } while (AbandonPlayCard() == true || !CheckHandCardList());*/
-    }
-
-    public void UseCard(int typeId) {         //选取手牌区牌并将其typeId作为参数
-        for (int i = 0; i < handCardList.size(); i++) {
-            if (handCardList.get(i).getTypeId() == typeId) {
-                //
-            }
-        }
+    public boolean IsAbleToPlay(int judge) {
+        if(judge==0) return false;
+        return true;
     }
 
     public boolean IsPlayFinish() {
@@ -170,14 +124,6 @@ public class Player {
 
     public boolean IsRequireDiscard() {
         return true;
-    }
-
-    public void Discard() {
-        if (this.getCardsNum() > this.getHp())
-            for (int i = 0; i < handCardList.size(); i++)
-                handCardList.remove(this.getHp() + i);//暂时设定弃掉超过血量范围的牌，后续设置可选取
-        this.setHandCardList(handCardList);//更新当前手牌
-
     }
 
     public boolean IsSkillInitiate(Heroes hero) {

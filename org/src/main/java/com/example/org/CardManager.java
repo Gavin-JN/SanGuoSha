@@ -127,5 +127,4 @@ public class CardManager {
             cardsPile.add(new Card(20));
         }
     }
-
 }
