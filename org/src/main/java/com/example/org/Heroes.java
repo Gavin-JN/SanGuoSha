@@ -128,14 +128,13 @@ public class Heroes {
 
                 //空城——锁定技，当你没有手牌时，你不能成为【杀】或【决斗】的目标。◆当你在“决斗”过程中没有手牌无法打出杀时，你仍然会受到【决斗】的伤害。
                 //返回的布尔类型决定角色是否可以被杀
-                public boolean kongCheng(Player player) {
+                public void kongCheng(Player player) {
                     if (player.getCardsNum() == 0) {
 
-                        player.
+
                         System.out.println("诸葛亮发动了空城，不能成为杀或决斗的目标。");
-                        return true;
                     }
-                    return false;
+
                 }
             }
 
