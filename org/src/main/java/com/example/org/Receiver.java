@@ -42,17 +42,18 @@ public class Receiver {
         room.RespWithTarget(player,targetPlayer,typeId);
     }
 
-    //确定是否能出牌（包括响应出牌和当前回合出牌）
+    //确定是否能出牌（包括响应出牌和当前回合出牌和救援）
     public boolean CheckPlayCard(Player player,int typeId) {
-        if (room.respPlayers.contains(player) && room.respPlayers.get(0) == player) return true;
-        if (room.turn == player.getSeatId()){
-            if(player.IsAbleToPlay()) return true;
-            else return false;
-        }
         ArrayList<Integer> handCardTypeId = new ArrayList<>();
         for(int i=0;i<player.getHandCardList().size();i++){
             handCardTypeId.add(player.getHandCardList().get(i).getTypeId());
             if(!handCardTypeId.contains(typeId)) return false;
+        }
+        if (room.respPlayers.contains(player) && room.respPlayers.get(0) == player && room.status== Room.roomStatus.RespStatus) return true;
+        if (room.helpPlayers.contains(player) && room.helpPlayers.get(0) == player && room.status== Room.roomStatus.RescueStatus) return true;
+        if (room.turn == player.seatId && room.status== Room.roomStatus.PlayStatus){
+            if(player.IsAbleToPlay()) return true;
+            else return false;
         }
         return false;
     }
@@ -63,6 +64,7 @@ public class Receiver {
         for (int i=0;i<player.getHandCardList().size();i++) {
             if(player.getHandCardList().get(i).getTypeId()==typeId) {
                 Card card = player.getHandCardList().get(i);
+
             }
         }
         if(room.currentCard.Resp(player,typeId)){
@@ -72,9 +74,38 @@ public class Receiver {
                 //通知该玩家响应
             }
             else{
-                //通知当前玩家继续出牌
+                room.setStatus(Room.roomStatus.PlayStatus);
             }
         }
 
+    }
+
+    //
+    public void Abandon(Player player){
+        if(room.turn==player.getSeatId()&&room.status == Room.roomStatus.PlayStatus){
+            room.status= Room.roomStatus.DiscardStatus;
+            player.Discard();
+            int nextTurn = (++room.turn)%room.players.size();
+            room.turn = nextTurn;
+            room.status= Room.roomStatus.JudgeStatus;
+        }
+        else if(room.status== Room.roomStatus.RescueStatus){
+            room.helpPlayers.remove(0);
+            if(room.helpPlayers.size()>0){
+                // 向下一个玩家发送请求
+            }
+            else room.GameOver(room);
+        }
+        else if(room.respPlayers.get(0)==player){
+            room.respPlayers.remove(0);
+            if(room.currentCard.AbandonResp(player)){
+                if(player.hp<=0){
+                    room.status= Room.roomStatus.RescueStatus;
+                    room.dyingPlayer=player;
+                    //通知房间内成员是否救援
+                }
+                else room.setStatus(Room.roomStatus.PlayStatus);
+            }
+        }
     }
 }

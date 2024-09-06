@@ -1,6 +1,7 @@
 package com.example.org;
 
 import java.util.Currency;
+import java.util.List;
 
 public class Card {
    private int typeId;
@@ -44,6 +45,9 @@ public class Card {
    public boolean Resp(Player targetPlayer,int typeId){
       return true;
    }
+   public boolean AbandonResp(Player targetPlayer){
+      return false;
+   }
 }
 
 /*所有牌共99张，
@@ -69,21 +73,32 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-   public void Use(Player player,Player targetPlayer){   //9.6 目前仅考虑了是否使用酒对杀的影响
-      if(player.isIfUseJiu()) {    //使用酒的时候，杀的伤害是2
-         targetPlayer.setHp(targetPlayer.getHp()-2);
-      }
-      else {  //未使用酒的时候的杀的伤害是1
-         targetPlayer.setHp(targetPlayer.getHp()-1);
-      }
-      //根据攻击距离，限制出杀次数，装备武器效果，是否喝酒，及对手是否响应执行对手血量变化
+   public void Use(Player player,Player targetPlayer){
+      //根据攻击距离，限制出杀次数，装备武器效果执行杀的效果
    }
    public boolean Resp(Player targetPlayer,int typeId){
-      if(targetPlayer.AbandonPlayCard()) return false;
+      if(AbandonResp(targetPlayer)) return false;
       for(int i=0;i<targetPlayer.getHandCardList().size();i++){
          if(targetPlayer.getHandCardList().get(i).getTypeId()==2) return true;
       }
       return false;
+   }
+   public boolean AbandonResp(Player targetPlayer){
+      int damage;
+      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isUseJiu) damage=2;
+      else damage = 1;
+      targetPlayer.hp-=damage;
+      if(targetPlayer.hp<=0){
+         List<Player> playerList = targetPlayer.room.players;
+         boolean add = false;
+         targetPlayer.room.helpPlayers.clear();
+         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
+               i%=targetPlayer.room.players.size();
+               if(playerList.get(i)==targetPlayer) add=true;
+               if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
+         }
+      }
+      return targetPlayer.hp<=0;
    }
 }
 
@@ -105,7 +120,7 @@ class Tao extends Card{
       super(typeId);
       super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Tao.jpg");
    }
-   public void UseTao(Player player){
+   public void Use(Player player){
       if(player.getHp()<player.getHpLimit()) {//血量+1
          int CurrentHp=player.getHp();
          player.setHp(CurrentHp);
@@ -123,14 +138,14 @@ class Jiu extends Card{
       super(typeId);
       super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Jiu.png");
    }
-   public void UseJiu(Player player){
+   public void Use(Player player){
       if(player.getHp()==0) {//濒死回血
          player.setHp(1);
       }
       //杀的伤害+1
       else
       {
-         player.setIfUseJiu(true);
+         player.isUseJiu=true;
       }
    }
 

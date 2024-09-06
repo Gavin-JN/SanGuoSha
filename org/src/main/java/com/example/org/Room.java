@@ -16,12 +16,16 @@ public class Room {
     public Player dyingPlayer;  //濒死求援的玩家
     public List<Room> roomList;
     public int turn;
-    enum roomStatus {InitStatus,JudgeStatus,DrawStatus,PlayStatus,DiscardStatus,
-                    ResponseStatus,RescueStatus,Closed,}; //房间各阶段
+    enum roomStatus {InitStatus,SelectStatus,JudgeStatus,DrawStatus,PlayStatus,DiscardStatus,
+                    RespStatus,RescueStatus,Closed}; //房间各阶段
     public roomStatus status;
 
     public Room(int roomId) {
         this.roomId = roomId;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 
     public int getTurn() {
@@ -56,7 +60,6 @@ public class Room {
         this.players = playerList;
         setStatus(roomStatus.InitStatus);
         cardList=CardManager.cardsPile;
-        sid=1;
     }
     public void InitHandCard(){
         for (Player player : players) {
@@ -71,11 +74,14 @@ public class Room {
         return players.get(seatId);
     }
     public void RespWithTarget(Player player,Player targetPlayer,int typeId){
-        getRoom().respPlayers.add(targetPlayer);
-        getRoom().setStatus(roomStatus.ResponseStatus);
-        getRoom().currentCard= new Card(typeId);
+        player.room.respPlayers.add(targetPlayer);
+        player.room.setStatus(roomStatus.RespStatus);
+        player.room.currentCard= new Card(typeId);
     }
     public void RespWithoutTarget(Player player,int typeId){
 
+    }
+    public void GameOver(Room room){
+        room.status=roomStatus.Closed;
     }
 }
