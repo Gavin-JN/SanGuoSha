@@ -13,17 +13,26 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class fireWindow extends Parent {
+
+    private  Pane player1Pane;
+    private Pane player2Pane;
+    private Pane gameAreaPane;
     
     public fireWindow(Player player1, Player targetPlayer) {
         //己方
         Pane player1Pane = new Pane();
         player1Pane.setPrefSize(1000, 150);
-
         //敌方
         Pane player2Pane = new Pane();
-
         //对战区域
         Pane gameAreaPane = new Pane();
+        Pane heroCardPane = new Pane();
+        Pane equipmentPane = new Pane();
+        //记录选中卡片的编号
+        List<Integer> checkedCards = new ArrayList<Integer>();
+        //敌方武将
+        Pane heroCardPane2 = new Pane();
+
         //设置根区域的背景图片
         BorderPane root = new BorderPane();
         Image image = new Image(getClass().getResourceAsStream("img/background.jpg"));
@@ -46,7 +55,6 @@ public class fireWindow extends Parent {
         Background background2 = new Background(backgroundImage2);
         player1Pane.setBackground(background2);
         //编辑己方区域的内容
-        Pane heroCardPane = new Pane();
         heroCardPane.setPrefSize(100, 150);
         Image imageHero = new Image(getClass().getResourceAsStream("img/hero.png"));
         BackgroundImage heroImage = new BackgroundImage(imageHero, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -56,7 +64,6 @@ public class fireWindow extends Parent {
         heroCardPane.setLayoutY(0);
         player1Pane.getChildren().add(heroCardPane);
 
-        Pane equipmentPane = new Pane();
         equipmentPane.setPrefSize(100, 150);
         Image imageEquipment = new Image(getClass().getResourceAsStream("img/equipment.png"));
         BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -65,9 +72,6 @@ public class fireWindow extends Parent {
         equipmentPane.setLayoutX(180);
         equipmentPane.setLayoutY(0);
         player1Pane.getChildren().add(equipmentPane);
-
-        //记录选中卡片的编号
-        List<Integer> checkedCards = new ArrayList<Integer>();
 
         for (int i = 0; i < player1.getHandCardList().size(); i++) {
             Pane cardPane = new Pane();
@@ -108,11 +112,9 @@ public class fireWindow extends Parent {
                 //被点击后标记事件，即该张牌可能会出
             });
             player1Pane.getChildren().add(cardPane);
-//            player1Pane.getChildren().add(cardPane);
         }
 
-        //敌方武将
-        Pane heroCardPane2 = new Pane();
+
         heroCardPane2.setPrefSize(100, 150);
         Image imageHero2 = new Image(getClass().getResourceAsStream("img/hero.png"));   //根据玩家抽中的武将，上传对应的图片
         BackgroundImage heroImage2 = new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -182,6 +184,8 @@ public class fireWindow extends Parent {
                 showCardPane.setLayoutY(100);
                 gameAreaPane.getChildren().add(showCardPane);
             }
+
+
 
             System.out.println("决定出牌");
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
