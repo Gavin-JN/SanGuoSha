@@ -35,7 +35,7 @@ public class Receiver {
         if (room.respPlayers.contains(player) && room.respPlayers.get(0) == player && room.status== Room.roomStatus.RespStatus) return true;
         if (room.helpPlayers.contains(player) && room.helpPlayers.get(0) == player && room.status== Room.roomStatus.RescueStatus) return true;
         if (room.turn == player.seatId && room.status== Room.roomStatus.PlayStatus){
-            if(player.IsAbleToPlay()) return true;
+            if(!player.IsAbleToPlay(0)) return true;
             else return false;
         }
         return false;
