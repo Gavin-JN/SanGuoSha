@@ -55,17 +55,17 @@ public class Heroes {
                 System.out.println("本回合制衡已经使用过了！");
                 return;
             }
-            if (discardCards > player.getHandCardList().size()) {
+            if (discardCards > player.handCardList.size()) {
                 System.out.println("手牌不足以弃牌！");
                 return;
             }
             for(int i=0;i<checkedCard.size();i++) {
-                player.getHandCardList().remove(checkedCard.get(i));
+                player.handCardList.remove(checkedCard.get(i));
             }
           for(int i=0;i<discardCards;i++) {   //抽取与弃牌数量相同的新牌
               int typeOfCard=player.DrawCard(cardList);  //cardList为待抽取的剩余的所有卡牌
               Card cardIn=new Card(typeOfCard);
-              player.getHandCardList().add(cardIn);
+              player.handCardList.add(cardIn);
           }
             balanceUsed = true;
             System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
@@ -83,7 +83,7 @@ public class Heroes {
 
             public void jianXiong(Card card, Player player) {  //card为对对该角色造成伤害的卡牌
                 // 获得对自己造成伤害的牌
-                player.getHandCardList().add(card);  // 模拟获得一张牌
+                player.handCardList.add(card);  // 模拟获得一张牌
                 System.out.println("曹操发动奸雄，获得了" + card + "牌。");
             }
         }
