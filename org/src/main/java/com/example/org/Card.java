@@ -26,6 +26,14 @@ public class Card {
    public boolean Resp(Player targetPlayer,int typeId){
       return true;
    }
+
+    public String getCardPhotoPath() {
+        return "";
+    }
+
+   public boolean AbandonResp(Player player) {
+       return false;
+   }
 }
 
 /*所有牌共99张，

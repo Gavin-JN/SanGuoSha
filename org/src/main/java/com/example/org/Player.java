@@ -199,4 +199,8 @@ public class Player {
         }
         return false;
     }
+
+    public boolean AbandonPlayCard() {
+        return false;
+    }
 }
