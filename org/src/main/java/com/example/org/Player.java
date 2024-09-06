@@ -7,9 +7,18 @@ import java.util.List;
 
 public class Player {
     public int seatId;
+    private Heroes hero;
     private List<Card> handCardList;
     public List<Card> equipCardList;
     public List<Card> judgeCardList;
+
+    public Heroes getHero() {
+        return hero;
+    }
+
+    public void setHero(Heroes hero) {
+        this.hero = hero;
+    }
 
     public int hp;
     //    final static int hp= ;设置一个静态变量代表当前血量
