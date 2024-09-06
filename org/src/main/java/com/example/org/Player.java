@@ -11,6 +11,11 @@ public class Player {
     private List<Card> handCardList;
     public List<Card> equipCardList;
     public List<Card> judgeCardList;
+    public Room room;
+    public int hp;
+    public int hpLimit;//血量上限
+    public boolean isUseJiu=false;
+    public boolean ifUseGuoHeChaiQiao=false;
 
     public Heroes getHero() {
         return hero;
@@ -19,12 +24,6 @@ public class Player {
     public void setHero(Heroes hero) {
         this.hero = hero;
     }
-
-    public int hp;
-    //    final static int hp= ;设置一个静态变量代表当前血量
-    public int hpLimit;//血量上限
-    public boolean isUseJiu=false;
-    public boolean ifUseGuoHeChaiQiao=false;
 
     public boolean isIfUseGuoHeChaiQiao() {
         return ifUseGuoHeChaiQiao;
@@ -43,8 +42,6 @@ public class Player {
 
     }
 
-    public Room room;
-
     public int getHp() {
         return hp;
     }
@@ -55,11 +52,12 @@ public class Player {
 
     private int attackDistance;
 
-
+    //返回当前玩家的手牌的总数量
     public int getCardsNum() {
         return handCardList.size();
-    }//当前玩家手牌数量
+    }
 
+    //返回该玩家当前拥有杀的数量
     public int getShaNum() {
         int number = 0;
         for (int i = 0; i < handCardList.size(); i++) {
@@ -110,6 +108,7 @@ public class Player {
         return seatId;
     }
 
+    //判定牌
     public void JudgeCardList(Player player) {
         if (player.judgeCardList.size() == 0)
             return;
@@ -134,7 +133,7 @@ public class Player {
             return true;
     }
 
-    //抽牌
+    //抽牌，返回的是抽中牌的类型编码
     public int DrawCard(List<Card> cardList) {   //cardList为当前这局游戏的剩余的所有的待摸牌
         Collections.shuffle(cardList);  //打乱剩余牌的次序
         int typeOfCard = 0;
@@ -147,7 +146,7 @@ public class Player {
         return typeOfCard;
     }
 
-
+    //
     public boolean IsAbleToPlay() {
         //若乐不思蜀判定成功则返回false ，弹出一张非红桃牌及“乐不思蜀生效”字样
         if (Math.random() > 0.75)

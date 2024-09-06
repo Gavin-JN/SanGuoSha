@@ -3,6 +3,7 @@ package com.example.org;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -23,6 +24,7 @@ public class fireWindow extends Parent {
     private List <Integer> checkedCardFromTarget;
     private List<Integer> checkedCards;
     private BorderPane root;
+
     public fireWindow(Player player1, Player targetPlayer) {
         //己方
         player1Pane = new Pane();
@@ -109,7 +111,7 @@ public class fireWindow extends Parent {
             int finalI = i;
             Integer finaLi=i;
             AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
-
+            //鼠标悬浮以及点击事件
             cardPane.setOnMouseClicked(event -> {
                 if(!isClicked.get()) {
                     cardPane.setTranslateY(-38);
@@ -129,7 +131,7 @@ public class fireWindow extends Parent {
             cardContainer.getChildren().add(cardPane);
         }
 
-
+        //敌方武将照片
         heroCardPane2.setPrefSize(100, 150);
         Image imageHero2 = new Image(getClass().getResourceAsStream(targetPlayer.getHero().getHeroPhotoPath()));   //根据玩家抽中的武将，上传对应的图片
         BackgroundImage heroImage2 = new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -139,8 +141,7 @@ public class fireWindow extends Parent {
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
 
-
-
+        //敌方卡牌信息
         for (int i = 0; i < targetPlayer.getHandCardList().size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
@@ -152,7 +153,6 @@ public class fireWindow extends Parent {
             cardPane.setLayoutX(650 + i * 45);
             cardPane.setLayoutY(0);
             player2Pane.getChildren().add(cardPane);
-
 
             //要判断玩家是否可以弃对方的牌
             AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
@@ -229,7 +229,6 @@ public class fireWindow extends Parent {
             checkedCards.clear();
         });
 
-
         //弃牌按钮
         Button fold = new Button();
         fold.setPrefSize(80, 40);
@@ -301,6 +300,22 @@ public class fireWindow extends Parent {
         gameAreaPane.getChildren().add(down);
         gameAreaPane.getChildren().add(fold);
 
+        //设置血条(己方)
+        ProgressBar healthBar1 = new ProgressBar();
+        healthBar1.setProgress(1.0);  // 初始为满血
+        healthBar1.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
+        healthBar1.setPrefWidth(100);  // 设置血条的宽度
+        healthBar1.setLayoutX(0);
+        heroCardPane.getChildren().add(healthBar1);
+
+        //设置血条（敌方）
+        ProgressBar healthBar2 = new ProgressBar();
+        healthBar2.setProgress(1.0);  // 初始为满血
+        healthBar2.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
+        healthBar2.setPrefWidth(100);  // 设置血条的宽度
+        healthBar2.setLayoutX(0);
+        healthBar2.setProgress(80.0/100);
+        heroCardPane2.getChildren().addAll(healthBar2);
 
         //设置Scane和Stage的大小
         Scene scene = new Scene(root, 1250, 700);
@@ -314,10 +329,10 @@ public class fireWindow extends Parent {
         stage.getIcons().add(icon);
         stage.setTitle("FireWindow");
         stage.show();
-
     }
 
-    private void renderPlayerCards(Pane cardContainer, Player player) {   //更新己方玩家的卡牌区域
+    //更新己方玩家的卡牌区域
+    private void renderPlayerCards(Pane cardContainer, Player player) {
         // 清空卡牌容器
         cardContainer.getChildren().clear();
 
@@ -370,7 +385,7 @@ public class fireWindow extends Parent {
         }
     }
 
-
+    //将出的牌展示在对战区域
     private void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
     {
         cardContainer2.getChildren().clear();
@@ -390,5 +405,13 @@ public class fireWindow extends Parent {
 
     }
 
+    //当玩家的血量发生变化的时候调用此函数更新界面上的血条
+    private void updataBlood(Pane heroCardPhone00,Player player,ProgressBar healthBar)   //更新血条长度
+    {
+        heroCardPhone00.getChildren().clear();
+        double MaxBlood=player.getHpLimit();
+        double nowBlood=player.getHp();
+        healthBar.setProgress(nowBlood/MaxBlood);
+        heroCardPhone00.getChildren().add(healthBar);
+    }
 }
-
