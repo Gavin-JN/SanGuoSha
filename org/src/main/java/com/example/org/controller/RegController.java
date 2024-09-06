@@ -29,9 +29,9 @@ public class RegController {
     @FXML
     public void login(ActionEvent event){
         System.out.println("login");
-        FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         //获取当前窗口
-        Stage stage=(Stage) ((Node)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
 
         try {

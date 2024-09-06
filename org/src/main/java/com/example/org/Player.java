@@ -183,11 +183,11 @@ public class Player {
         return false;
     }
     public boolean AbandonPlayCard(){
-        if(IsAbandonPlay()) return true; //btn事件
+        if(IsAbandonPlay()) return true;
         return false;
     }
 
     private boolean IsAbandonPlay() {
         return true;
-    }
+    } //btn事件
 }

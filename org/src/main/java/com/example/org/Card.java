@@ -23,6 +23,9 @@ public class Card {
    public boolean RequireTarget(){
       return false;
    }
+   public boolean Resp(Player targetPlayer,int typeId){
+      return true;
+   }
 }
 
 /*所有牌共99张，
@@ -47,7 +50,15 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-   public void Use(){
+   public void Use(Player targetPlayer){
+      //根据攻击距离，限制出杀次数，装备武器效果，是否喝酒，及对手是否响应执行对手血量变化
+   }
+   public boolean Resp(Player targetPlayer,int typeId){
+      if(targetPlayer.AbandonPlayCard()) return false;
+      for(int i=0;i<targetPlayer.getHandCardList().size();i++){
+         if(targetPlayer.getHandCardList().get(i).getTypeId()==2) return true;
+      }
+      return false;
    }
 }
 
