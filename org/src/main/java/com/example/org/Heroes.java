@@ -6,7 +6,7 @@ public class Heroes {
 
     public int hpLimit;//血量上限
     private Player player;    //将武将与玩家绑定
-
+    //武将图片资源路径
     private String heroPhotoPath;
 
     public String getHeroPhotoPath() {
