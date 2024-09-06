@@ -12,12 +12,22 @@ public class Player {
     private List<Card> judgeCardList;
 
     //用于判断玩家是否使用酒
-    private  boolean ifUseJiu=false;
+    private  boolean ifUseJiu=false;  //是否使用了酒
+    private  boolean ifUseGuoHeChaiQiao=false;  //是否使用了过河拆桥
 
     private int hp;
     //    final static int hp= ;设置一个静态变量代表当前血量
     private int hpLimit;//血量上限
     //血量
+
+
+    public boolean isIfUseGuoHeChaiQiao() {
+        return ifUseGuoHeChaiQiao;
+    }
+
+    public void setIfUseGuoHeChaiQiao(boolean ifUseGuoHeChaiQiao) {
+        this.ifUseGuoHeChaiQiao = ifUseGuoHeChaiQiao;
+    }
 
     public boolean isIfUseJiu() {
         return ifUseJiu;

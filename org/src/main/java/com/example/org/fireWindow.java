@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class fireWindow extends Parent {
     
-    public fireWindow() {
+    public fireWindow(Player player1, Player targetPlayer) {
         //己方
         Pane player1Pane = new Pane();
         player1Pane.setPrefSize(1000, 150);
@@ -122,6 +122,8 @@ public class fireWindow extends Parent {
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
 
+
+        List<Integer> checkedCardFromTarget =new ArrayList<>(); //选中的对方玩家的牌的列表
         for (int i = 0; i < 6; i++) {    //根据对方玩家的卡牌的数量循环对应的次数
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
@@ -133,6 +135,23 @@ public class fireWindow extends Parent {
             cardPane.setLayoutX(650 + i * 45);
             cardPane.setLayoutY(0);
             player2Pane.getChildren().add(cardPane);
+
+
+            //要判断玩家是否可以弃对方的牌
+            AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
+            int finalI = i;
+            Integer FinaLi=i;
+            cardPane.setOnMouseClicked(event -> {
+                if (!isClicked.get()) {
+                    cardPane.setTranslateY(30);
+                    isClicked.set(true);
+                    checkedCardFromTarget.add(finalI);
+                } else {
+                    cardPane.setTranslateY(0);
+                    isClicked.set(false);
+                    checkedCardFromTarget.remove(FinaLi);
+                }
+            });
         }
 
 
@@ -181,12 +200,34 @@ public class fireWindow extends Parent {
         fold.setStyle("-fx-background-color: #000fff");
         fold.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         fold.setOnAction(event -> {
+
+            //需要判断是弃自己的牌还是其对方的牌，看是否使用了过河拆桥
+
+            if(player1.isIfUseGuoHeChaiQiao())   //使用的是过河拆桥，故此时弃对方玩家的牌
+            {
+                for(int i=0;i<checkedCardFromTarget.size();i++) {   //将弃的卡牌展示在对战区域
+                    Pane showCardPane = new Pane();
+                    showCardPane.setPrefSize(100, 150);
+                    Image imageShowCard = new Image(getClass().getResourceAsStream(targetPlayer.getHandCardList().get(checkedCardFromTarget.get(i)).getCardPhotoPath()));
+                    BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
+                    BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
+                    Background showCardBackground=new Background(showCardImage);
+                    showCardPane.setBackground(showCardBackground);
+                    showCardPane.setLayoutX(400+i*40);
+                    showCardPane.setLayoutY(100);
+                    gameAreaPane.getChildren().add(showCardPane);
+                }
+                for(int i=0;i<checkedCardFromTarget.size();i++) {
+                    targetPlayer.getHandCardList().remove(checkedCardFromTarget.get(i));//删除对方玩家的被选中的手牌
+                }
+
+            }
+
             System.out.println("决定弃牌");
             //将checkedCard列表中的编号的卡牌从玩家目前已有的卡牌中remove
             checkedCards.clear();
 
         });
-
 
         //返回按钮
         Button back = new Button();
@@ -202,12 +243,10 @@ public class fireWindow extends Parent {
             checkedCards.clear();
         });
 
-
         player2Pane.getChildren().add(back);
         gameAreaPane.getChildren().add(up);
         gameAreaPane.getChildren().add(down);
         gameAreaPane.getChildren().add(fold);
-
 
         //设置Scane和Stage的大小
         Scene scene = new Scene(root, 1250, 700);

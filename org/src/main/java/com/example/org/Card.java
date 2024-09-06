@@ -4,8 +4,26 @@ import java.util.Currency;
 
 public class Card {
    private int typeId;
+   private int fireDistance;//卡牌的攻击距离
+   private String cardPhotoPath;
 
-   public Card( int typeId) {
+   public String getCardPhotoPath() {
+      return cardPhotoPath;
+   }
+
+   public void setCardPhotoPath(String cardPhotoPath) {
+      this.cardPhotoPath = cardPhotoPath;
+   }
+
+   public int getFireDistance() {
+      return fireDistance;
+   }
+
+   public void setFireDistance(int fireDistance) {
+      this.fireDistance = fireDistance;
+   }
+
+   public Card(int typeId) {
       this.typeId = typeId;
    }
    public int getTypeId() {
@@ -121,6 +139,7 @@ class Jiu extends Card{
 class ShunShouQianYang extends Card {
    public ShunShouQianYang(int typeId) {
       super(typeId);
+      super.setFireDistance(1);  //攻击距离为1
    }
 
    public boolean CanInitiative() {
@@ -144,6 +163,10 @@ class GuoHeChaiQiao extends Card{
 
    public boolean RequireTarget() {
       return true;
+   }
+
+   public void dicardFromTargetPlayer(Player targetPlayer,int locationCard) {      //location为玩家选中的对方牌在对方牌组里的索引
+     // targetPlayer
    }
 }
 
@@ -260,6 +283,7 @@ class WanJianQiFa extends Card{
 class ZhuGeLianNu extends Card{
    public ZhuGeLianNu(int typeId) {
       super(typeId);
+      super.setFireDistance(1);
    }
 
    public boolean CanInitiative() {
@@ -271,6 +295,7 @@ class ZhuGeLianNu extends Card{
 class HanBingJian extends Card{
    public HanBingJian(int typeId) {
       super(typeId);
+      super.setFireDistance(2);
    }
 
    public boolean CanInitiative() {
@@ -282,6 +307,7 @@ class HanBingJian extends Card{
 class GuDingDao extends Card{
    public GuDingDao(int typeId) {
       super(typeId);
+      super.setFireDistance(2);
    }
 
    public boolean CanInitiative() {
@@ -293,6 +319,7 @@ class GuDingDao extends Card{
 class QingLongYanYueDao extends Card{
    public QingLongYanYueDao(int typeId) {
       super(typeId);
+      super.setFireDistance(3);
    }
 
    public boolean CanInitiative() {
