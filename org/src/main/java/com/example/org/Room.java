@@ -79,4 +79,10 @@ public class Room {
     public void GameOver(Room room){
         room.status=roomStatus.Closed;
     }
+    public boolean IsPlayFinish(Player player1,Player player2) {
+        if(player1.hp==0||player2.hp==0)//判断条件应该为 “某一玩家血量为0且在响应阶段没有使用桃或酒”
+        return true;
+        else
+            return false;
+    }
 }

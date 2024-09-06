@@ -3,6 +3,7 @@ package com.example.org;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -17,24 +18,32 @@ public class fireWindow extends Parent {
     private  Pane player1Pane;
     private Pane player2Pane;
     private Pane gameAreaPane;
-    
+    private Pane heroCardPane;
+    private  Pane equipmentPane;
+    private   Pane heroCardPane2;
+    private List <Integer> checkedCardFromTarget;
+    private List<Integer> checkedCards;
+    private BorderPane root;
+
     public fireWindow(Player player1, Player targetPlayer) {
         //己方
-        Pane player1Pane = new Pane();
+        player1Pane = new Pane();
         player1Pane.setPrefSize(1000, 150);
         //敌方
-        Pane player2Pane = new Pane();
+        player2Pane = new Pane();
         //对战区域
-        Pane gameAreaPane = new Pane();
-        Pane heroCardPane = new Pane();
-        Pane equipmentPane = new Pane();
+        gameAreaPane = new Pane();
+        heroCardPane = new Pane();
+        equipmentPane = new Pane();
+        checkedCardFromTarget =new ArrayList<>(); //选中的对方玩家的牌的列表
         //记录选中卡片的编号
-        List<Integer> checkedCards = new ArrayList<Integer>();
+        checkedCards = new ArrayList<Integer>();
         //敌方武将
-        Pane heroCardPane2 = new Pane();
+        heroCardPane2 = new Pane();
+
 
         //设置根区域的背景图片
-        BorderPane root = new BorderPane();
+        root = new BorderPane();
         Image image = new Image(getClass().getResourceAsStream("img/background.jpg"));
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImage);
@@ -54,16 +63,18 @@ public class fireWindow extends Parent {
                 backgroundSize);
         Background background2 = new Background(backgroundImage2);
         player1Pane.setBackground(background2);
+
+
         //编辑己方区域的内容
         heroCardPane.setPrefSize(100, 150);
-        Image imageHero = new Image(getClass().getResourceAsStream("img/hero.png"));
+        Image imageHero = new Image(getClass().getResourceAsStream(player1.getHero().getHeroPhotoPath()));
         BackgroundImage heroImage = new BackgroundImage(imageHero, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background heroBackground = new Background(heroImage);
         heroCardPane.setBackground(heroBackground);
         heroCardPane.setLayoutX(20);
         heroCardPane.setLayoutY(0);
         player1Pane.getChildren().add(heroCardPane);
-
+        //己方装备
         equipmentPane.setPrefSize(100, 150);
         Image imageEquipment = new Image(getClass().getResourceAsStream("img/equipment.png"));
         BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -73,6 +84,12 @@ public class fireWindow extends Parent {
         equipmentPane.setLayoutY(0);
         player1Pane.getChildren().add(equipmentPane);
 
+        //己方卡牌区
+        Pane cardContainer = new Pane();  //卡牌区域
+        cardContainer.setPrefSize(900, 150);
+        cardContainer.setLayoutX(340);
+        cardContainer.setLayoutY(0);
+        player1Pane.getChildren().add(cardContainer);
         for (int i = 0; i < player1.getHandCardList().size(); i++) {
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
@@ -80,7 +97,7 @@ public class fireWindow extends Parent {
             BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
             Background cardBackground = new Background(cardImage);
             cardPane.setBackground(cardBackground);
-            cardPane.setLayoutX(340 + i * 110);
+            cardPane.setLayoutX(0 + i * 110);
             cardPane.setLayoutY(0);
 
             cardPane.setOnMouseEntered(event -> {
@@ -94,7 +111,7 @@ public class fireWindow extends Parent {
             int finalI = i;
             Integer finaLi=i;
             AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
-
+            //鼠标悬浮以及点击事件
             cardPane.setOnMouseClicked(event -> {
                 if(!isClicked.get()) {
                     cardPane.setTranslateY(-38);
@@ -111,12 +128,12 @@ public class fireWindow extends Parent {
                 }
                 //被点击后标记事件，即该张牌可能会出
             });
-            player1Pane.getChildren().add(cardPane);
+            cardContainer.getChildren().add(cardPane);
         }
 
-
+        //敌方武将照片
         heroCardPane2.setPrefSize(100, 150);
-        Image imageHero2 = new Image(getClass().getResourceAsStream("img/hero.png"));   //根据玩家抽中的武将，上传对应的图片
+        Image imageHero2 = new Image(getClass().getResourceAsStream(targetPlayer.getHero().getHeroPhotoPath()));   //根据玩家抽中的武将，上传对应的图片
         BackgroundImage heroImage2 = new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background heroBackground2 = new Background(heroImage2);
         heroCardPane2.setBackground(heroBackground2);
@@ -124,8 +141,7 @@ public class fireWindow extends Parent {
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
 
-
-        List<Integer> checkedCardFromTarget =new ArrayList<>(); //选中的对方玩家的牌的列表
+        //敌方卡牌信息
         for (int i = 0; i < targetPlayer.getHandCardList().size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
@@ -137,7 +153,6 @@ public class fireWindow extends Parent {
             cardPane.setLayoutX(650 + i * 45);
             cardPane.setLayoutY(0);
             player2Pane.getChildren().add(cardPane);
-
 
             //要判断玩家是否可以弃对方的牌
             AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
@@ -156,6 +171,12 @@ public class fireWindow extends Parent {
             });
         }
 
+       //在gameArea区域展示牌
+        Pane cardContainer2 = new Pane();
+        cardContainer2.setPrefSize(400,400);
+        cardContainer2.setLayoutX(400);
+        cardContainer2.setLayoutY(100);
+        gameAreaPane.getChildren().add(cardContainer2);
 
         //出牌按钮
         Button up = new Button();
@@ -167,10 +188,6 @@ public class fireWindow extends Parent {
         up.setStyle("-fx-background-color: #000fff");
         up.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         up.setOnAction(event -> {
-
-            //清空对战区域
-            gameAreaPane.getChildren().clear();
-
             for(int i=0;i<checkedCards.size();i++)
             {
                 Pane showCardPane = new Pane();
@@ -184,14 +201,17 @@ public class fireWindow extends Parent {
                 showCardPane.setLayoutY(100);
                 gameAreaPane.getChildren().add(showCardPane);
             }
-
-
-
             System.out.println("决定出牌");
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
+            showCardInArea(cardContainer2,player1,checkedCards); //展示
+            for(int i=0;i<checkedCards.size();i++)  //删除本地
+            {
+                player1.getHandCardList().remove((int)(checkedCards.get(i)));
+            }
+            //玩家手牌列表更新之后再展示手牌
+            renderPlayerCards(cardContainer,player1);
             checkedCards.clear();
         });
-
 
         //结束回合按钮
         Button down = new Button();
@@ -204,13 +224,10 @@ public class fireWindow extends Parent {
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         down.setOnAction(event -> {
 
-            //清空对战区域
-            gameAreaPane.getChildren().clear();
 
             System.out.println("回合结束进入下一回合");
             checkedCards.clear();
         });
-
 
         //弃牌按钮
         Button fold = new Button();
@@ -222,8 +239,7 @@ public class fireWindow extends Parent {
         fold.setStyle("-fx-background-color: #000fff");
         fold.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         fold.setOnAction(event -> {
-            //先清空gameArea区域内的所有pane组件
-            gameAreaPane.getChildren().clear();
+
 
             //需要判断是弃自己的牌还是其对方的牌，看是否使用了过河拆桥
             if(player1.isIfUseGuoHeChaiQiao())   //使用的是过河拆桥，故此时弃对方玩家的牌
@@ -240,16 +256,19 @@ public class fireWindow extends Parent {
                     showCardPane.setLayoutY(100);
                     gameAreaPane.getChildren().add(showCardPane);
                 }
-                for(int i=0;i<checkedCardFromTarget.size();i++) {
-                    targetPlayer.getHandCardList().remove(checkedCardFromTarget.get(i));//删除对方玩家的被选中的手牌
-                }
 
+                showCardInArea(cardContainer2,targetPlayer,checkedCardFromTarget); //在gameArea区域展示
+
+                for(int i=0;i<checkedCardFromTarget.size();i++) {
+                    targetPlayer.getHandCardList().remove((int)checkedCardFromTarget.get(i));//删除对方玩家的被选中的手牌
+                }
             }
             else {  //不是过河 拆桥，则删除己方玩家的被选中的卡牌
 
                 for(int i=0;i<checkedCards.size();i++) {
-                    player1.getHandCardList().remove(checkedCards.get(i));
+                    player1.getHandCardList().remove((int)(checkedCards.get(i)));
                 }
+                renderPlayerCards(cardContainer,player1);
 
             }
 
@@ -270,8 +289,10 @@ public class fireWindow extends Parent {
         back.setStyle("-fx-background-color: #000fff");
         back.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         back.setOnAction(event -> {
+
             System.out.println("返回开始页面");
             checkedCards.clear();
+
         });
 
         player2Pane.getChildren().add(back);
@@ -279,6 +300,22 @@ public class fireWindow extends Parent {
         gameAreaPane.getChildren().add(down);
         gameAreaPane.getChildren().add(fold);
 
+        //设置血条(己方)
+        ProgressBar healthBar1 = new ProgressBar();
+        healthBar1.setProgress(1.0);  // 初始为满血
+        healthBar1.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
+        healthBar1.setPrefWidth(100);  // 设置血条的宽度
+        healthBar1.setLayoutX(0);
+        heroCardPane.getChildren().add(healthBar1);
+
+        //设置血条（敌方）
+        ProgressBar healthBar2 = new ProgressBar();
+        healthBar2.setProgress(1.0);  // 初始为满血
+        healthBar2.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
+        healthBar2.setPrefWidth(100);  // 设置血条的宽度
+        healthBar2.setLayoutX(0);
+        healthBar2.setProgress(80.0/100);
+        heroCardPane2.getChildren().addAll(healthBar2);
 
         //设置Scane和Stage的大小
         Scene scene = new Scene(root, 1250, 700);
@@ -292,7 +329,89 @@ public class fireWindow extends Parent {
         stage.getIcons().add(icon);
         stage.setTitle("FireWindow");
         stage.show();
+    }
+
+    //更新己方玩家的卡牌区域
+    private void renderPlayerCards(Pane cardContainer, Player player) {
+        // 清空卡牌容器
+        cardContainer.getChildren().clear();
+
+        // 遍历玩家的手牌列表
+        for (int i = 0; i < player.getHandCardList().size(); i++) {
+            Pane cardPane = new Pane();
+            cardPane.setPrefSize(100, 150);
+
+            // 从手牌列表中获取卡牌图片路径
+            String cardPhotoPath = player.getHandCardList().get(i).getCardPhotoPath();
+            Image imageCard = new Image(getClass().getResourceAsStream(cardPhotoPath));
+
+            // 创建卡牌背景图
+            BackgroundImage cardImage = new BackgroundImage(
+                    imageCard,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    BackgroundSize.DEFAULT
+            );
+            Background cardBackground = new Background(cardImage);
+            cardPane.setBackground(cardBackground);
+
+            // 设置卡牌的布局位置（水平排列）
+            cardPane.setLayoutX(340 + i * 110);
+            cardPane.setLayoutY(0);
+
+            // 添加卡牌的交互事件，如悬浮效果、点击效果等
+            cardPane.setOnMouseEntered(event -> cardPane.setLayoutY(-20));
+            cardPane.setOnMouseExited(event -> cardPane.setLayoutY(0));
+
+            AtomicBoolean isClicked = new AtomicBoolean(false);
+            int finalI = i;
+            cardPane.setOnMouseClicked(event -> {
+                if (!isClicked.get()) {
+                    cardPane.setTranslateY(-38);
+                    isClicked.set(true);
+                    // 添加选中的卡牌编号
+                    checkedCards.add(finalI);
+                } else {
+                    cardPane.setTranslateY(0);
+                    isClicked.set(false);
+                    // 移除选中的卡牌编号
+                    checkedCards.remove(Integer.valueOf(finalI));
+                }
+            });
+
+            // 将卡牌添加到卡牌容器中
+            cardContainer.getChildren().add(cardPane);
+        }
+    }
+
+    //将出的牌展示在对战区域
+    private void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
+    {
+        cardContainer2.getChildren().clear();
+      for(int i=0;i<checked.size();i++)
+      {
+          Pane showCardPane = new Pane();
+          showCardPane.setPrefSize(100, 150);
+          Image imageShowCard = new Image(getClass().getResourceAsStream(player.getHandCardList().get(checked.get(i)).getCardPhotoPath()));
+          BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
+          BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
+          Background showCardBackground=new Background(showCardImage);
+          showCardPane.setBackground(showCardBackground);
+          showCardPane.setLayoutX(0+i*30);
+          showCardPane.setLayoutY(0);
+          cardContainer2.getChildren().add(showCardPane);
+      }
 
     }
-}
 
+    //当玩家的血量发生变化的时候调用此函数更新界面上的血条
+    private void updataBlood(Pane heroCardPhone00,Player player,ProgressBar healthBar)   //更新血条长度
+    {
+        heroCardPhone00.getChildren().clear();
+        double MaxBlood=player.getHpLimit();
+        double nowBlood=player.getHp();
+        healthBar.setProgress(nowBlood/MaxBlood);
+        heroCardPhone00.getChildren().add(healthBar);
+    }
+}
