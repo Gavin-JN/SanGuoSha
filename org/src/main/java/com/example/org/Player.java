@@ -7,9 +7,20 @@ import java.util.List;
 
 public class Player {
     public int seatId;
+    private Heroes hero;
     private List<Card> handCardList;
     public List<Card> equipCardList;
     public List<Card> judgeCardList;
+
+    public final static int ToDistance=1;//自己对敌方距离
+    public final static int FromDistance=1;//敌方对自己距离
+    public Heroes getHero() {
+        return hero;
+    }
+
+    public void setHero(Heroes hero) {
+        this.hero = hero;
+    }
 
     public int hp;
     //    final static int hp= ;设置一个静态变量代表当前血量
@@ -25,14 +36,14 @@ public class Player {
         this.ifUseGuoHeChaiQiao = ifUseGuoHeChaiQiao;
     }
 
-    //血量
+    //血量,实时更新
     public void setHp(int CurrentHp) {
         this.hp = CurrentHp;
     }
 
-    public void setHpLimit() {
-
-    }
+    public void setHpLimit(Heroes hero) {
+        this.hpLimit=hero.getHpLimit();
+    }//血量上限为所选武将的血量上限
 
     public Room room;
 
@@ -164,9 +175,7 @@ public class Player {
         }
     }
 
-    public boolean IsPlayFinish() {
-        return true;
-    }
+
 
     public boolean IsRequireDiscard() {
         return true;
