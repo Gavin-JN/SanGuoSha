@@ -3,20 +3,24 @@ package com.example.org.UserDao.impl;
 import com.example.org.UserDao.SQLExec;
 
 import java.sql.*;
-
 public class SQLExecImpl implements SQLExec
 {
     private Connection conn;
-    public SQLExecImpl()
-    {
-        String url="jdbc:mysql://192.168.185.82:3306/db1";
+    public SQLExecImpl() throws ClassNotFoundException {
+        String url="jdbc:mysql://localhost:3306/db1";
         String username="root";
         String password="17727096201";
 
         try
         {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             this.conn = DriverManager.getConnection(url, username, password);
-            Statement stmt = conn.createStatement();
+//            Statement stmt = conn.createStatement();
+            if (this.conn != null) {
+                System.out.println("Connection success");
+            } else {
+                System.out.println("Connection failed: Connection object is null");
+            }
         }catch (SQLException e)
         {
             System.out.println("Connctions failed:"+e);
@@ -26,6 +30,10 @@ public class SQLExecImpl implements SQLExec
 
     @Override
     public boolean queryAccount(String account, String password) throws SQLException {
+        if (this.conn == null) {
+            System.out.println("No database connection available.");
+            return false;
+        }
         boolean isExist=false;
         String sql="SELECT * FROM account where account=? and password=?";
         PreparedStatement pstmt=conn.prepareStatement(sql);
@@ -46,6 +54,10 @@ public class SQLExecImpl implements SQLExec
 
     @Override
     public boolean queryAccount(String account) throws SQLException {
+        if (this.conn == null) {
+            System.out.println("No database connection available.");
+            return false;
+        }
         boolean isExist=false;
         String sql="SELECT * FROM account where account=?";
         PreparedStatement pstmt=conn.prepareStatement(sql);
@@ -62,6 +74,10 @@ public class SQLExecImpl implements SQLExec
 
     @Override
     public void addAccount(String username,String password, String nickname,String email) throws SQLException {
+        if (this.conn == null) {
+            System.out.println("No database connection available.");
+            return;
+        }
         String sql="INSERT INTO account(username,account,password,email) value(?,?,?,?)";
         PreparedStatement pstmt=conn.prepareStatement(sql);
 
@@ -78,6 +94,10 @@ public class SQLExecImpl implements SQLExec
 
     @Override
     public void removeAccount(String account) throws SQLException {
+        if (this.conn == null) {
+            System.out.println("No database connection available.");
+            return;
+        }
         String sql="DELETE FROM account where account=?";
         PreparedStatement pstmt=conn.prepareStatement(sql);
         pstmt.setString(1,account);
@@ -89,6 +109,10 @@ public class SQLExecImpl implements SQLExec
 
     @Override
     public void changeData(String account,String password) throws SQLException {
+        if (this.conn == null) {
+            System.out.println("No database connection available.");
+            return;
+        }
         String sql="UPDATE account\n"+
                 "set password=?\n"+
                 "where account=?";

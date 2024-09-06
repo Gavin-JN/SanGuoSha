@@ -92,7 +92,7 @@ public class RegController {
     }
 
     @FXML
-    public void register(ActionEvent event) throws SQLException {
+    public void register(ActionEvent event) throws SQLException, ClassNotFoundException {
         System.out.println("register");
         IUserDaoImpl user = new IUserDaoImpl();
         user.UserRegister(txtName.getText(),"11110",txtPassword.getText(),txtConfirm.getText(),"151512");

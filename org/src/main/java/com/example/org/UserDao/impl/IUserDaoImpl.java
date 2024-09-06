@@ -5,18 +5,23 @@ import com.example.org.UserDao.IUserDao;
 import java.sql.SQLException;
 
 public class IUserDaoImpl implements IUserDao {
-    @Override
-    public void UserLogin(String account, String password) throws SQLException {
-        SQLExecImpl sqlExec=new SQLExecImpl();
-        if(sqlExec.queryAccount(account,password))
-        {
-//            允许连接
-        }
+
+    public IUserDaoImpl(){
 
     }
 
     @Override
-    public void UserRegister(String username,String nickname, String pwd1, String pwd2,String email) throws SQLException {
+    public void UserLogin(String account, String password) throws SQLException, ClassNotFoundException {
+       SQLExecImpl sqlExec=new SQLExecImpl();
+       if(sqlExec.queryAccount(account,password))
+       {
+
+       }
+
+    }
+
+    @Override
+    public void UserRegister(String username,String nickname, String pwd1, String pwd2,String email) throws SQLException, ClassNotFoundException {
         SQLExecImpl sqlExec=new SQLExecImpl();
         if(!sqlExec.queryAccount(username)) {
             if(pwd1.equals(pwd2)){
@@ -29,6 +34,5 @@ public class IUserDaoImpl implements IUserDao {
         }
     }
 
-    public IUserDaoImpl(){}
 
 }
