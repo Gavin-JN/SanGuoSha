@@ -26,6 +26,9 @@ public class Card {
    public boolean Resp(Player targetPlayer,int typeId){
       return true;
    }
+   public boolean AbandonResp(Player targetPlayer){
+      return false;
+   }
 }
 
 /*所有牌共99张，
@@ -54,11 +57,14 @@ class Sha extends Card{
       //根据攻击距离，限制出杀次数，装备武器效果，是否喝酒，及对手是否响应执行对手血量变化
    }
    public boolean Resp(Player targetPlayer,int typeId){
-      if(targetPlayer.AbandonPlayCard()) return false;
+      if(AbandonResp(targetPlayer)) return false;
       for(int i=0;i<targetPlayer.getHandCardList().size();i++){
          if(targetPlayer.getHandCardList().get(i).getTypeId()==2) return true;
       }
       return false;
+   }
+   public boolean AbandonResp(Player targetPlayer){
+      return true;
    }
 }
 
@@ -78,7 +84,7 @@ class Tao extends Card{
    public Tao(int typeId) {
       super(typeId);
    }
-   public void UseTao(Player player){
+   public void Use(Player player){
       if(player.getHp()<player.getHpLimit()) {//血量+1
          int CurrentHp=player.getHp();
          player.setHp(CurrentHp);
@@ -95,7 +101,7 @@ class Jiu extends Card{
    public Jiu(int typeId) {
       super(typeId);
    }
-   public void UseJiu(Player player){
+   public void Use(Player player){
       if(player.getHp()==0) {//濒死回血
          player.setHp(1);
       }
