@@ -21,7 +21,7 @@ public class StartController {
     @FXML
     public void StartGame(ActionEvent event){
         System.out.println("play");
-        fireWindow player=new fireWindow();
+        fireWindow player=new fireWindow();  //传入两个玩家
 
     }
 }

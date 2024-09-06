@@ -11,10 +11,22 @@ public class Player {
     private List<Card> equipCardList;
     private List<Card> judgeCardList;
 
+    //用于判断玩家是否使用酒
+    private  boolean ifUseJiu=false;
+
     private int hp;
     //    final static int hp= ;设置一个静态变量代表当前血量
     private int hpLimit;//血量上限
     //血量
+
+    public boolean isIfUseJiu() {
+        return ifUseJiu;
+    }
+
+    public void setIfUseJiu(boolean ifUseJiu) {
+        this.ifUseJiu = ifUseJiu;
+    }
+
     public void setHp(int CurrentHp){
         this.hp=CurrentHp;
     }
@@ -152,6 +164,8 @@ public class Player {
 
         }while(AbandonPlayCard()==true||!CheckHandCardList());
     }
+
+
     public void UseCard(int typeId){         //选取手牌区牌并将其typeId作为参数
         for(int i=0;i<handCardList.size();i++){
             if(handCardList.get(i).getTypeId()==typeId)
@@ -161,9 +175,11 @@ public class Player {
     public boolean IsPlayFinish(){
         return true;
     }
+
     public boolean IsRequireDiscard(){
         return true;
     }
+
     public void Discard(){
         if(this.getCardsNum()>this.getHp())
             for(int i=0;i<handCardList.size();i++)
@@ -190,4 +206,5 @@ public class Player {
     private boolean IsAbandonPlay() {
         return true;
     } //btn事件
+
 }

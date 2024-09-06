@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class fireWindow extends Parent {
-
+    
     public fireWindow() {
         //己方
         Pane player1Pane = new Pane();
@@ -114,7 +114,7 @@ public class fireWindow extends Parent {
         //敌方武将
         Pane heroCardPane2 = new Pane();
         heroCardPane2.setPrefSize(100, 150);
-        Image imageHero2 = new Image(getClass().getResourceAsStream("img/hero.png"));
+        Image imageHero2 = new Image(getClass().getResourceAsStream("img/hero.png"));   //根据玩家抽中的武将，上传对应的图片
         BackgroundImage heroImage2 = new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background heroBackground2 = new Background(heroImage2);
         heroCardPane2.setBackground(heroBackground2);
@@ -122,7 +122,7 @@ public class fireWindow extends Parent {
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {    //根据对方玩家的卡牌的数量循环对应的次数
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
             Image imageCard = new Image(getClass().getResourceAsStream("img/cardBack.png"));
@@ -151,6 +151,7 @@ public class fireWindow extends Parent {
             for(int i=0;i<checkedCards.size();i++) {
                 System.out.println(checkedCards.get(i));
             }
+
 
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
             checkedCards.clear();

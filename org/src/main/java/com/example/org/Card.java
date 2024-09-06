@@ -50,7 +50,13 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-   public void Use(Player targetPlayer){
+   public void Use(Player player,Player targetPlayer){   //9.6 目前仅考虑了是否使用酒对杀的影响
+      if(player.isIfUseJiu()) {    //使用酒的时候，杀的伤害是2
+         targetPlayer.setHp(targetPlayer.getHp()-2);
+      }
+      else {  //未使用酒的时候的杀的伤害是1
+         targetPlayer.setHp(targetPlayer.getHp()-1);
+      }
       //根据攻击距离，限制出杀次数，装备武器效果，是否喝酒，及对手是否响应执行对手血量变化
    }
    public boolean Resp(Player targetPlayer,int typeId){
@@ -100,6 +106,10 @@ class Jiu extends Card{
          player.setHp(1);
       }
       //杀的伤害+1
+      else
+      {
+         player.setIfUseJiu(true);
+      }
    }
 
    public boolean CanInitiative(){
