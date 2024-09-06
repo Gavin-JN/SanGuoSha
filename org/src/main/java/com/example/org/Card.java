@@ -120,7 +120,7 @@ class Tao extends Card{
       super(typeId);
       super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Tao.jpg");
    }
-   public void Use(Player player){
+   public void UseTao(Player player){
       if(player.getHp()<player.getHpLimit()) {//血量+1
          int CurrentHp=player.getHp();
          player.setHp(CurrentHp);

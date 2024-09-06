@@ -164,9 +164,7 @@ public class Player {
         }
     }
 
-    public boolean IsPlayFinish() {
-        return true;
-    }
+
 
     public boolean IsRequireDiscard() {
         return true;
