@@ -10,13 +10,21 @@ public class Player {
     public List<Card> handCardList;
     public List<Card> equipCardList;
     public List<Card> judgeCardList;
-
+    public Heroes hero;
     public int hp;
     //    final static int hp= ;设置一个静态变量代表当前血量
     public int hpLimit;//血量上限
     public boolean isUseJiu=false;
     public boolean isNextShaAddDamage=false;
     public boolean ifUseGuoHeChaiQiao=false;
+
+    public Heroes getHero() {
+        return hero;
+    }
+
+    public void setHero(Heroes hero) {
+        this.hero = hero;
+    }
 
     public boolean isIfUseGuoHeChaiQiao() {
         return ifUseGuoHeChaiQiao;
