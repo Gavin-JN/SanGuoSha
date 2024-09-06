@@ -69,10 +69,10 @@ public class fireWindow extends Parent {
         //记录选中卡片的编号
         List<Integer> checkedCards = new ArrayList<Integer>();
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < player1.getHandCardList().size(); i++) {
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
-            Image imageCard = new Image(getClass().getResourceAsStream("img/card.png"));
+            Image imageCard = new Image(getClass().getResourceAsStream(player1.getHandCardList().get(i).getCardPhotoPath()));
             BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
             Background cardBackground = new Background(cardImage);
             cardPane.setBackground(cardBackground);
@@ -124,7 +124,7 @@ public class fireWindow extends Parent {
 
 
         List<Integer> checkedCardFromTarget =new ArrayList<>(); //选中的对方玩家的牌的列表
-        for (int i = 0; i < 6; i++) {    //根据对方玩家的卡牌的数量循环对应的次数
+        for (int i = 0; i < targetPlayer.getHandCardList().size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
             Image imageCard = new Image(getClass().getResourceAsStream("img/cardBack.png"));
