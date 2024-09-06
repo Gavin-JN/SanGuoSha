@@ -131,6 +131,7 @@ public class Heroes {
                 public boolean kongCheng(Player player) {
                     if (player.getCardsNum() == 0) {
 
+                        player.
                         System.out.println("诸葛亮发动了空城，不能成为杀或决斗的目标。");
                         return true;
                     }
