@@ -2,6 +2,7 @@ package com.example.org;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -90,10 +91,10 @@ public class fireWindow extends Parent {
         cardContainer.setLayoutX(340);
         cardContainer.setLayoutY(0);
         player1Pane.getChildren().add(cardContainer);
-        for (int i = 0; i < player1.getHandCardList().size(); i++) {
+        for (int i = 0; i < player1.handCardList.size(); i++) {
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
-            Image imageCard = new Image(getClass().getResourceAsStream(player1.getHandCardList().get(i).getCardPhotoPath()));
+            Image imageCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(i).getCardPhotoPath()));
             BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
             Background cardBackground = new Background(cardImage);
             cardPane.setBackground(cardBackground);
@@ -142,7 +143,7 @@ public class fireWindow extends Parent {
         player2Pane.getChildren().add(heroCardPane2);
 
         //敌方卡牌信息
-        for (int i = 0; i < targetPlayer.getHandCardList().size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
+        for (int i = 0; i < targetPlayer.handCardList.size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
             Image imageCard = new Image(getClass().getResourceAsStream("img/cardBack.png"));
@@ -192,7 +193,7 @@ public class fireWindow extends Parent {
             {
                 Pane showCardPane = new Pane();
                 showCardPane.setPrefSize(100, 150);
-                Image imageShowCard = new Image(getClass().getResourceAsStream(player1.getHandCardList().get(checkedCards.get(i)).getCardPhotoPath()));
+                Image imageShowCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(checkedCards.get(i)).getCardPhotoPath()));
                 BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
                 BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
                 Background showCardBackground=new Background(showCardImage);
@@ -206,7 +207,7 @@ public class fireWindow extends Parent {
             showCardInArea(cardContainer2,player1,checkedCards); //展示
             for(int i=0;i<checkedCards.size();i++)  //删除本地
             {
-                player1.getHandCardList().remove((int)(checkedCards.get(i)));
+                player1.handCardList.remove((int)(checkedCards.get(i)));
             }
             //玩家手牌列表更新之后再展示手牌
             renderPlayerCards(cardContainer,player1);
@@ -224,7 +225,20 @@ public class fireWindow extends Parent {
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         down.setOnAction(event -> {
 
+            if(player1.handCardList.size()>player1.getHp())
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("警告");
+                alert.setHeaderText(null);
+                alert.setContentText("您目前的手牌数量仍大于血量无法进入下一回合，请弃牌或出牌！");
 
+                alert.showAndWait();
+              System.out.println("手牌数量超过血量无法进入下一回合");
+            }
+
+            else {
+               player1.room.turn= (player1.room.turn+1)%player1.room.players.size();
+            }
             System.out.println("回合结束进入下一回合");
             checkedCards.clear();
         });
@@ -247,7 +261,7 @@ public class fireWindow extends Parent {
                 for(int i=0;i<checkedCardFromTarget.size();i++) {   //将弃的卡牌展示在对战区域
                     Pane showCardPane = new Pane();
                     showCardPane.setPrefSize(100, 150);
-                    Image imageShowCard = new Image(getClass().getResourceAsStream(targetPlayer.getHandCardList().get(checkedCardFromTarget.get(i)).getCardPhotoPath()));
+                    Image imageShowCard = new Image(getClass().getResourceAsStream(targetPlayer.handCardList.get(checkedCardFromTarget.get(i)).getCardPhotoPath()));
                     BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
                     BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
                     Background showCardBackground=new Background(showCardImage);
@@ -260,13 +274,13 @@ public class fireWindow extends Parent {
                 showCardInArea(cardContainer2,targetPlayer,checkedCardFromTarget); //在gameArea区域展示
 
                 for(int i=0;i<checkedCardFromTarget.size();i++) {
-                    targetPlayer.getHandCardList().remove((int)checkedCardFromTarget.get(i));//删除对方玩家的被选中的手牌
+                    targetPlayer.handCardList.remove((int)checkedCardFromTarget.get(i));//删除对方玩家的被选中的手牌
                 }
             }
             else {  //不是过河 拆桥，则删除己方玩家的被选中的卡牌
 
                 for(int i=0;i<checkedCards.size();i++) {
-                    player1.getHandCardList().remove((int)(checkedCards.get(i)));
+                    player1.handCardList.remove((int)(checkedCards.get(i)));
                 }
                 renderPlayerCards(cardContainer,player1);
 
@@ -337,12 +351,12 @@ public class fireWindow extends Parent {
         cardContainer.getChildren().clear();
 
         // 遍历玩家的手牌列表
-        for (int i = 0; i < player.getHandCardList().size(); i++) {
+        for (int i = 0; i < player.handCardList.size(); i++) {
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
 
             // 从手牌列表中获取卡牌图片路径
-            String cardPhotoPath = player.getHandCardList().get(i).getCardPhotoPath();
+            String cardPhotoPath = player.handCardList.get(i).getCardPhotoPath();
             Image imageCard = new Image(getClass().getResourceAsStream(cardPhotoPath));
 
             // 创建卡牌背景图
@@ -385,6 +399,7 @@ public class fireWindow extends Parent {
         }
     }
 
+
     //将出的牌展示在对战区域
     private void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
     {
@@ -393,7 +408,7 @@ public class fireWindow extends Parent {
       {
           Pane showCardPane = new Pane();
           showCardPane.setPrefSize(100, 150);
-          Image imageShowCard = new Image(getClass().getResourceAsStream(player.getHandCardList().get(checked.get(i)).getCardPhotoPath()));
+          Image imageShowCard = new Image(getClass().getResourceAsStream(player.handCardList.get(checked.get(i)).getCardPhotoPath()));
           BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
           BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
           Background showCardBackground=new Background(showCardImage);
@@ -404,6 +419,7 @@ public class fireWindow extends Parent {
       }
 
     }
+
 
     //当玩家的血量发生变化的时候调用此函数更新界面上的血条
     private void updataBlood(Pane heroCardPhone00,Player player,ProgressBar healthBar)   //更新血条长度

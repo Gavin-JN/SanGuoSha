@@ -1,6 +1,7 @@
 package com.example.org;
 
 import java.util.Currency;
+import java.util.List;
 
 public class Card {
    private int typeId;
@@ -32,14 +33,18 @@ public class Card {
    public boolean RequireTarget(){
       return false;
    }
-   public boolean Resp(Player targetPlayer,int typeId){
+   public boolean Use(Player player,int id){
       return true;
    }
 
+   public boolean Resp(Player targetPlayer,int id){
+      return true;
+   }
+   public boolean AbandonResp(Player targetPlayer){
+      return false;
+   }
+   public void setResp(Player player){
 
-
-   public boolean AbandonResp(Player player) {
-       return false;
    }
 }
 
@@ -66,15 +71,34 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-   public void Use(Player targetPlayer){
-      //根据攻击距离，限制出杀次数，装备武器效果，是否喝酒，及对手是否响应执行对手血量变化
+   public void Use(Player player,Player targetPlayer){
+      //根据攻击距离，限制出杀次数，装备武器效果执行杀的效果
    }
-   public boolean Resp(Player targetPlayer,int typeId){
-      if(targetPlayer.AbandonPlayCard()) return false;
-      for(int i=0;i<targetPlayer.getHandCardList().size();i++){
-         if(targetPlayer.getHandCardList().get(i).getTypeId()==2) return true;
-      }
+   public boolean Resp(Player targetPlayer,int id){
+      if(AbandonResp(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==2) return true;
       return false;
+   }
+   public boolean AbandonResp(Player targetPlayer){
+      int damage;
+      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isUseJiu
+              &&targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isNextShaAddDamage) {
+         damage = 2;
+         targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isNextShaAddDamage=false;
+      }
+      else damage = 1;
+      targetPlayer.hp-=damage;
+      if(targetPlayer.hp<=0){
+         List<Player> playerList = targetPlayer.room.players;
+         boolean add = false;
+         targetPlayer.room.helpPlayers.clear();
+         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
+               i%=targetPlayer.room.players.size();
+               if(playerList.get(i)==targetPlayer) add=true;
+               if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
+         }
+      }
+      return targetPlayer.hp<=0;
    }
 }
 
@@ -96,11 +120,23 @@ class Tao extends Card{
       super(typeId);
       super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Tao.jpg");
    }
-   public void UseTao(Player player){
-      if(player.getHp()<player.getHpLimit()) {//血量+1
-         int CurrentHp=player.getHp();
-         player.setHp(CurrentHp);
+   public boolean Use(Player player,int id) {
+      Card card = player.handCardList.get(id);
+      if (card == null || card.getTypeId() != 3) return false;
+      if (player.room.dyingPlayer == null || player.hp == player.hpLimit) return false;
+      if (player.room.dyingPlayer != null) {
+         player.room.dyingPlayer.hp++;
+         player.handCardList.remove(id);
+         if(player.room.dyingPlayer.hp<=0) player.room.GameOver(player.room);
+         else{
+            player.room.helpPlayers.clear();
+            player.room.dyingPlayer=null;
+         }
       }
+      else if(player.hp<player.hpLimit){
+         player.hp++;
+      }
+      return true;
    }
 
    public boolean CanInitiative(){
@@ -114,13 +150,19 @@ class Jiu extends Card{
       super(typeId);
       super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Jiu.png");
    }
-   public void UseJiu(Player player){
-      if(player.getHp()==0) {//濒死回血
-         player.setHp(1);
+   public boolean Use(Player player,int id) {
+      if (player.hp <= 0) {//濒死回血
+         player.hp++;
+         player.handCardList.remove(id);
       }
       //杀的伤害+1
+      if (player.room.status == Room.roomStatus.PlayStatus && player.seatId==player.room.turn && player.isUseJiu==false) {
+         player.isUseJiu = true;
+         player.isNextShaAddDamage = true;
+         player.handCardList.remove(id);
+      }
+      return true;
    }
-
    public boolean CanInitiative(){
       return true;
    }
@@ -155,6 +197,10 @@ class GuoHeChaiQiao extends Card{
 
    public boolean RequireTarget() {
       return true;
+   }
+
+   public void discardFromTargetPlayer(Player targetPlayer,int locationCard) {      //location为玩家选中的对方牌在对方牌组里的索引
+     // targetPlayer
    }
 }
 
@@ -314,7 +360,7 @@ class GuDingDao extends Card{
 //青龙偃月刀：攻击距离为3，装备后使用杀被闪响应后，可继续出杀， typeId 18
 class QingLongYanYueDao extends Card{
    public QingLongYanYueDao(int typeId) {
-      super(18);
+      super(typeId);
       super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/QingLongYanYueDao.jpg");
    }
 
@@ -341,7 +387,6 @@ class HorseDecrease1 extends Card{
       super(typeId);
       super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/HorseOfReduce.png");
    }
-
 
    public boolean CanInitiative() {
       return true;

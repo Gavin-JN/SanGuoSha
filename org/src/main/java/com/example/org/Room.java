@@ -62,13 +62,8 @@ public class Room {
         cardList=CardManager.cardsPile;
     }
     public void InitHandCard(){
-        for (Player player : players) {
-            List<Card> cardList1 = new ArrayList<>();
-            for(int i=0;i<4;i++){
-                cardList1.add(new Card(player.DrawCard(cardList)));
-            }
-            player.setHandCardList(cardList1);
-        }
+        for (Player player : players)
+            for(int i=0;i<4;i++)    player.handCardList.add(new Card(player.DrawCard(cardList)));
     }
     public Player getPlayerBySeatId(int seatId){
         return players.get(seatId);
