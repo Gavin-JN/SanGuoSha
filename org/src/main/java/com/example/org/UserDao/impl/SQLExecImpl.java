@@ -9,8 +9,8 @@ public class SQLExecImpl implements SQLExec
     private Connection conn;
     SQLExecImpl()
     {
-        String url="jdbc:mysql://192.168.3.31:3306/db1";
-        String username="usern ame";
+        String url="jdbc:mysql://172.20.10.2:3306/db1";
+        String username="username";
         String password="Lijingwen";
 
         try
