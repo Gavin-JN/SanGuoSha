@@ -7,15 +7,25 @@ import java.util.List;
 
 public class Player {
     public int seatId;
+    private Heroes hero;
     private List<Card> handCardList;
     public List<Card> equipCardList;
     public List<Card> judgeCardList;
-
+    public Room room;
     public int hp;
-    //    final static int hp= ;设置一个静态变量代表当前血量
     public int hpLimit;//血量上限
     public boolean isUseJiu=false;
     public boolean ifUseGuoHeChaiQiao=false;
+
+    public final static int ToDistance=1;//自己对敌方距离
+    public final static int FromDistance=1;//敌方对自己距离
+    public Heroes getHero() {
+        return hero;
+    }
+
+    public void setHero(Heroes hero) {
+        this.hero = hero;
+    }
 
     public boolean isIfUseGuoHeChaiQiao() {
         return ifUseGuoHeChaiQiao;
@@ -25,16 +35,14 @@ public class Player {
         this.ifUseGuoHeChaiQiao = ifUseGuoHeChaiQiao;
     }
 
-    //血量
+    //血量,实时更新
     public void setHp(int CurrentHp) {
         this.hp = CurrentHp;
     }
 
-    public void setHpLimit() {
-
-    }
-
-    public Room room;
+    public void setHpLimit(Heroes hero) {
+        this.hpLimit=hero.getHpLimit();
+    }//血量上限为所选武将的血量上限
 
     public int getHp() {
         return hp;
@@ -46,11 +54,12 @@ public class Player {
 
     private int attackDistance;
 
-
+    //返回当前玩家的手牌的总数量
     public int getCardsNum() {
         return handCardList.size();
-    }//当前玩家手牌数量
+    }
 
+    //返回该玩家当前拥有杀的数量
     public int getShaNum() {
         int number = 0;
         for (int i = 0; i < handCardList.size(); i++) {
@@ -101,6 +110,7 @@ public class Player {
         return seatId;
     }
 
+    //判定牌
     public void JudgeCardList(Player player) {
         if (player.judgeCardList.size() == 0)
             return;
@@ -125,7 +135,7 @@ public class Player {
             return true;
     }
 
-    //抽牌
+    //抽牌，返回的是抽中牌的类型编码
     public int DrawCard(List<Card> cardList) {   //cardList为当前这局游戏的剩余的所有的待摸牌
         Collections.shuffle(cardList);  //打乱剩余牌的次序
         int typeOfCard = 0;
@@ -138,7 +148,7 @@ public class Player {
         return typeOfCard;
     }
 
-
+    //
     public boolean IsAbleToPlay() {
         //若乐不思蜀判定成功则返回false ，弹出一张非红桃牌及“乐不思蜀生效”字样
         if (Math.random() > 0.75)
@@ -164,9 +174,7 @@ public class Player {
         }
     }
 
-    public boolean IsPlayFinish() {
-        return true;
-    }
+
 
     public boolean IsRequireDiscard() {
         return true;

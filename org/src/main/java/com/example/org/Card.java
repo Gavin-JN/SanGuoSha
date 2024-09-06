@@ -1,30 +1,11 @@
 package com.example.org;
 
 import java.util.Currency;
-import java.util.List;
 
 public class Card {
    private int typeId;
-   private int fireDistance;//卡牌的攻击距离
-   private String cardPhotoPath;
 
-   public String getCardPhotoPath() {
-      return cardPhotoPath;
-   }
-
-   public void setCardPhotoPath(String cardPhotoPath) {
-      this.cardPhotoPath = cardPhotoPath;
-   }
-
-   public int getFireDistance() {
-      return fireDistance;
-   }
-
-   public void setFireDistance(int fireDistance) {
-      this.fireDistance = fireDistance;
-   }
-
-   public Card(int typeId) {
+   public Card( int typeId) {
       this.typeId = typeId;
    }
    public int getTypeId() {
@@ -45,9 +26,6 @@ public class Card {
    public boolean Resp(Player targetPlayer,int typeId){
       return true;
    }
-   public boolean AbandonResp(Player targetPlayer){
-      return false;
-   }
 }
 
 /*所有牌共99张，
@@ -61,7 +39,6 @@ public class Card {
 class Sha extends Card{
    public Sha(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Sha.webp");
    }
 
    public boolean CanInitiative(){
@@ -73,32 +50,15 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-   public void Use(Player player,Player targetPlayer){
-      //根据攻击距离，限制出杀次数，装备武器效果执行杀的效果
+   public void Use(Player targetPlayer){
+      //根据攻击距离，限制出杀次数，装备武器效果，是否喝酒，及对手是否响应执行对手血量变化
    }
    public boolean Resp(Player targetPlayer,int typeId){
-      if(AbandonResp(targetPlayer)) return false;
+      if(targetPlayer.AbandonPlayCard()) return false;
       for(int i=0;i<targetPlayer.getHandCardList().size();i++){
          if(targetPlayer.getHandCardList().get(i).getTypeId()==2) return true;
       }
       return false;
-   }
-   public boolean AbandonResp(Player targetPlayer){
-      int damage;
-      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isUseJiu) damage=2;
-      else damage = 1;
-      targetPlayer.hp-=damage;
-      if(targetPlayer.hp<=0){
-         List<Player> playerList = targetPlayer.room.players;
-         boolean add = false;
-         targetPlayer.room.helpPlayers.clear();
-         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
-               i%=targetPlayer.room.players.size();
-               if(playerList.get(i)==targetPlayer) add=true;
-               if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
-         }
-      }
-      return targetPlayer.hp<=0;
    }
 }
 
@@ -106,7 +66,6 @@ class Sha extends Card{
 class Shan extends Card{
    public Shan(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Shan.webp");
    }
 
    public boolean CanPassive(){
@@ -118,9 +77,8 @@ class Shan extends Card{
 class Tao extends Card{
    public Tao(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Tao.jpg");
    }
-   public void Use(Player player){
+   public void UseTao(Player player){
       if(player.getHp()<player.getHpLimit()) {//血量+1
          int CurrentHp=player.getHp();
          player.setHp(CurrentHp);
@@ -136,17 +94,12 @@ class Tao extends Card{
 class Jiu extends Card{
    public Jiu(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/Jiu.png");
    }
-   public void Use(Player player){
+   public void UseJiu(Player player){
       if(player.getHp()==0) {//濒死回血
          player.setHp(1);
       }
       //杀的伤害+1
-      else
-      {
-         player.isUseJiu=true;
-      }
    }
 
    public boolean CanInitiative(){
@@ -158,8 +111,6 @@ class Jiu extends Card{
 class ShunShouQianYang extends Card {
    public ShunShouQianYang(int typeId) {
       super(typeId);
-      super.setFireDistance(1);  //攻击距离为1
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/ShunShouQianYang.webp");
    }
 
    public boolean CanInitiative() {
@@ -175,7 +126,6 @@ class ShunShouQianYang extends Card {
 class GuoHeChaiQiao extends Card{
    public GuoHeChaiQiao(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/GuoHeChaiQiao.png");
    }
 
    public boolean CanInitiative() {
@@ -185,17 +135,12 @@ class GuoHeChaiQiao extends Card{
    public boolean RequireTarget() {
       return true;
    }
-
-   public void dicardFromTargetPlayer(Player targetPlayer,int locationCard) {      //location为玩家选中的对方牌在对方牌组里的索引
-     // targetPlayer
-   }
 }
 
 //无中生有：摸两张牌， typeId 7
 class WuZhongShengYou extends Card{
    public WuZhongShengYou(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/WuZhongShengYou.webp");
    }
 
    public boolean CanInitiative() {
@@ -207,7 +152,6 @@ class WuZhongShengYou extends Card{
 class JieDaoShaRen extends Card{
    public JieDaoShaRen(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/JieDaoShaRen.png");
    }
 
    public boolean CanInitiative() {
@@ -224,13 +168,16 @@ class JieDaoShaRen extends Card{
 class JueDou extends Card{
    public JueDou(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/JueDou.png");
    }
 
    public boolean CanInitiative() {
       return true;
    }
 
+//   public void UseJueD(Player player)
+//   {
+//
+//   }
    public boolean RequireTarget() {
       return true;
    }
@@ -240,13 +187,22 @@ class JueDou extends Card{
 class WuXieKeJi extends Card{
    public WuXieKeJi(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/WuXieKeJi.webp");
    }
 
    public boolean CanInitiative() {
       return true;
    }
-
+//public void useWUXKJ(Card card){
+//   int id=card.getTypeId();
+//   if(id>4&&id<16)
+//   {
+//
+//   }
+//   else
+//   {
+//
+//   }
+// }
    public boolean CanPassive() {
       return true;
    }
@@ -256,13 +212,27 @@ class WuXieKeJi extends Card{
 class LeBuSiShu extends Card{
    public LeBuSiShu(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/LeBuSIShu.jpg");
    }
 
    public boolean CanInitiative() {
       return true;
    }
 
+//   public void useLeBSS(){
+//
+////      new Thread(()->{
+////         while(true){
+////            if(player.IsCurrentRound())
+////            {
+////               if(!player.IsAbleToPlay())
+////   "发送信息给服务器，服务器结束回合"
+////            }
+////   try{Thread.sleep(1000};//每个一秒检测一次
+////         }catch(InterruptedException e){
+////         e.printStackTrace()}
+////      });
+////
+//   }
    public boolean RequireTarget() {
       return true;
    }
@@ -272,9 +242,21 @@ class LeBuSiShu extends Card{
 class BingLiangCunDuan extends Card{
    public BingLiangCunDuan(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/bingLiangCunDuan.png");
    }
 
+//   public void useBingLCD(Player player){
+//      new Thread(()->{
+//         while(true){
+//            if(player.IsCurrentRound())
+//            {
+//               if(!player.IsAbleToDraw())
+//   "发送信息给服务器，服务器不予发牌
+//            }
+//   try{Thread.sleep(1000};//每个一秒检测一次
+//         }catch(InterruptedException e){
+//         e.printStackTrace()}
+//      });
+//   }
    public boolean CanInitiative() {
       return true;
    }
@@ -288,7 +270,6 @@ class BingLiangCunDuan extends Card{
 class NanManRuQin extends Card{
    public NanManRuQin(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/NanManRuQin.webp");
    }
 
    public boolean CanInitiative() {
@@ -300,7 +281,6 @@ class NanManRuQin extends Card{
 class WanJianQiFa extends Card{
    public WanJianQiFa(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/WanJianQiFa.webp");
    }
 
    public boolean CanInitiative() {
@@ -312,8 +292,6 @@ class WanJianQiFa extends Card{
 class ZhuGeLianNu extends Card{
    public ZhuGeLianNu(int typeId) {
       super(typeId);
-      super.setFireDistance(1);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/ZhuGeLianNu.webp");
    }
 
    public boolean CanInitiative() {
@@ -325,8 +303,6 @@ class ZhuGeLianNu extends Card{
 class HanBingJian extends Card{
    public HanBingJian(int typeId) {
       super(typeId);
-      super.setFireDistance(2);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/HanBingJian.png");
    }
 
    public boolean CanInitiative() {
@@ -338,8 +314,6 @@ class HanBingJian extends Card{
 class GuDingDao extends Card{
    public GuDingDao(int typeId) {
       super(typeId);
-      super.setFireDistance(2);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/GuDingDao.png");
    }
 
    public boolean CanInitiative() {
@@ -350,9 +324,7 @@ class GuDingDao extends Card{
 //青龙偃月刀：攻击距离为3，装备后使用杀被闪响应后，可继续出杀， typeId 18
 class QingLongYanYueDao extends Card{
    public QingLongYanYueDao(int typeId) {
-      super(typeId);
-      super.setFireDistance(3);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/QingLongYanYueDao.jpg");
+      super(18);
    }
 
    public boolean CanInitiative() {
@@ -360,11 +332,12 @@ class QingLongYanYueDao extends Card{
    }
 }
 
+
+
 //加1马：装备后别人计算与你的距离+1，typeId 19
 class HorseIncrease1 extends Card{
    public HorseIncrease1(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/HorseOfIncrease.png");
    }
 
    public boolean CanInitiative() {
@@ -376,8 +349,8 @@ class HorseIncrease1 extends Card{
 class HorseDecrease1 extends Card{
    public HorseDecrease1(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("src/main/resources/com/example/org/controller/img/ShouPai/HorseOfReduce.png");
    }
+
 
    public boolean CanInitiative() {
       return true;
