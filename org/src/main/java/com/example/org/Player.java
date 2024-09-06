@@ -15,8 +15,8 @@ public class Player {
     //    final static int hp= ;设置一个静态变量代表当前血量
     private int hpLimit;//血量上限
     //血量
-    public void setHp(){
-
+    public void setHp(int CurrentHp){
+        this.hp=CurrentHp;
     }
     public void setHpLimit(){
 
@@ -96,6 +96,7 @@ public class Player {
     public boolean IsCurrentRound(){
         return true;
     }
+
     public void JudgeCardList(Player player){
         if(player.judgeCardList.size()==0)
             return ;
@@ -110,23 +111,25 @@ public class Player {
     }
 
     public boolean IsAbleToDraw(){
-        //若兵粮寸断判定成功则返回false
-        return true;
+        //若兵粮寸断判定成功则返回false,弹出一张非梅花牌图片及“兵粮寸断生效”字样
+        if(Math.random()>0.75)
+                    return false;
+
+        else  //弹出一张梅花牌图片及“兵粮寸断失效”字样
+                   return true;
     }
 
     //抽牌
     public int  DrawCard(List<Card> cardList){   //cardList为当前这局游戏的剩余的所有的待摸牌
         Collections.shuffle(cardList);  //打乱剩余牌的次序
-        int typeOfCard;
+        int typeOfCard=0;
         if(!cardList.isEmpty())
         {
             Card GetCard=cardList.remove(0);
             typeOfCard=GetCard.getTypeId();
         }
         else{
-            CardManager.PushCard();
-            Card GetCard=cardList.remove(0);
-            typeOfCard=GetCard.getTypeId();
+            System.out.println("卡牌数量不足");
         }
         return typeOfCard;
     }
@@ -134,8 +137,12 @@ public class Player {
 
 
     public boolean IsAbleToPlay(){
-        //若乐不思蜀判定成功则返回false
-        return true;
+        //若乐不思蜀判定成功则返回false ，弹出一张非红桃牌及“乐不思蜀生效”字样
+        if(Math.random()>0.75)
+            return false;
+
+        else  //弹出一张红桃牌及“乐不思蜀失效”字样
+            return true;
     }
 
     public void PlayCard(){
@@ -175,11 +182,11 @@ public class Player {
         return false;
     }
     public boolean AbandonPlayCard(){
-        if(IsAbandonPlay()) return true; //btn事件
+        if(IsAbandonPlay()) return true;
         return false;
     }
 
     private boolean IsAbandonPlay() {
         return true;
-    }
+    } //btn事件
 }

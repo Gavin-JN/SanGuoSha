@@ -1,4 +1,7 @@
 package com.example.org;
+
+import java.util.Currency;
+
 public class Card {
    private int typeId;
 
@@ -19,6 +22,9 @@ public class Card {
    }
    public boolean RequireTarget(){
       return false;
+   }
+   public boolean Resp(Player targetPlayer,int typeId){
+      return true;
    }
 }
 
@@ -44,7 +50,16 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-
+   public void Use(Player targetPlayer){
+      //根据攻击距离，限制出杀次数，装备武器效果，是否喝酒，及对手是否响应执行对手血量变化
+   }
+   public boolean Resp(Player targetPlayer,int typeId){
+      if(targetPlayer.AbandonPlayCard()) return false;
+      for(int i=0;i<targetPlayer.getHandCardList().size();i++){
+         if(targetPlayer.getHandCardList().get(i).getTypeId()==2) return true;
+      }
+      return false;
+   }
 }
 
 //闪：可在对方杀，万箭齐发时打出，防止受到伤害， typeId 2
@@ -63,6 +78,12 @@ class Tao extends Card{
    public Tao(int typeId) {
       super(typeId);
    }
+   public void UseTao(Player player){
+      if(player.getHp()<player.getHpLimit()) {//血量+1
+         int CurrentHp=player.getHp();
+         player.setHp(CurrentHp);
+      }
+   }
 
    public boolean CanInitiative(){
       return true;
@@ -73,6 +94,12 @@ class Tao extends Card{
 class Jiu extends Card{
    public Jiu(int typeId) {
       super(typeId);
+   }
+   public void UseJiu(Player player){
+      if(player.getHp()==0) {//濒死回血
+         player.setHp(1);
+      }
+      //杀的伤害+1
    }
 
    public boolean CanInitiative(){
