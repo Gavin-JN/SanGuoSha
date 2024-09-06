@@ -3,8 +3,7 @@ package com.example.org;
 import java.util.List;
 
 public class Heroes {
-    public int hp;
-    //    final static int hp= ;设置一个静态变量代表当前血量
+
     public int hpLimit;//血量上限
     private Player player;    //将武将与玩家绑定
 
@@ -17,10 +16,6 @@ public class Heroes {
     public void setHeroPhotoPath(String heroPhotoPath) {
         this.heroPhotoPath = heroPhotoPath;
     }
-
-    //血量
-    public void setHp() {
-    }//设置当前血量
 
     public void setHpLimit(int num) {
         this.hpLimit = num;
@@ -36,10 +31,6 @@ public class Heroes {
     public boolean getSkillInitiate() {
         return IsSkillInitiate;
     }
-
-    public int getHp() {
-        return hp;
-    }//返回当前血量
 
     public int getHpLimit() {
         return hpLimit;
@@ -127,7 +118,7 @@ public class Heroes {
 
             //咆哮——出牌阶段，你可以使用任意数量的【杀】。
             //该技能角色需主动选择使用
-            public void paoXiao() {
+            public void paoXiao(Player player) {
             //解除对该玩家出杀的数量的限制
 
             }
