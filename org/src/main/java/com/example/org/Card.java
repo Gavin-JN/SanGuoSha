@@ -174,6 +174,10 @@ class JueDou extends Card{
       return true;
    }
 
+//   public void UseJueD(Player player)
+//   {
+//
+//   }
    public boolean RequireTarget() {
       return true;
    }
@@ -188,7 +192,17 @@ class WuXieKeJi extends Card{
    public boolean CanInitiative() {
       return true;
    }
-
+//public void useWUXKJ(Card card){
+//   int id=card.getTypeId();
+//   if(id>4&&id<16)
+//   {
+//
+//   }
+//   else
+//   {
+//
+//   }
+// }
    public boolean CanPassive() {
       return true;
    }
@@ -204,6 +218,21 @@ class LeBuSiShu extends Card{
       return true;
    }
 
+//   public void useLeBSS(){
+//
+////      new Thread(()->{
+////         while(true){
+////            if(player.IsCurrentRound())
+////            {
+////               if(!player.IsAbleToPlay())
+////   "发送信息给服务器，服务器结束回合"
+////            }
+////   try{Thread.sleep(1000};//每个一秒检测一次
+////         }catch(InterruptedException e){
+////         e.printStackTrace()}
+////      });
+////
+//   }
    public boolean RequireTarget() {
       return true;
    }
@@ -215,6 +244,19 @@ class BingLiangCunDuan extends Card{
       super(typeId);
    }
 
+//   public void useBingLCD(Player player){
+//      new Thread(()->{
+//         while(true){
+//            if(player.IsCurrentRound())
+//            {
+//               if(!player.IsAbleToDraw())
+//   "发送信息给服务器，服务器不予发牌
+//            }
+//   try{Thread.sleep(1000};//每个一秒检测一次
+//         }catch(InterruptedException e){
+//         e.printStackTrace()}
+//      });
+//   }
    public boolean CanInitiative() {
       return true;
    }
@@ -282,7 +324,7 @@ class GuDingDao extends Card{
 //青龙偃月刀：攻击距离为3，装备后使用杀被闪响应后，可继续出杀， typeId 18
 class QingLongYanYueDao extends Card{
    public QingLongYanYueDao(int typeId) {
-      super(typeId);
+      super(18);
    }
 
    public boolean CanInitiative() {
@@ -308,6 +350,7 @@ class HorseDecrease1 extends Card{
    public HorseDecrease1(int typeId) {
       super(typeId);
    }
+
 
    public boolean CanInitiative() {
       return true;
