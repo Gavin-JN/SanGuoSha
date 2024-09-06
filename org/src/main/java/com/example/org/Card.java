@@ -1,6 +1,7 @@
 package com.example.org;
 
 import java.util.Currency;
+import java.util.List;
 
 public class Card {
    private int typeId;
@@ -71,14 +72,8 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-   public void Use(Player player,Player targetPlayer){   //9.6 目前仅考虑了是否使用酒对杀的影响
-      if(player.isIfUseJiu()) {    //使用酒的时候，杀的伤害是2
-         targetPlayer.setHp(targetPlayer.getHp()-2);
-      }
-      else {  //未使用酒的时候的杀的伤害是1
-         targetPlayer.setHp(targetPlayer.getHp()-1);
-      }
-      //根据攻击距离，限制出杀次数，装备武器效果，是否喝酒，及对手是否响应执行对手血量变化
+   public void Use(Player player,Player targetPlayer){
+      //根据攻击距离，限制出杀次数，装备武器效果执行杀的效果
    }
    public boolean Resp(Player targetPlayer,int typeId){
       if(AbandonResp(targetPlayer)) return false;
@@ -88,7 +83,21 @@ class Sha extends Card{
       return false;
    }
    public boolean AbandonResp(Player targetPlayer){
-      return true;
+      int damage;
+      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isUseJiu) damage=2;
+      else damage = 1;
+      targetPlayer.hp-=damage;
+      if(targetPlayer.hp<=0){
+         List<Player> playerList = targetPlayer.room.players;
+         boolean add = false;
+         targetPlayer.room.helpPlayers.clear();
+         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
+               i%=targetPlayer.room.players.size();
+               if(playerList.get(i)==targetPlayer) add=true;
+               if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
+         }
+      }
+      return targetPlayer.hp<=0;
    }
 }
 
@@ -132,7 +141,7 @@ class Jiu extends Card{
       //杀的伤害+1
       else
       {
-         player.setIfUseJiu(true);
+         player.isUseJiu=true;
       }
    }
 

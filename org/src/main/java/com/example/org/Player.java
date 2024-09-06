@@ -14,6 +14,7 @@ public class Player {
     public int hp;
     //    final static int hp= ;设置一个静态变量代表当前血量
     public int hpLimit;//血量上限
+    public boolean isUseJiu=false;
 
     //血量
     public void setHp(int CurrentHp) {

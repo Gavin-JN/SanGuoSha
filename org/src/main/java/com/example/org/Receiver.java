@@ -42,17 +42,18 @@ public class Receiver {
         room.RespWithTarget(player,targetPlayer,typeId);
     }
 
-    //确定是否能出牌（包括响应出牌和当前回合出牌）
+    //确定是否能出牌（包括响应出牌和当前回合出牌和救援）
     public boolean CheckPlayCard(Player player,int typeId) {
-        if (room.respPlayers.contains(player) && room.respPlayers.get(0) == player) return true;
-        if (room.turn == player.seatId){
-            if(player.IsAbleToPlay()) return true;
-            else return false;
-        }
         ArrayList<Integer> handCardTypeId = new ArrayList<>();
         for(int i=0;i<player.getHandCardList().size();i++){
             handCardTypeId.add(player.getHandCardList().get(i).getTypeId());
             if(!handCardTypeId.contains(typeId)) return false;
+        }
+        if (room.respPlayers.contains(player) && room.respPlayers.get(0) == player && room.status== Room.roomStatus.RespStatus) return true;
+        if (room.helpPlayers.contains(player) && room.helpPlayers.get(0) == player && room.status== Room.roomStatus.RescueStatus) return true;
+        if (room.turn == player.seatId && room.status== Room.roomStatus.PlayStatus){
+            if(player.IsAbleToPlay()) return true;
+            else return false;
         }
         return false;
     }
@@ -63,6 +64,7 @@ public class Receiver {
         for (int i=0;i<player.getHandCardList().size();i++) {
             if(player.getHandCardList().get(i).getTypeId()==typeId) {
                 Card card = player.getHandCardList().get(i);
+
             }
         }
         if(room.currentCard.Resp(player,typeId)){
@@ -77,6 +79,8 @@ public class Receiver {
         }
 
     }
+
+    //
     public void Abandon(Player player){
         if(room.turn==player.getSeatId()&&room.status == Room.roomStatus.PlayStatus){
             room.status= Room.roomStatus.DiscardStatus;
