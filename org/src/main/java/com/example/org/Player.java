@@ -15,6 +15,15 @@ public class Player {
     //    final static int hp= ;设置一个静态变量代表当前血量
     public int hpLimit;//血量上限
     public boolean isUseJiu=false;
+    public boolean ifUseGuoHeChaiQiao=false;
+
+    public boolean isIfUseGuoHeChaiQiao() {
+        return ifUseGuoHeChaiQiao;
+    }
+
+    public void setIfUseGuoHeChaiQiao(boolean ifUseGuoHeChaiQiao) {
+        this.ifUseGuoHeChaiQiao = ifUseGuoHeChaiQiao;
+    }
 
     //血量
     public void setHp(int CurrentHp) {
