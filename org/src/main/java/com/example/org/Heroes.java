@@ -101,6 +101,7 @@ public class Heroes {
             public void longDan(int cardType) {
                 if (cardType==1) {
                     System.out.println("赵云将杀当作闪使用。");
+                    //需传递某种信号
                 } else if (cardType==2) {
                     System.out.println("赵云将闪当作杀使用。");
                 } else {

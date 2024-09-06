@@ -2,6 +2,7 @@ package com.example.org;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -224,7 +225,20 @@ public class fireWindow extends Parent {
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         down.setOnAction(event -> {
 
+            if(player1.getHandCardList().size()>player1.getHp())
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("警告");
+                alert.setHeaderText(null);
+                alert.setContentText("您目前的手牌数量仍大于血量无法进入下一回合，请弃牌或出牌！");
 
+                alert.showAndWait();
+              System.out.println("手牌数量超过血量无法进入下一回合");
+            }
+
+            else {
+               player1.room.turn= (player1.room.turn+1)%player1.room.players.size();
+            }
             System.out.println("回合结束进入下一回合");
             checkedCards.clear();
         });
@@ -385,6 +399,7 @@ public class fireWindow extends Parent {
         }
     }
 
+
     //将出的牌展示在对战区域
     private void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
     {
@@ -404,6 +419,7 @@ public class fireWindow extends Parent {
       }
 
     }
+
 
     //当玩家的血量发生变化的时候调用此函数更新界面上的血条
     private void updataBlood(Pane heroCardPhone00,Player player,ProgressBar healthBar)   //更新血条长度
