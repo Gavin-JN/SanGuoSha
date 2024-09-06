@@ -1,5 +1,6 @@
 package com.example.org.controller;
 
+import com.example.org.UserDao.impl.SQLExecImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 public class LoginController {
     @FXML
@@ -31,16 +33,19 @@ public class LoginController {
     }
 
     @FXML
-    public void Play(ActionEvent event){
+    public void Play(ActionEvent event) throws ClassNotFoundException, SQLException {
         //将信息传入服务器当中
         //比较数据
         //成功之后进入游戏
         //不成功就提示错误
+        SQLExecImpl sqlExec=new SQLExecImpl();
+        boolean isValid=sqlExec.queryAccount(NameOfLogin.getText(),PasswordOfLogin.getText());
+
         if(NameOfLogin.getText().equals("") || PasswordOfLogin.getText().equals("")){
             prompt.setText("用户名或者密码不能为空！！");
-        } else if (false) {//不匹配
+        } else if (!isValid) {//不匹配
             prompt.setText("用户名或者密码错误！！");
-        }else if(true){ //匹配
+        }else if(isValid){ //匹配
             System.out.println("play");
             FXMLLoader fxmlLoader2=new FXMLLoader(getClass().getResource("start.fxml"));
             //获取当前窗口

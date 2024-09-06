@@ -10,15 +10,15 @@ public class IUserDaoImpl implements IUserDao {
 
     }
 
-    @Override
-    public void UserLogin(String account, String password) throws SQLException, ClassNotFoundException {
-       SQLExecImpl sqlExec=new SQLExecImpl();
-       if(sqlExec.queryAccount(account,password))
-       {
-
-       }
-
-    }
+//    @Override
+////    public void UserLogin(String account, String password) throws SQLException, ClassNotFoundException {
+//       SQLExecImpl sqlExec=new SQLExecImpl();
+//       if(sqlExec.queryAccount(account,password))
+//       {
+//
+//       }
+//
+//    }
 
     @Override
     public void UserRegister(String username,String nickname, String pwd1, String pwd2,String email) throws SQLException, ClassNotFoundException {

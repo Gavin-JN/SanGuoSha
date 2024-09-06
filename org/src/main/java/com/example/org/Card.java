@@ -36,9 +36,7 @@ public class Card {
       return true;
    }
 
-    public String getCardPhotoPath() {
-        return "";
-    }
+
 
    public boolean AbandonResp(Player player) {
        return false;

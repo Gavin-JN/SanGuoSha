@@ -29,15 +29,15 @@ public class SQLExecImpl implements SQLExec
     }
 
     @Override
-    public boolean queryAccount(String account, String password) throws SQLException {
+    public boolean queryAccount(String username, String password) throws SQLException {
         if (this.conn == null) {
             System.out.println("No database connection available.");
             return false;
         }
         boolean isExist=false;
-        String sql="SELECT * FROM account where account=? and password=?";
+        String sql="SELECT * FROM account where username=? and password=?";
         PreparedStatement pstmt=conn.prepareStatement(sql);
-        pstmt.setString(1,account);
+        pstmt.setString(1,username);
         pstmt.setString(2,password);
         ResultSet rs=pstmt.executeQuery();
         if(rs.next()) {
@@ -53,20 +53,20 @@ public class SQLExecImpl implements SQLExec
     }
 
     @Override
-    public boolean queryAccount(String account) throws SQLException {
+    public boolean queryAccount(String username) throws SQLException {
         if (this.conn == null) {
             System.out.println("No database connection available.");
             return false;
         }
         boolean isExist=false;
-        String sql="SELECT * FROM account where account=?";
+        System.out.printf(String.valueOf(isExist));
+        String sql="SELECT * FROM account where username=?";
         PreparedStatement pstmt=conn.prepareStatement(sql);
-        pstmt.setString(1,account);
+        pstmt.setString(1,username);
         ResultSet rs=pstmt.executeQuery();
         if(rs.next()) {
             isExist=true;
             System.out.println("账号已存在");
-
         }
         pstmt.close();
         return isExist;
