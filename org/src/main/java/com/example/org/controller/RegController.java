@@ -37,9 +37,6 @@ public class RegController {
         IUserDaoImpl user = new IUserDaoImpl();
 
 
-//        if(1){
-//
-//        }
 
         System.out.println("login");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));

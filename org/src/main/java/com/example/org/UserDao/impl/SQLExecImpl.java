@@ -10,7 +10,7 @@ public class SQLExecImpl implements SQLExec
     SQLExecImpl()
     {
         String url="jdbc:mysql://192.168.3.31:3306/db1";
-        String username="username";
+        String username="usern ame";
         String password="Lijingwen";
 
         try
