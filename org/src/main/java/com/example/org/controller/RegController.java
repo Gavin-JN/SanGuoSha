@@ -1,5 +1,6 @@
 package com.example.org.controller;
 
+import com.example.org.UserDao.impl.IUserDaoImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,8 +27,20 @@ public class RegController {
     @FXML
     private TextField txtEmail;
 
+
+
+
+
+
     @FXML
     public void login(ActionEvent event){
+        IUserDaoImpl user = new IUserDaoImpl();
+
+
+//        if(1){
+//
+//        }
+
         System.out.println("login");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         //获取当前窗口
