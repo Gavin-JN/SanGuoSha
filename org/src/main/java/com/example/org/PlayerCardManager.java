@@ -2,7 +2,7 @@ package com.example.org;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//可以放在Play里
 //用来管理玩家手牌，实时更新
 public class PlayerCardManager {
     Player owner;

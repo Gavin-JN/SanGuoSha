@@ -21,8 +21,14 @@ public class IUserDaoImpl implements IUserDao {
         if(!sqlExec.queryAccount(account)) {
             if(pwd1.equals(pwd2)){
                 sqlExec.addAccount(username,account,pwd1,email);
+                //相应成功
                 System.out.println("注册成功");
             }
+        }else{
+            //相应注册界面
         }
     }
+
+    public IUserDaoImpl(){}
+
 }
