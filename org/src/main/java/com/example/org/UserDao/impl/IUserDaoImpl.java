@@ -16,11 +16,11 @@ public class IUserDaoImpl implements IUserDao {
     }
 
     @Override
-    public void UserRegister(String username,String account, String pwd1, String pwd2,String email) throws SQLException {
+    public void UserRegister(String username,String nickname, String pwd1, String pwd2,String email) throws SQLException {
         SQLExecImpl sqlExec=new SQLExecImpl();
-        if(!sqlExec.queryAccount(account)) {
+        if(!sqlExec.queryAccount(username)) {
             if(pwd1.equals(pwd2)){
-                sqlExec.addAccount(username,account,pwd1,email);
+                sqlExec.addAccount(username,nickname,pwd1,email);
                 //相应成功
                 System.out.println("注册成功");
             }

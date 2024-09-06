@@ -1,6 +1,7 @@
 package com.example.org.controller;
 
 import com.example.org.UserDao.impl.IUserDaoImpl;
+import com.example.org.UserDao.impl.SQLExecImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,15 +16,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 public class RegController {
 
     @FXML
     private TextField txtName;
     @FXML
-    private PasswordField txtConfirm;
-    @FXML
     private PasswordField txtPassword;
+    @FXML
+    private PasswordField txtConfirm;
     @FXML
     private TextField txtEmail;
 
@@ -35,8 +37,6 @@ public class RegController {
     @FXML
     public void login(ActionEvent event){
         IUserDaoImpl user = new IUserDaoImpl();
-
-
 
         System.out.println("login");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
@@ -92,8 +92,10 @@ public class RegController {
     }
 
     @FXML
-    public void register(ActionEvent event){
+    public void register(ActionEvent event) throws SQLException {
         System.out.println("register");
+        IUserDaoImpl user = new IUserDaoImpl();
+        user.UserRegister(txtName.getText(),"11110",txtPassword.getText(),txtConfirm.getText(),"151512");
 
     }
 

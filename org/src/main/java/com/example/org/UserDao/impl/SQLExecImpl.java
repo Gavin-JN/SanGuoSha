@@ -7,11 +7,11 @@ import java.sql.*;
 public class SQLExecImpl implements SQLExec
 {
     private Connection conn;
-    SQLExecImpl()
+    public SQLExecImpl()
     {
-        String url="jdbc:mysql://192.168.3.31:3306/db1";
-        String username="usern ame";
-        String password="Lijingwen";
+        String url="jdbc:mysql://192.168.185.82:3306/db1";
+        String username="root";
+        String password="17727096201";
 
         try
         {
@@ -61,13 +61,13 @@ public class SQLExecImpl implements SQLExec
     }
 
     @Override
-    public void addAccount(String username,String account, String password,String email) throws SQLException {
+    public void addAccount(String username,String password, String nickname,String email) throws SQLException {
         String sql="INSERT INTO account(username,account,password,email) value(?,?,?,?)";
         PreparedStatement pstmt=conn.prepareStatement(sql);
 
         pstmt.setString(1,username);
-        pstmt.setString(2,account);
-        pstmt.setString(3,password);
+        pstmt.setString(2,password);
+        pstmt.setString(3,nickname);
         pstmt.setString(4,email);
 
         int count=pstmt.executeUpdate();
