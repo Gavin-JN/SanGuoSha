@@ -20,10 +20,28 @@ public class Room {
                     RespStatus,RescueStatus,Closed}; //房间各阶段
     public roomStatus status;
 
+
+
+
+
+
+
+
+
+
     public Room(int roomId) {
         this.roomId = roomId;
     }
 
+    //若有房间空闲则使用该房间，否则新建房间
+    public Room getRoom(){
+        for(Room room:roomList){
+            if(room.getStatus()== roomStatus.Closed) return room;
+        }
+        Room room = new Room(index++);
+        roomList.add(room);
+        return room;
+    }
     public void setTurn(int turn) {
         this.turn = turn;
     }
@@ -46,41 +64,40 @@ public class Room {
         room.Init(players);
     }
 
-    //若有房间空闲则使用该房间，否则新建房间
-    public Room getRoom(){
-        for(Room room:roomList){
-            if(room.getStatus()== roomStatus.Closed) return room;
-        }
-        Room room = new Room(index++);
-        roomList.add(room);
-        return room;
-    }
-
     //房间初始化
     public void Init(List<Player> playerList){
         this.players = playerList;
         setStatus(roomStatus.InitStatus);
         cardList=CardManager.cardsPile;
     }
+
+    //游戏开始为每个玩家分发四张卡牌
     public void InitHandCard(){
         for (Player player : players)
             for(int i=0;i<4;i++)    player.handCardList.add(new Card(player.DrawCard(cardList)));
     }
 
+
+    //根据玩家座位号返回该玩家Player类型
     public Player getPlayerBySeatId(int seatId){
         return players.get(seatId);
     }
+
+
+    //响应目标出牌
     public void RespWithTarget(Player player,Player targetPlayer,int typeId){
         player.room.respPlayers.add(targetPlayer);
         player.room.setStatus(roomStatus.RespStatus);
         player.room.currentCard= new Card(typeId);
     }
-    public void RespWithoutTarget(Player player,int typeId){
 
-    }
+
     public void GameOver(Room room){
         room.status=roomStatus.Closed;
     }
+
+
+
     public boolean IsPlayFinish(Player player1,Player player2) {
         if(player1.hp==0||player2.hp==0)//判断条件应该为 “某一玩家血量为0且在响应阶段没有使用桃或酒”
         return true;
