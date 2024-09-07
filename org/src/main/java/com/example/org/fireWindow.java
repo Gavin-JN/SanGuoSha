@@ -71,7 +71,8 @@ public class fireWindow extends Parent {
         //编辑己方区域的内容
         heroCardPane.setPrefSize(100, 150);
         Image imageHero = new Image(getClass().getResourceAsStream(player1.getHero().getHeroPhotoPath()));
-        BackgroundImage heroImage = new BackgroundImage(imageHero, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        BackgroundSize backgroundSizeHero = new BackgroundSize(100, 150, false, false, false, false);
+        BackgroundImage heroImage = new BackgroundImage(imageHero, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeHero);
         Background heroBackground = new Background(heroImage);
         heroCardPane.setBackground(heroBackground);
         heroCardPane.setLayoutX(20);
@@ -80,7 +81,8 @@ public class fireWindow extends Parent {
         //己方装备
         equipmentPane.setPrefSize(100, 150);
         Image imageEquipment = new Image(getClass().getResourceAsStream("img/equipment.png"));
-        BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        BackgroundSize backgroundSizeEquipment = new BackgroundSize(100, 150, false, false, false, false);
+        BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment);
         Background equipmentBackground = new Background(equipmentImage);
         equipmentPane.setBackground(equipmentBackground);
         equipmentPane.setLayoutX(180);
@@ -96,9 +98,9 @@ public class fireWindow extends Parent {
         for (int i = 0; i < player1.handCardList.size(); i++) {
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
-
             Image imageCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(i).getCardPhotoPath()));
-            BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+            BackgroundSize backgroundSizeCard = new BackgroundSize(100, 150, false, false, false, false);
+            BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCard);
             Background cardBackground = new Background(cardImage);
             cardPane.setBackground(cardBackground);
             cardPane.setLayoutX(0 + i * 110);
@@ -137,8 +139,9 @@ public class fireWindow extends Parent {
 
         //敌方武将照片
         heroCardPane2.setPrefSize(100, 150);
-        Image imageHero2 = new Image(getClass().getResourceAsStream(targetPlayer.getHero().getHeroPhotoPath()));   //根据玩家抽中的武将，上传对应的图片
-        BackgroundImage heroImage2 = new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        Image imageHero2 = new Image(getClass().getResourceAsStream(targetPlayer.getHero().getHeroPhotoPath()));
+        BackgroundSize backgroundSizeHero2 = new BackgroundSize(100, 150, false, false, false, false);//根据玩家抽中的武将，上传对应的图片
+        BackgroundImage heroImage2 = new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeHero2);
         Background heroBackground2 = new Background(heroImage2);
         heroCardPane2.setBackground(heroBackground2);
         heroCardPane2.setLayoutX(450);
@@ -150,8 +153,8 @@ public class fireWindow extends Parent {
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
             Image imageCard = new Image(getClass().getResourceAsStream("img/cardBack.png"));
-            BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
-            BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCardBack);
+            BackgroundSize backgroundSizeCard = new BackgroundSize(100, 150, false, false, false, false);
+            BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCard);
             Background cardBackground = new Background(cardImage);
             cardPane.setBackground(cardBackground);
             cardPane.setLayoutX(650 + i * 45);

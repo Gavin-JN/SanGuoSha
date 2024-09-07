@@ -7,47 +7,55 @@ public class Heroes {
     //血量上限
     public int hpLimit;
     //将武将与玩家绑定
-    private static Player player;
+    public Player player;
     //武将图片资源路径
     private String heroPhotoPath;
     //判断当前玩家技能能否主动使用
     boolean IsSkillInitiate;
 
     //构造器（与析构器）
-    public Heroes() {}
-    public Heroes(int hpLimit,String heroPhotoPath) {
+    public Heroes() {
+    }
+
+    public Heroes(int hpLimit, String heroPhotoPath) {
         this.hpLimit = hpLimit;
         this.heroPhotoPath = heroPhotoPath;
     }
 
-
-
     public void setHpLimit(int num) {
         this.hpLimit = num;
     }
-    public int getHpLimit() {return hpLimit;}
 
-    public void setPlayer(Player player) {this.player = player;}
-    public Player getPlayer() {return player;}
+    public int getHpLimit() {
+        return hpLimit;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
 
     public void setHeroPhotoPath(String heroPhotoPath) {
         this.heroPhotoPath = heroPhotoPath;
     }
-    public String getHeroPhotoPath() {return heroPhotoPath;}
+
+    public String getHeroPhotoPath() {
+        return heroPhotoPath;
+    }
 
     public void setSkillInitiate(boolean isSkillInitiate) {
         this.IsSkillInitiate = isSkillInitiate;
 
     }
+
     public boolean getSkillInitiate() {
         return IsSkillInitiate;
     }
-
-
-
-
-
-    public static class sunQuan extends Heroes {
+}
+class sunQuan extends Heroes {
         private boolean balanceUsed = false;  // 布尔类型用于记录记录制衡是否已使用,初始化为未使用过制衡
         public sunQuan() {
             this.setSkillInitiate(true);
@@ -79,7 +87,7 @@ public class Heroes {
         }
 }
 
-    public static class caoCao extends Heroes {
+class caoCao extends Heroes {
         //1、奸雄。获得对自己造成伤害的牌
         // (当角色收到伤害的时候调用该函数）
         public caoCao() {
@@ -197,4 +205,3 @@ public class Heroes {
         }
 
     }
-}
