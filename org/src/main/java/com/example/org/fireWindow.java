@@ -195,19 +195,19 @@ public class fireWindow extends Parent {
         up.setStyle("-fx-background-color: #000fff");
         up.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         up.setOnAction(event -> {
-            for(int i=0;i<checkedCards.size();i++)
-            {
-                Pane showCardPane = new Pane();
-                showCardPane.setPrefSize(100, 150);
-                Image imageShowCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(checkedCards.get(i)).getCardPhotoPath()));
-                BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
-                BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
-                Background showCardBackground=new Background(showCardImage);
-                showCardPane.setBackground(showCardBackground);
-                showCardPane.setLayoutX(400+i*40);
-                showCardPane.setLayoutY(100);
-                gameAreaPane.getChildren().add(showCardPane);
-            }
+//            for(int i=0;i<checkedCards.size();i++)
+//            {
+//                Pane showCardPane = new Pane();
+//                showCardPane.setPrefSize(100, 150);
+//                Image imageShowCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(checkedCards.get(i)).getCardPhotoPath()));
+//                BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
+//                BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
+//                Background showCardBackground=new Background(showCardImage);
+//                showCardPane.setBackground(showCardBackground);
+//                showCardPane.setLayoutX(400+i*40);
+//                showCardPane.setLayoutY(100);
+//                gameAreaPane.getChildren().add(showCardPane);
+//            }
             System.out.println("决定出牌");
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
             showCardInArea(cardContainer2,player1,checkedCards); //展示
@@ -365,19 +365,20 @@ public class fireWindow extends Parent {
             String cardPhotoPath = player.handCardList.get(i).getCardPhotoPath();
             Image imageCard = new Image(getClass().getResourceAsStream(cardPhotoPath));
 
+            BackgroundSize backgroundSizeCard = new BackgroundSize(100, 150, false, false, false, false);
             // 创建卡牌背景图
             BackgroundImage cardImage = new BackgroundImage(
                     imageCard,
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundPosition.CENTER,
-                    BackgroundSize.DEFAULT
+                    backgroundSizeCard
             );
             Background cardBackground = new Background(cardImage);
             cardPane.setBackground(cardBackground);
 
             // 设置卡牌的布局位置（水平排列）
-            cardPane.setLayoutX(340 + i * 110);
+            cardPane.setLayoutX(0 + i * 110);
             cardPane.setLayoutY(0);
 
             // 添加卡牌的交互事件，如悬浮效果、点击效果等

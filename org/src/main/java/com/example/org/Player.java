@@ -136,4 +136,51 @@ public class Player {
         }
         public void Discard() {
         }
+
+        public  Card getCardByType(int typeId) {
+        switch (typeId)
+        {
+            case 1:
+                return new Sha(1);
+            case 2:
+                return new Shan(2);
+            case 3:
+                return new Tao(3);
+            case 4:
+                return new Jiu(4);
+            case 5:
+                return new ShunShouQianYang(5);
+            case 6:
+                return new GuoHeChaiQiao(6);
+            case 7:
+                return new WuZhongShengYou(7);
+            case 8:
+                return new JieDaoShaRen(8);
+            case 9:
+                return new JueDou(9);
+            case 10:
+                return new WuXieKeJi(10);
+            case 11:
+                return new LeBuSiShu(11);
+            case 12:
+                return new BingLiangCunDuan(12);
+            case 13:
+                return new NanManRuQin(13);
+            case 14:
+                return new WanJianQiFa(14);
+            case 15:
+                return new ZhuGeLianNu(15);
+            case 16:
+                return new HanBingJian(16);
+            case 17:
+                return new GuDingDao(17);
+            case 18:
+                return new QingLongYanYueDao(18);
+            case 19:
+                return new HorseIncrease1(19);
+            case 20:
+                return new HorseDecrease1(20);
+        }
+        return new Card();
+        }
     }
