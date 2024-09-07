@@ -348,6 +348,9 @@ public class fireWindow extends Parent {
         Image icon = new Image(in);
         stage.getIcons().add(icon);
         stage.setTitle("FireWindow");
+
+        // 添加背景音乐
+        Sound p=new Sound();
         stage.show();
     }
 
