@@ -24,10 +24,9 @@ public class Card {
 
    public Card() {
    }
+
+   //该牌能否主动使用
    public boolean CanInitiative(){
-      return false;
-   }
-   public boolean CanPassive(){
       return false;
    }
    public boolean RequireTarget(){
@@ -65,20 +64,22 @@ class Sha extends Card{
    public boolean CanInitiative(){
       return true;
    }
-   public boolean CanPassive(){
-      return true;
-   }
+
    public boolean RequireTarget() {
       return true;
    }
    public void Use(Player player,Player targetPlayer){
       //根据攻击距离，限制出杀次数，装备武器效果执行杀的效果
    }
+
+   //若杀被闪响应则返回true
    public boolean Resp(Player targetPlayer,int id){
       if(AbandonResp(targetPlayer)) return false;
       if(targetPlayer.handCardList.get(id).getTypeId()==2) return true;
       return false;
    }
+
+   //若对手放弃响应则根据当前是否喝酒执行对手血量变化
    public boolean AbandonResp(Player targetPlayer){
       int damage;
       if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isUseJiu
@@ -109,9 +110,6 @@ class Shan extends Card{
       super.setCardPhotoPath("controller/img/ShouPai/Shan.webp");
    }
 
-   public boolean CanPassive(){
-      return true;
-   }
 }
 
 //桃：可在自己回合已受伤时或濒死时使用回复一点体力，typeId 3
@@ -257,10 +255,6 @@ class WuXieKeJi extends Card{
    }
 
    public boolean CanInitiative() {
-      return true;
-   }
-
-   public boolean CanPassive() {
       return true;
    }
 }

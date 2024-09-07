@@ -8,7 +8,6 @@ public class Room {
     public int sid;
     public int roomId;
     public List<Card> cardList;  //牌堆
-    public List<Card> discardList;  //弃牌堆
     public Card currentCard;  //当前处理的牌
     public List<Player> players; //房间内所有玩家
     public List<Player> respPlayers;  //房间内待响应的玩家
