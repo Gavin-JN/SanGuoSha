@@ -55,6 +55,7 @@ public class Room {
         roomList.add(room);
         return room;
     }
+
     //房间初始化
     public void Init(List<Player> playerList){
         this.players = playerList;
@@ -65,6 +66,7 @@ public class Room {
         for (Player player : players)
             for(int i=0;i<4;i++)    player.handCardList.add(new Card(player.DrawCard(cardList)));
     }
+
     public Player getPlayerBySeatId(int seatId){
         return players.get(seatId);
     }
