@@ -55,12 +55,13 @@ public class Room {
         roomList.add(room);
         return room;
     }
-    //房间初始化
+    //房间初始化,玩家武将及牌
     public void Init(List<Player> playerList){
         this.players = playerList;
         setStatus(roomStatus.InitStatus);
         cardList=CardManager.cardsPile;
     }
+
     public void InitHandCard(){
         for (Player player : players)
             for(int i=0;i<4;i++)    player.handCardList.add(new Card(player.DrawCard(cardList)));
