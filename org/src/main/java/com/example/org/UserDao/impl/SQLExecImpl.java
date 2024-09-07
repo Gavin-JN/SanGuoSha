@@ -5,6 +5,7 @@ import com.example.org.UserDao.SQLExec;
 import java.sql.*;
 public class SQLExecImpl implements SQLExec
 {
+
     private Connection conn;
     public SQLExecImpl() throws ClassNotFoundException {
         String url="jdbc:mysql://localhost:3306/db1";
@@ -27,6 +28,9 @@ public class SQLExecImpl implements SQLExec
         }
         System.out.println("Connctions success");
     }
+
+
+
 
     @Override
     public boolean queryAccount(String username, String password) throws SQLException {
@@ -92,15 +96,21 @@ public class SQLExecImpl implements SQLExec
         pstmt.close();
     }
 
+
+
+
+
+
+
     @Override
-    public void removeAccount(String account) throws SQLException {
+    public void removeAccount(String username) throws SQLException {
         if (this.conn == null) {
             System.out.println("No database connection available.");
             return;
         }
-        String sql="DELETE FROM account where account=?";
+        String sql="DELETE FROM account where username=?";
         PreparedStatement pstmt=conn.prepareStatement(sql);
-        pstmt.setString(1,account);
+        pstmt.setString(1,username);
         int count=pstmt.executeUpdate();
         System.out.println(count>0);
 
@@ -108,17 +118,17 @@ public class SQLExecImpl implements SQLExec
     }
 
     @Override
-    public void changeData(String account,String password) throws SQLException {
+    public void changeData(String username,String password) throws SQLException {
         if (this.conn == null) {
             System.out.println("No database connection available.");
             return;
         }
         String sql="UPDATE account\n"+
                 "set password=?\n"+
-                "where account=?";
+                "where username=?";
         PreparedStatement pstmt=conn.prepareStatement(sql);
         pstmt.setString(1,password);
-        pstmt.setString(2,account);
+        pstmt.setString(2,username);
         int count=pstmt.executeUpdate();
         System.out.println(count>0);
 
@@ -132,6 +142,5 @@ public class SQLExecImpl implements SQLExec
             conn.close();
         }
     }
-
 
 }

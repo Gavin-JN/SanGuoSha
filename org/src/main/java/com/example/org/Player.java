@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Player {
     public int seatId;
+
     public List<Card> handCardList;
     public List<Card> equipCardList;
     public List<Card> judgeCardList;
@@ -18,42 +19,45 @@ public class Player {
     public boolean isNextShaAddDamage=false;
     public boolean ifUseGuoHeChaiQiao=false;
 
-    public Heroes getHero() {
-        return hero;
-    }
+    public Room room;
+    private int attackDistance;
 
-    public void setHero(Heroes hero) {
+    //构造器（与析构器）
+    public Player() {}
+    public Player(Heroes hero) {
         this.hero = hero;
     }
 
+
+    //set和get方法
+    public void setHero(Heroes hero) {
+        this.hero = hero;
+    }
+    public Heroes getHero() {
+        return hero;
+    }
+    public void setIfUseGuoHeChaiQiao(boolean ifUseGuoHeChaiQiao) {this.ifUseGuoHeChaiQiao = ifUseGuoHeChaiQiao;}
     public boolean isIfUseGuoHeChaiQiao() {
         return ifUseGuoHeChaiQiao;
     }
-
-    public void setIfUseGuoHeChaiQiao(boolean ifUseGuoHeChaiQiao) {
-        this.ifUseGuoHeChaiQiao = ifUseGuoHeChaiQiao;
-    }
-
-    //血量
     public void setHp(int CurrentHp) {
         this.hp = CurrentHp;
     }
-
-    public void setHpLimit() {
-
-    }
-
-    public Room room;
-
     public int getHp() {
         return hp;
     }
+    public void setHpLimit() {
 
+    }
     public int getHpLimit() {
         return hpLimit;
     }
-
-    private int attackDistance;
+    public void setSeatId(int seatId) {
+        this.seatId = seatId;
+    }
+    public int getSeatId() {return seatId;}
+    public void setAttackDistance(int attackDistance) {this.attackDistance = attackDistance;}
+    public int getAttackDistance() {return attackDistance;}
 
 
     public int getCardsNum() {
@@ -70,21 +74,6 @@ public class Player {
         return number;
     }
 
-    public void setSeatId(int seatId) {
-        this.seatId = seatId;
-    }
-
-    public int getAttackDistance() {
-        return attackDistance;
-    }
-
-    public void setAttackDistance(int attackDistance) {
-        this.attackDistance = attackDistance;
-    }
-
-    public int getSeatId() {
-        return seatId;
-    }
 
     public void JudgeCardList(Player player) {
         if (player.judgeCardList.size() == 0)
@@ -121,31 +110,28 @@ public class Player {
     }
 
 
+
+
     public boolean IsAbleToPlay(int judge) {
         if(judge==0) return false;
         return true;
     }
-
     public boolean IsPlayFinish() {
         return true;
     }
-
     public boolean IsRequireDiscard() {
         return true;
     }
-
     public boolean IsSkillInitiate(Heroes hero) {
 
         return true;
     }
-
     public boolean CheckHandCardList() {
         for (int i = 0; i < handCardList.size(); i++) {
             if (handCardList.get(i).CanInitiative()) return true;
         }
         return false;
     }
-
     public void Discard() {
     }
 }
