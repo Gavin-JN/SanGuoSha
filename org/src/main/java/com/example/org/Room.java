@@ -63,15 +63,17 @@ public class Room {
         setStatus(roomStatus.InitStatus);
         CardManager.CreateCardList();
         cardList=CardManager.cardsPile;
+for(int m=0;m<4;m++) {
+    for (Player player : players)
+        for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
+}
 
-//        for (Player player : players)
-//            for(int i=0;i<1;i++)    player.handCardList.add(new Card(player.DrawCard(cardList)));
-
-        Card card=new Sha(1);
+        Card card=new QingLongYanYueDao(18);
         for (Player player : players)
         {
             player.handCardList.add(card);
         }
+
      players.get(0).setHero( new caoCao());
         players.get(1).setHero( new caoCao());
 

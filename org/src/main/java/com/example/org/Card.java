@@ -16,7 +16,7 @@ public class Card {
    }
 
    public Card(int typeId) {
-      this.typeId = typeId;
+   this.typeId = typeId;
    }
    public int getTypeId() {
       return typeId;
@@ -59,7 +59,7 @@ public class Card {
 class Sha extends Card{
    public Sha(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/Tao.jpg");
+      super.setCardPhotoPath("controller/img/ShouPai/Sha.jpg");
    }
 
    public boolean CanInitiative(){
@@ -106,7 +106,7 @@ class Sha extends Card{
 class Shan extends Card{
    public Shan(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/Shan.webp");
+      super.setCardPhotoPath("controller/img/ShouPai/Shan.jpg");
    }
 
    public boolean CanPassive(){
@@ -148,7 +148,7 @@ class Tao extends Card{
 class Jiu extends Card{
    public Jiu(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/Jiu.png");
+      super.setCardPhotoPath("controller/img/ShouPai/Jiu.jpg");
    }
    public boolean Use(Player player,int id) {
       if (player.hp <= 0) {//濒死回血
@@ -172,7 +172,7 @@ class Jiu extends Card{
 class ShunShouQianYang extends Card {
    public ShunShouQianYang(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/ShunShouQianYang.webp");
+      super.setCardPhotoPath("controller/img/ShouPai/ShunShouQianYang.jpg");
    }
 
    public boolean CanInitiative() {
@@ -208,7 +208,7 @@ class GuoHeChaiQiao extends Card{
 class WuZhongShengYou extends Card{
    public WuZhongShengYou(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/WuZhongShengYou.webp");
+      super.setCardPhotoPath("controller/img/ShouPai/WuZhongShengYou.jpg");
    }
 
    public boolean CanInitiative() {
@@ -253,7 +253,7 @@ class JueDou extends Card{
 class WuXieKeJi extends Card{
    public WuXieKeJi(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/WuXieKeJi.webp");
+      super.setCardPhotoPath("controller/img/ShouPai/WuXieKeJi.jpg");
    }
 
    public boolean CanInitiative() {
@@ -301,7 +301,7 @@ class BingLiangCunDuan extends Card{
 class NanManRuQin extends Card{
    public NanManRuQin(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/NanManRuQin.webp");
+      super.setCardPhotoPath("controller/img/ShouPai/NanManRuQin.png");
    }
 
    public boolean CanInitiative() {
@@ -313,7 +313,7 @@ class NanManRuQin extends Card{
 class WanJianQiFa extends Card{
    public WanJianQiFa(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/WanJianQiFa.webp");
+      super.setCardPhotoPath("controller/img/ShouPai/WanJianQiFa.jpg");
    }
 
    public boolean CanInitiative() {
@@ -325,7 +325,7 @@ class WanJianQiFa extends Card{
 class ZhuGeLianNu extends Card{
    public ZhuGeLianNu(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/ZhuGeLianNu.webp");
+      super.setCardPhotoPath("controller/img/ShouPai/ZhuGeLianNu.jpg");
    }
 
    public boolean CanInitiative() {
