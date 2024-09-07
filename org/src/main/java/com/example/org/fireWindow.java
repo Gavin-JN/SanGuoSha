@@ -27,6 +27,7 @@ public class fireWindow extends Parent {
     private List<Integer> checkedCards;
     private BorderPane root;
 
+
     public fireWindow(Player player1, Player targetPlayer) {
         //己方
         player1Pane = new Pane();
@@ -95,6 +96,7 @@ public class fireWindow extends Parent {
         for (int i = 0; i < player1.handCardList.size(); i++) {
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
+
             Image imageCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(i).getCardPhotoPath()));
             BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
             Background cardBackground = new Background(cardImage);

@@ -72,11 +72,11 @@ public class Receiver {
         }
     }
 
+
     //
     public void Abandon(Player player){
         if(room.turn==player.getSeatId()&&room.status == Room.roomStatus.PlayStatus){
             room.status= Room.roomStatus.DiscardStatus;
-            player.Discard();
             int nextTurn = (++room.turn)%room.players.size();
             room.turn = nextTurn;
             room.status= Room.roomStatus.JudgeStatus;

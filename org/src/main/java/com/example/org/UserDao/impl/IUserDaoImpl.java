@@ -20,6 +20,9 @@ public class IUserDaoImpl implements IUserDao {
 //
 //    }
 
+
+
+
     @Override
     public void UserRegister(String username,String nickname, String pwd1, String pwd2,String email) throws SQLException, ClassNotFoundException {
         SQLExecImpl sqlExec=new SQLExecImpl();
@@ -33,6 +36,5 @@ public class IUserDaoImpl implements IUserDao {
             //相应注册界面
         }
     }
-
 
 }
