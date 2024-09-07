@@ -59,7 +59,7 @@ public class Card {
 class Sha extends Card{
    public Sha(int typeId) {
       super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/Sha.webp");
+      super.setCardPhotoPath("controller/img/ShouPai/Tao.jpg");
    }
 
    public boolean CanInitiative(){

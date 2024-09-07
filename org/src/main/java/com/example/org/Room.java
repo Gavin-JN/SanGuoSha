@@ -1,5 +1,7 @@
 package com.example.org;
 
+import javafx.scene.layout.BackgroundImage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,13 +61,20 @@ public class Room {
     public void Init(List<Player> playerList){
         this.players = playerList;
         setStatus(roomStatus.InitStatus);
+        CardManager.CreateCardList();
         cardList=CardManager.cardsPile;
+//        for (Player player : players)
+//            for(int i=0;i<1;i++)    player.handCardList.add(new Card(player.DrawCard(cardList)));
+        Card card=new Sha(1);
+        for (Player player : players)
+        {
+            player.handCardList.add(card);
+        }
+     players.get(0).setHero( new guoJia());
+        players.get(1).setHero( new zhangFei());
+
     }
 
-    public void InitHandCard(){
-        for (Player player : players)
-            for(int i=0;i<4;i++)    player.handCardList.add(new Card(player.DrawCard(cardList)));
-    }
     public Player getPlayerBySeatId(int seatId){
         return players.get(seatId);
     }
@@ -85,5 +94,35 @@ public class Room {
         return true;
         else
             return false;
+    }
+    public  void selectHero(Player player){
+        int id=(int)(1+Math.random()*8);
+        switch (id)
+        {
+            case 1:
+                player.setHero(new sunQuan());
+                break;
+            case 2:
+                player.setHero(new caoCao());
+                break;
+            case 3:
+                player.setHero(new zhaoYun());
+                break;
+            case 4:
+                player.setHero(new zhangFei());
+                break;
+            case 5:
+                player.setHero(new zhuGeLiang());
+                break;
+            case 6:
+                player.setHero(new zhangLiao());
+                break;
+            case 7:
+                player.setHero(new daQiao());
+                break;
+            case 8:
+                player.setHero(new guoJia());
+                break;
+        }
     }
 }

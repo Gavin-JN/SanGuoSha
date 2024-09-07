@@ -8,6 +8,7 @@ public class Heroes {
     public Player player;    //将武将与玩家绑定
     //武将图片资源路径
     private String heroPhotoPath;
+    public int heroId;
 
     public String getHeroPhotoPath() {
         return heroPhotoPath;
@@ -48,6 +49,7 @@ public class Heroes {
             this.setSkillInitiate(true);
             this.setHpLimit(4);
             this.setHeroPhotoPath("controller/img/heroPic/sunquan.jpg");
+            this.heroId=1;
         }
 
         //1、制衡。弃任意牌，摸等量牌，每回合一次
@@ -81,6 +83,7 @@ public class Heroes {
                 this.setSkillInitiate(false);
                 this.setHpLimit(4);
                 this.setHeroPhotoPath("controller/img/heroPic/caocao.jpg");
+                this.heroId=2;
             }
 
             public void jianXiong(Card card, Player player) {  //card为对对该角色造成伤害的卡牌
@@ -96,6 +99,7 @@ public class Heroes {
                 this.setSkillInitiate(true);
                 this.setHpLimit(4);
                 this.setHeroPhotoPath("controller/img/heroPic/zhaoyun.jpg");
+                this.heroId=3;
             }
 
             //1、龙胆——你可以将你手牌的【杀】当【闪】、【闪】当【杀】使用或打出。
@@ -117,6 +121,7 @@ public class Heroes {
                 this.setSkillInitiate(true);
                 this.setHpLimit(4);
                 this.setHeroPhotoPath("controller/img/heroPic/zhangfei.jpg");
+                this.heroId=4;
             }
 
             //咆哮——出牌阶段，你可以使用任意数量的【杀】。
@@ -133,6 +138,7 @@ public class Heroes {
                     this.setSkillInitiate(false);
                     this.setHpLimit(3);
                     this.setHeroPhotoPath("controller/img/heroPic/zhugeliang.jpg");
+                    this.heroId=5;
                 }
 
                 //空城——锁定技，当你没有手牌时，你不能成为【杀】或【决斗】的目标。◆当你在“决斗”过程中没有手牌无法打出杀时，你仍然会受到【决斗】的伤害。
@@ -153,6 +159,7 @@ public class Heroes {
                     this.setSkillInitiate(true);
                     this.setHpLimit(4);
                     this.setHeroPhotoPath("controller/img/heroPic/zhangliao.jpg");
+                    this.heroId=6;
                 }
 
                 //突袭——摸牌阶段，你可以放弃摸牌，然后从至多两名（至少一名）角色的手牌里各抽取一张牌。◆摸牌阶段，你一旦发动突袭，就不能从牌堆获得牌；只剩一名其他角色时，你就只能选择这一名角色；若此时其他任何人都没有手牌，你就不能发动突袭。
@@ -167,6 +174,7 @@ public class Heroes {
                     this.setSkillInitiate(true);
                     this.setHpLimit(3);
                     this.setHeroPhotoPath("controller/img/heroPic/daqiao.jpg");
+                    this.heroId=7;
                 }
 
                 //流离——当你成为【杀】的目标时，你可以弃一张牌，并将此【杀】转移给你攻击范围内的另一名角色。（该角色不得是【杀】的使用者）
@@ -184,6 +192,7 @@ public class Heroes {
                     this.setSkillInitiate(false);
                     this.setHpLimit(3);
                     this.setHeroPhotoPath("controller/img/heroPic/guojia.jpg");
+                    this.heroId=8;
                 }
 
                 //遗计——你每受到1点伤害，可摸两张牌
