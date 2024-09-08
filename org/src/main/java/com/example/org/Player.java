@@ -31,6 +31,7 @@ public class Player {
     //构造器（与析构器）
     public Player() {
         this.handCardList = new ArrayList<>();
+        this.setHp(this.getHpLimit());
     }
     public Player(Heroes hero) {
         this.hero = hero;
@@ -55,9 +56,7 @@ public class Player {
     public int getHp() {
         return hp;
     }
-    public void setHpLimit() {
-
-    }
+    public void setHpLimit() {this.hpLimit = this.getHero().getHpLimit();}
     public int getHpLimit() {
         return hpLimit;
     }
