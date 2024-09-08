@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
+    //阿三大苏打实打实
     public static void main(String[] args) throws IOException {
         //获取本机ip地址
         InetAddress localhost = InetAddress.getLocalHost();

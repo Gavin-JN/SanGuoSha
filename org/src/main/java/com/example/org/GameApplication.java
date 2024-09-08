@@ -23,6 +23,8 @@ public class GameApplication extends Application {
         // 创建一个StackPane作为新的根布局
         StackPane stackPane = new StackPane();
 
+
+
         // 设置背景图
         Image backgroundImage = new Image(this.getClass().getResourceAsStream("img/bg.png")); // 确保图片路径正确
         BackgroundImage background = new BackgroundImage(
@@ -57,6 +59,9 @@ public class GameApplication extends Application {
     }
 
 
+    public void useless(){
+        System.out.println("waste");
+    }
     public static void main(String[] args) {
         launch();
     }
