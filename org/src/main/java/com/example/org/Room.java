@@ -1,5 +1,7 @@
 package com.example.org;
 
+import javafx.scene.layout.BackgroundImage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,28 +21,10 @@ public class Room {
                     RespStatus,RescueStatus,Closed}; //房间各阶段
     public roomStatus status;
 
-
-
-
-
-
-
-
-
-
     public Room(int roomId) {
         this.roomId = roomId;
     }
 
-    //若有房间空闲则使用该房间，否则新建房间
-    public Room getRoom(){
-        for(Room room:roomList){
-            if(room.getStatus()== roomStatus.Closed) return room;
-        }
-        Room room = new Room(index++);
-        roomList.add(room);
-        return room;
-    }
     public void setTurn(int turn) {
         this.turn = turn;
     }
@@ -63,44 +47,86 @@ public class Room {
         room.Init(players);
     }
 
-    //房间初始化
+    //若有房间空闲则使用该房间，否则新建房间
+    public Room getRoom(){
+        for(Room room:roomList){
+            if(room.getStatus()== roomStatus.Closed) return room;
+        }
+        Room room = new Room(index++);
+        roomList.add(room);
+        return room;
+    }
+    //房间初始化,玩家武将及牌
     public void Init(List<Player> playerList){
         this.players = playerList;
         setStatus(roomStatus.InitStatus);
+        CardManager.CreateCardList();
         cardList=CardManager.cardsPile;
+for(int m=0;m<4;m++) {
+    for (Player player : players)
+        for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
+}
+
+//        Card card=new QingLongYanYueDao(18);
+//        for (Player player : players)
+//        {
+//            player.handCardList.add(card);
+//        }
+
+        //随机分配英雄操作
+     selectHero(players.get(0));
+     selectHero(players.get(1));
+
     }
 
-    //游戏开始为每个玩家分发四张卡牌
-    public void InitHandCard(){
-        for (Player player : players)
-            for(int i=0;i<4;i++)    player.handCardList.add(new Card(player.DrawCard(cardList)));
-    }
-
-
-    //根据玩家座位号返回该玩家Player类型
     public Player getPlayerBySeatId(int seatId){
         return players.get(seatId);
     }
-
-
-    //响应目标出牌
     public void RespWithTarget(Player player,Player targetPlayer,int typeId){
         player.room.respPlayers.add(targetPlayer);
         player.room.setStatus(roomStatus.RespStatus);
         player.room.currentCard= new Card(typeId);
     }
+    public void RespWithoutTarget(Player player,int typeId){
 
-
+    }
     public void GameOver(Room room){
         room.status=roomStatus.Closed;
     }
-
-
-
     public boolean IsPlayFinish(Player player1,Player player2) {
         if(player1.hp==0||player2.hp==0)//判断条件应该为 “某一玩家血量为0且在响应阶段没有使用桃或酒”
         return true;
         else
             return false;
+    }
+    public  void selectHero(Player player){
+        int id=(int)(1+Math.random()*8);
+        switch (id)
+        {
+            case 1:
+                player.setHero(new sunQuan());
+                break;
+            case 2:
+                player.setHero(new caoCao());
+                break;
+            case 3:
+                player.setHero(new zhaoYun());
+                break;
+            case 4:
+                player.setHero(new zhangFei());
+                break;
+            case 5:
+                player.setHero(new zhuGeLiang());
+                break;
+            case 6:
+                player.setHero(new zhangLiao());
+                break;
+            case 7:
+                player.setHero(new daQiao());
+                break;
+            case 8:
+                player.setHero(new guoJia());
+                break;
+        }
     }
 }

@@ -71,7 +71,6 @@ public class Receiver {
             }
         }
     }
-
     //
     public void Abandon(Player player){
         if(room.turn==player.getSeatId()&&room.status == Room.roomStatus.PlayStatus){

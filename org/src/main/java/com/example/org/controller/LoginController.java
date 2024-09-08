@@ -38,9 +38,9 @@ public class LoginController {
         //比较数据
         //成功之后进入游戏
         //不成功就提示错误
-        SQLExecImpl sqlExec=new SQLExecImpl();
-        boolean isValid=sqlExec.queryAccount(NameOfLogin.getText(),PasswordOfLogin.getText());
-
+//        SQLExecImpl sqlExec=new SQLExecImpl();
+//        boolean isValid=sqlExec.queryAccount(NameOfLogin.getText(),PasswordOfLogin.getText());
+        boolean isValid= true;
         if(NameOfLogin.getText().equals("") || PasswordOfLogin.getText().equals("")){
             prompt.setText("用户名或者密码不能为空！！");
         } else if (!isValid) {//不匹配
