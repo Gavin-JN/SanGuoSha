@@ -180,6 +180,14 @@ class ShunShouQianYang extends Card {
    public boolean RequireTarget() {
       return true;
    }
+   public boolean Resp(Player targetPlayer,int id){
+      if(AbandonResp(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==10) return true;
+      return false;
+   }
+
+   //若对手放弃响应则根据当前是否喝酒执行对手血量变化
+
 }
 
 //过河拆桥：可弃置对手区域内一张牌，  typeId 6

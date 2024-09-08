@@ -18,6 +18,7 @@ public class Player {
     public int hpLimit;//血量上限
     public boolean isUseJiu=false;
     public boolean isNextShaAddDamage=false;
+    public boolean ifUseShunShouQianYang =false;
     public boolean ifUseGuoHeChaiQiao=false;
 
     public Room room;
