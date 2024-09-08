@@ -25,7 +25,7 @@ public class Client extends Application {
         String ipAddress = localhost.getHostAddress();
 
         //连接服务端，去找到指定服务器
-        Socket socket = new Socket("127.0.0.1", 3333);
+        Socket socket = new Socket("192.168.185.82", 1688);
 
         //创建socket的输出流
         OutputStream os = socket.getOutputStream();
