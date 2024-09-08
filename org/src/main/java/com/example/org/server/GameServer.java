@@ -13,7 +13,7 @@ public class GameServer{
     public static void main(String[] args) throws IOException {
         System.out.println("---服务端启动成功---");
         //创建服务端Socket对象，同时注册端口
-        ServerSocket serverSocket = new ServerSocket(3333);
+        ServerSocket serverSocket = new ServerSocket(1688);
         //把这个客户端对应的通信管道交给一个独立的线程进行处理
         while(true){
             //等待连接 这里accept返回值是一个socket对象
