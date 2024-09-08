@@ -2,7 +2,6 @@ package com.example.org.UserDao.impl;
 
 import com.example.org.UserDao.SQLExec;
 
-
 import java.sql.*;
 public class SQLExecImpl implements SQLExec
 {
@@ -28,7 +27,6 @@ public class SQLExecImpl implements SQLExec
             System.out.println("Connctions failed:"+e);
         }
         System.out.println("Connctions success");
-
     }
 
 
