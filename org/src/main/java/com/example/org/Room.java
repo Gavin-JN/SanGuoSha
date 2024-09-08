@@ -15,11 +15,13 @@ public class Room {
     public List<Player> respPlayers;  //房间内待响应的玩家
     public List<Player> helpPlayers;  //房间内考虑救援的玩家
     public Player dyingPlayer;  //濒死求援的玩家
+    public List<Player> wxkjPlayers;  //无懈可击响应玩家
     public List<Room> roomList;
     public int turn;
     enum roomStatus {InitStatus,SelectStatus,JudgeStatus,DrawStatus,PlayStatus,DiscardStatus,
                     RespStatus,RescueStatus,Closed}; //房间各阶段
     public roomStatus status;
+    public Receiver receiver;
 
     public Room(int roomId) {
         this.roomId = roomId;
@@ -58,7 +60,11 @@ public class Room {
     }
     //房间初始化,玩家武将及牌
     public void Init(List<Player> playerList){
+        receiver = new Receiver(this);
         this.players = playerList;
+        respPlayers = new ArrayList<>();
+        helpPlayers = new ArrayList<>();
+        wxkjPlayers = new ArrayList<>();
         setStatus(roomStatus.InitStatus);
         CardManager.CreateCardList();
         cardList=CardManager.cardsPile;
@@ -98,6 +104,79 @@ for(int m=0;m<4;m++) {
         return true;
         else
             return false;
+    }
+    public void update(){
+        switch(status){
+            case JudgeStatus:{
+                if(getPlayerBySeatId(turn).judgeCardList[0]){
+                    //多种情况：1.第一次进入判断，通知他人出无懈可击
+                    //2.是否处于他人无懈可击状态
+                    //3.已经不是无懈可击了，判定是否生效
+                    int status = getPlayerBySeatId(turn).buffStatus;
+                    if(status == 0){
+                        currentCard=new LeBuSiShu(11);
+                        respPlayers.add(getPlayerBySeatId(turn));
+                        currentCard.setResp(getPlayerBySeatId(turn));
+                        getPlayerBySeatId(turn).buffStatus=1;
+                        return;
+                    }
+                    else if(status==1){
+                        return;
+                    }
+                    else if(status==2){
+                        getPlayerBySeatId(turn).buffStatus=0;
+                    }
+                }
+                if(getPlayerBySeatId(turn).judgeCardList[1]){
+                    //多种情况：1.第一次进入判断，通知他人出无懈可击
+                    //2.是否处于他人无懈可击状态
+                    //3.已经不是无懈可击了，判定是否生效
+                    int status = getPlayerBySeatId(turn).buffStatus;
+                    if(status == 0){
+                        currentCard=new BingLiangCunDuan(12);
+                        respPlayers.add(getPlayerBySeatId(turn));
+                        currentCard.setResp(getPlayerBySeatId(turn));
+                        getPlayerBySeatId(turn).buffStatus=1;
+                        return;
+                    }
+                    else if(status==1){
+                        return;
+                    }
+                    else if(status==2){
+                        getPlayerBySeatId(turn).buffStatus=0;
+                    }
+                }
+                status=roomStatus.DrawStatus;
+                return;
+            }
+            case DrawStatus:{
+                if(!getPlayerBySeatId(turn).isAbleToDraw){
+                    getPlayerBySeatId(turn).isAbleToDraw=true;
+                    status=roomStatus.PlayStatus;
+                }
+                else{
+                    for(int i=0;i<2;i++) {
+                        getPlayerBySeatId(turn).DrawCard(cardList);
+                    }
+                    status=roomStatus.PlayStatus;
+                }
+            }
+            case PlayStatus:{
+                if(!getPlayerBySeatId(turn).isAbleToPlay){
+                    getPlayerBySeatId(turn).isAbleToDraw=true;
+                    status=roomStatus.DiscardStatus;
+                }
+                else{
+                    //出牌直到Abandon
+                }
+            }
+            case DiscardStatus:{
+                //弃牌至当前血量
+                int nextTurn = (++turn)%players.size();
+                turn = nextTurn;
+                status= Room.roomStatus.JudgeStatus;
+            }
+        }
     }
     public  void selectHero(Player player){
         int id=(int)(1+Math.random()*8);
