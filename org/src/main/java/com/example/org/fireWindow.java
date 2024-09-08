@@ -30,6 +30,10 @@ public class fireWindow extends Parent {
     private BorderPane root;
     private StackPane bloodPone1;
     private StackPane bloodPone2;
+    private ProgressBar healthBar1;
+    private ProgressBar healthBar2;
+    private Label healthLabel1;
+    private Label healthLabel2;
 
 
     public fireWindow(Player player1, Player targetPlayer) {
@@ -292,6 +296,10 @@ public class fireWindow extends Parent {
                 }
 
             }
+            //更新己方血条
+            upDateAllBlood(bloodPone1,player1,healthBar1,healthLabel1);
+            //更新敌方血条
+            upDateAllBlood(bloodPone2,targetPlayer,healthBar2,healthLabel2);
 
         });
 
@@ -339,18 +347,6 @@ public class fireWindow extends Parent {
             //需要判断是弃自己的牌还是其对方的牌，看是否使用了过河拆桥
             if(player1.isIfUseGuoHeChaiQiao())   //使用的是过河拆桥，故此时弃对方玩家的牌
             {
-//                for(int i=0;i<checkedCardFromTarget.size();i++) {   //将弃的卡牌展示在对战区域
-//                    Pane showCardPane = new Pane();
-//                    showCardPane.setPrefSize(100, 150);
-//                    Image imageShowCard = new Image(getClass().getResourceAsStream(targetPlayer.handCardList.get(checkedCardFromTarget.get(i)).getCardPhotoPath()));
-//                    BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
-//                    BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
-//                    Background showCardBackground=new Background(showCardImage);
-//                    showCardPane.setBackground(showCardBackground);
-//                    showCardPane.setLayoutX(400+i*40);
-//                    showCardPane.setLayoutY(100);
-//                    gameAreaPane.getChildren().add(showCardPane);
-//                }
                 showCardInArea(cardContainer2,targetPlayer,checkedCardFromTarget); //在gameArea区域展示
 
                 for(int i=0;i<checkedCardFromTarget.size();i++) {
@@ -375,23 +371,6 @@ public class fireWindow extends Parent {
 
         });
 
-        //返回按钮
-        Button back = new Button();
-        back.setPrefSize(100, 60);
-        back.setText("返回");
-        back.setLayoutX(0);
-        back.setLayoutY(0);
-        back.backgroundProperty();
-        back.setStyle("-fx-background-color: #000fff");
-        back.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
-        back.setOnAction(event -> {
-
-            System.out.println("返回开始页面");
-            checkedCards.clear();
-
-        });
-
-        player2Pane.getChildren().add(back);
         gameAreaPane.getChildren().add(up);
         gameAreaPane.getChildren().add(down);
         gameAreaPane.getChildren().add(fold);
@@ -399,32 +378,34 @@ public class fireWindow extends Parent {
         bloodPone1.setPrefSize(100,20);
         heroCardPane.getChildren().add(bloodPone1);
         //设置血条(己方)
-        ProgressBar healthBar1 = new ProgressBar();
+        healthBar1 = new ProgressBar();
         healthBar1.setProgress(1.0);  // 初始为满血
         healthBar1.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
         healthBar1.setPrefWidth(100);  // 设置血条的宽度
         healthBar1.setLayoutX(0);
         //文字标签
-        Label healthLabel1 = new Label();
+        healthLabel1 = new Label();
         healthLabel1.setTextFill(Color.WHITE);  // 设置标签文字颜色
         healthLabel1.setStyle("-fx-font-weight: bold;");  // 设置字体粗体
-        healthLabel1.setText("100");
+        String Limithp1=String.valueOf(player1.getHpLimit());
+        healthLabel1.setText(Limithp1);
         bloodPone1.getChildren().addAll(healthBar1,healthLabel1);
 
 
         bloodPone2.setPrefSize(100,20);
         heroCardPane2.getChildren().add(bloodPone2);
         //设置血条（敌方）
-        ProgressBar healthBar2 = new ProgressBar();
+        healthBar2 = new ProgressBar();
         healthBar2.setProgress(1.0);  // 初始为满血
         healthBar2.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
         healthBar2.setPrefWidth(100);  // 设置血条的宽度
         healthBar2.setLayoutX(0);
 
-        Label healthLabel2 = new Label();
+        healthLabel2 = new Label();
         healthLabel2.setTextFill(Color.WHITE);  // 设置标签文字颜色
         healthLabel2.setStyle("-fx-font-weight: bold;");  // 设置字体粗体
-        healthLabel2.setText("100");
+        String Limithp2=String.valueOf(targetPlayer.getHpLimit());
+        healthLabel2.setText(Limithp2);
         bloodPone2.getChildren().addAll(healthBar2,healthLabel2);
 
 
@@ -516,7 +497,6 @@ public class fireWindow extends Parent {
           showCardPane.setLayoutY(0);
           cardContainer2.getChildren().add(showCardPane);
       }
-
     }
 
     //当玩家的血量发生变化的时候调用此函数更新界面上的血条
@@ -529,10 +509,14 @@ public class fireWindow extends Parent {
         heroCardPhone00.getChildren().add(healthBar);
     }
 
-    //    public void updateHealth(Player player,) {
-//
-//
-//        healthBar2.setProgress(healthPercentage);  // 更新进度条
-//        healthLabel2.setText((int)(healthPercentage * 100) + "%");  // 更新标签文字
-//    }
+    public void upDateAllBlood(StackPane pane,Player player,ProgressBar healthBar,Label healthLabel)
+    {
+        double limit=player.getHpLimit();
+        double now=player.getHp();
+        String nowHp=String.valueOf(now);
+        //更新血条内的文字提示
+        healthLabel.setText(nowHp);
+        //更新血条图像
+        updataBlood(pane,player,healthBar);
+    }
 }
