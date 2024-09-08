@@ -133,9 +133,7 @@ public class fireWindow extends Parent {
                     cardPane.setLayoutY(0);
                     ifUp.set(false);
                 }
-
             });
-
             int finalI = i;
             Integer finaLi=i;
             //鼠标悬浮以及点击事件
@@ -153,6 +151,7 @@ public class fireWindow extends Parent {
                     cardPane.setTranslateY(0);
                     isClicked.set(false);
                     checkedCards.remove(finaLi);
+                    canHover.set(true);
                 }
                 //被点击后标记事件，即该张牌可能会出
             });

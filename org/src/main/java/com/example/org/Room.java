@@ -73,15 +73,12 @@ for(int m=0;m<4;m++) {
         for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
 }
 
-//        Card card=new QingLongYanYueDao(18);
-//        for (Player player : players)
-//        {
-//            player.handCardList.add(card);
-//        }
-
         //随机分配英雄操作
-     players.get(0).setHero(new caoCao());
-        players.get(1).setHero(new caoCao());
+        selectHero(players.get(0));
+        players.get(0).setHpLimit();
+        selectHero(players.get(1), players.get(0).getHero()); // 确保第二个玩家的武将不同
+        players.get(1).setHpLimit();
+
 
     }
 
@@ -178,10 +175,36 @@ for(int m=0;m<4;m++) {
             }
         }
     }
-    public  void selectHero(Player player){
-        int id=(int)(1+Math.random()*8);
-        switch (id)
-        {
+    //初始化时分配英雄
+    public void selectHero(Player player) {
+        int id = (int) (1 + Math.random() * 8);
+        assignHero(player, id);
+    }
+
+    public void selectHero(Player player, Heroes otherHero) {
+        int id;
+        do {
+            id = (int) (1 + Math.random() * 8);
+        } while (isSameHero(id, otherHero));
+        assignHero(player, id);
+    }
+
+    private boolean isSameHero(int id, Heroes otherHero) {
+        switch (id) {
+            case 1: return otherHero instanceof sunQuan;
+            case 2: return otherHero instanceof caoCao;
+            case 3: return otherHero instanceof zhaoYun;
+            case 4: return otherHero instanceof zhangFei;
+            case 5: return otherHero instanceof zhuGeLiang;
+            case 6: return otherHero instanceof zhangLiao;
+            case 7: return otherHero instanceof daQiao;
+            case 8: return otherHero instanceof guoJia;
+            default: return false;
+        }
+    }
+
+    private void assignHero(Player player, int id) {
+        switch (id) {
             case 1:
                 player.setHero(new sunQuan());
                 break;

@@ -78,7 +78,7 @@ class sunQuan extends Heroes {
             }
           for(int i=0;i<discardCards;i++) {   //抽取与弃牌数量相同的新牌
               int typeOfCard=player.DrawCard(cardList);  //cardList为待抽取的剩余的所有卡牌
-              Card cardIn=new Card(typeOfCard);
+              Card cardIn=player.getCardByType(typeOfCard);
               player.handCardList.add(cardIn);
           }
             balanceUsed = true;
@@ -167,9 +167,13 @@ class zhaoYun extends Heroes {
         }
 
         //突袭——摸牌阶段，你可以放弃摸牌，然后从至多两名（至少一名）角色的手牌里各抽取一张牌。◆摸牌阶段，你一旦发动突袭，就不能从牌堆获得牌；只剩一名其他角色时，你就只能选择这一名角色；若此时其他任何人都没有手牌，你就不能发动突袭。
-        public void yuXi()
+        public void yuXi(Player targetPlayer)
         {
-
+            if(player.room.getStatus()== Room.roomStatus.DrawStatus) {
+                //放弃摸牌
+               int typeofCard=player.DrawCard(player.handCardList);
+               player.handCardList.add(player.getCardByType(typeofCard));
+            }
         }
     }
 
@@ -182,10 +186,12 @@ class zhaoYun extends Heroes {
 
         //流离——当你成为【杀】的目标时，你可以弃一张牌，并将此【杀】转移给你攻击范围内的另一名角色。（该角色不得是【杀】的使用者）
         //当玩家被杀时，可自主选择是否使用该技能
-        public void liuLi() {
-            //     setCards(getCards() - 1);
-            //要判断是否处于攻击范围内
-            //对另一名玩家实施杀
+        public void liuLi(Player targetPlayer) {
+            if()    //条件为被杀的时候
+            {
+                //弃一张牌
+                //把杀指向对方（对敌方杀）
+            }
 
         }
     }
@@ -199,8 +205,15 @@ class zhaoYun extends Heroes {
 
         //遗计——你每受到1点伤害，可摸两张牌
         //当受到伤害时该技能直接发动
-        public void yiJi(Player player) {
-
+        public void yiJi(Player player,List <Card> cardList) {
+            //if里面应为条件及受到一点伤害
+//            if()
+//            {
+//                for(int i=0;i<2;i++) {   //抽取与弃牌数量相同的新牌
+//                    int typeOfCard=player.DrawCard(cardList);  //cardList为待抽取的剩余的所有卡牌
+//                    Card cardIn=player.getCardByType(typeOfCard);
+//                    player.handCardList.add(cardIn);
+//                }
+            }
         }
 
-    }
