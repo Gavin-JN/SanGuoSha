@@ -55,5 +55,6 @@ User
                 "username="+getUsername()+
                 ",nickname="+getNickname()+
                 ",duartion="+getDuration();
+        //////wodsfhsiefjo
     }
 }
