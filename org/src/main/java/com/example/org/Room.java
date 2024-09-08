@@ -68,14 +68,15 @@ for(int m=0;m<4;m++) {
         for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
 }
 
-        Card card=new QingLongYanYueDao(18);
-        for (Player player : players)
-        {
-            player.handCardList.add(card);
-        }
+//        Card card=new QingLongYanYueDao(18);
+//        for (Player player : players)
+//        {
+//            player.handCardList.add(card);
+//        }
 
-     players.get(0).setHero( new caoCao());
-        players.get(1).setHero( new caoCao());
+        //随机分配英雄操作
+     selectHero(players.get(0));
+     selectHero(players.get(1));
 
     }
 
