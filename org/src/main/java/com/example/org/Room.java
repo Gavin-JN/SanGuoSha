@@ -16,6 +16,7 @@ public class Room {
     public List<Player> helpPlayers;  //房间内考虑救援的玩家
     public Player dyingPlayer;  //濒死求援的玩家
     public List<Player> wxkjPlayers;  //无懈可击响应玩家
+    public Player jdsrPlayer;  //借刀杀人被指定杀的玩家
     public List<Room> roomList;
     public int turn;
     enum roomStatus {InitStatus,SelectStatus,JudgeStatus,DrawStatus,PlayStatus,DiscardStatus,
