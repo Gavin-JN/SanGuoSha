@@ -76,8 +76,12 @@ for(int m=0;m<4;m++) {
         //随机分配英雄操作
         selectHero(players.get(0));
         players.get(0).setHpLimit();
+        //初始化血量为武将血量
+        players.get(0).setHp(players.get(0).getHpLimit());
         selectHero(players.get(1), players.get(0).getHero()); // 确保第二个玩家的武将不同
         players.get(1).setHpLimit();
+        //初始化血量为武将血量
+        players.get(1).setHp(players.get(1).getHpLimit());
 
 
     }
