@@ -97,6 +97,7 @@ public class fireWindow extends Parent {
         player1Pane.getChildren().add(cardContainer);
         for (int i = 0; i < player1.handCardList.size(); i++) {
             Pane cardPane = new Pane();
+            cardPane.setPickOnBounds(true); // 确保整个Pane的边界都可以接受点击事件
             cardPane.setPrefSize(100, 150);
             Image imageCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(i).getCardPhotoPath()));
             BackgroundSize backgroundSizeCard = new BackgroundSize(100, 150, false, false, false, false);
@@ -106,22 +107,31 @@ public class fireWindow extends Parent {
             cardPane.setLayoutX(0 + i * 110);
             cardPane.setLayoutY(0);
 
+            AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
+            AtomicBoolean canHover = new AtomicBoolean(true);
+            AtomicBoolean ifUp= new AtomicBoolean(false);
             cardPane.setOnMouseEntered(event -> {
-             cardPane.setLayoutY(-20);
+                if(canHover.get()) {
+                    cardPane.setLayoutY(-20);
+                    ifUp.set(true);
+                }
             });
-            ;
             cardPane.setOnMouseExited(event2 -> {
-                cardPane.setLayoutY(0);
+                if(ifUp.get()) {
+                    cardPane.setLayoutY(0);
+                    ifUp.set(false);
+                }
 
             });
+
             int finalI = i;
             Integer finaLi=i;
-            AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
             //鼠标悬浮以及点击事件
             cardPane.setOnMouseClicked(event -> {
                 if(!isClicked.get()) {
                     cardPane.setTranslateY(-38);
                     isClicked.set(true);
+                    canHover.set(false);
 
                     System.out.println(finalI);
 
@@ -195,19 +205,6 @@ public class fireWindow extends Parent {
         up.setStyle("-fx-background-color: #000fff");
         up.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         up.setOnAction(event -> {
-//            for(int i=0;i<checkedCards.size();i++)
-//            {
-//                Pane showCardPane = new Pane();
-//                showCardPane.setPrefSize(100, 150);
-//                Image imageShowCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(checkedCards.get(i)).getCardPhotoPath()));
-//                BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
-//                BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
-//                Background showCardBackground=new Background(showCardImage);
-//                showCardPane.setBackground(showCardBackground);
-//                showCardPane.setLayoutX(400+i*40);
-//                showCardPane.setLayoutY(100);
-//                gameAreaPane.getChildren().add(showCardPane);
-//            }
             System.out.println("决定出牌");
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
             showCardInArea(cardContainer2,player1,checkedCards); //展示
@@ -264,19 +261,18 @@ public class fireWindow extends Parent {
             //需要判断是弃自己的牌还是其对方的牌，看是否使用了过河拆桥
             if(player1.isIfUseGuoHeChaiQiao())   //使用的是过河拆桥，故此时弃对方玩家的牌
             {
-                for(int i=0;i<checkedCardFromTarget.size();i++) {   //将弃的卡牌展示在对战区域
-                    Pane showCardPane = new Pane();
-                    showCardPane.setPrefSize(100, 150);
-                    Image imageShowCard = new Image(getClass().getResourceAsStream(targetPlayer.handCardList.get(checkedCardFromTarget.get(i)).getCardPhotoPath()));
-                    BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
-                    BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
-                    Background showCardBackground=new Background(showCardImage);
-                    showCardPane.setBackground(showCardBackground);
-                    showCardPane.setLayoutX(400+i*40);
-                    showCardPane.setLayoutY(100);
-                    gameAreaPane.getChildren().add(showCardPane);
-                }
-
+//                for(int i=0;i<checkedCardFromTarget.size();i++) {   //将弃的卡牌展示在对战区域
+//                    Pane showCardPane = new Pane();
+//                    showCardPane.setPrefSize(100, 150);
+//                    Image imageShowCard = new Image(getClass().getResourceAsStream(targetPlayer.handCardList.get(checkedCardFromTarget.get(i)).getCardPhotoPath()));
+//                    BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
+//                    BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
+//                    Background showCardBackground=new Background(showCardImage);
+//                    showCardPane.setBackground(showCardBackground);
+//                    showCardPane.setLayoutX(400+i*40);
+//                    showCardPane.setLayoutY(100);
+//                    gameAreaPane.getChildren().add(showCardPane);
+//                }
                 showCardInArea(cardContainer2,targetPlayer,checkedCardFromTarget); //在gameArea区域展示
 
                 for(int i=0;i<checkedCardFromTarget.size();i++) {
@@ -285,9 +281,11 @@ public class fireWindow extends Parent {
             }
             else {  //不是过河 拆桥，则删除己方玩家的被选中的卡牌
 
+                showCardInArea(cardContainer2,player1,checkedCards);
                 for(int i=0;i<checkedCards.size();i++) {
                     player1.handCardList.remove((int)(checkedCards.get(i)));
                 }
+
                 renderPlayerCards(cardContainer,player1);
 
             }
@@ -429,7 +427,6 @@ public class fireWindow extends Parent {
       }
 
     }
-
 
     //当玩家的血量发生变化的时候调用此函数更新界面上的血条
     private void updataBlood(Pane heroCardPhone00,Player player,ProgressBar healthBar)   //更新血条长度
