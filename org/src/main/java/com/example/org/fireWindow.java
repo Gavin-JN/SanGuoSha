@@ -195,6 +195,8 @@ public class fireWindow extends Parent {
         cardContainer2.setLayoutY(100);
         gameAreaPane.getChildren().add(cardContainer2);
 
+
+
         //出牌按钮
         Button up = new Button();
         up.setPrefSize(80, 40);
@@ -208,6 +210,77 @@ public class fireWindow extends Parent {
             System.out.println("决定出牌");
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
             showCardInArea(cardContainer2,player1,checkedCards); //展示
+            //执行所处的牌的作用
+            for(int i =0;i<checkedCards.size();i++){
+                Card cardOut=player1.handCardList.get(checkedCards.get(i));
+                switch (cardOut.getTypeId())
+                {
+                    //所出的牌为杀
+                    case 1:
+                        
+                        break;
+                    //所出的牌为闪
+                    case 2:
+                        break;
+                    //所出的牌为桃
+                    case 3:
+                        break;
+                    //
+                    case 4:
+                        break;
+                    //
+                    case 5:
+                        break;
+                    //
+                    case 6:
+                        break;
+                    //
+                    case 7:
+                        break;
+                    //
+                    case 8:
+                        break;
+                    //
+                    case 9:
+                        break;
+                    //
+                    case 10:
+                        break;
+                    //
+                    case 11:
+                        break;
+                    //
+                    case 12:
+                        break;
+                    //
+                    case 13:
+                        break;
+                    //
+                    case 14:
+                        break;
+                    //
+                    case 15:
+                        break;
+                    //
+                    case 16:
+                        break;
+                    //
+                    case 17:
+                        break;
+                    //
+                    case 18:
+                        break;
+                    //
+                    case 19:
+                        break;
+                    //
+                    case 20:
+                        break;
+                }
+
+            }
+
+
             for(int i=0;i<checkedCards.size();i++)  //删除本地
             {
                 player1.handCardList.remove((int)(checkedCards.get(i)));
@@ -216,6 +289,9 @@ public class fireWindow extends Parent {
             renderPlayerCards(cardContainer,player1);
             checkedCards.clear();
         });
+
+
+
 
         //结束回合按钮
         Button down = new Button();
@@ -274,7 +350,6 @@ public class fireWindow extends Parent {
 //                    gameAreaPane.getChildren().add(showCardPane);
 //                }
                 showCardInArea(cardContainer2,targetPlayer,checkedCardFromTarget); //在gameArea区域展示
-
                 for(int i=0;i<checkedCardFromTarget.size();i++) {
                     targetPlayer.handCardList.remove((int)checkedCardFromTarget.get(i));//删除对方玩家的被选中的手牌
                 }
