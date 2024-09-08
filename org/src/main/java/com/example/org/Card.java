@@ -24,10 +24,9 @@ public class Card {
 
    public Card() {
    }
+
+   //该牌能否主动使用
    public boolean CanInitiative(){
-      return false;
-   }
-   public boolean CanPassive(){
       return false;
    }
    public boolean RequireTarget(){
@@ -45,6 +44,16 @@ public class Card {
    }
    public void setResp(Player player){
 
+   }
+   public void addWxkj(Player player){
+      for(int i=0;i<player.room.players.size();i++){
+         for(int j=0;j<player.handCardList.size();j++){
+            if(player.handCardList.get(j).getTypeId()==10) player.room.wxkjPlayers.add(player);
+         }
+         player=player.room.getPlayerBySeatId(player.seatId++);
+      }
+   }
+   public void wxkjResp(Player player,boolean success){
    }
 }
 
@@ -65,20 +74,23 @@ class Sha extends Card{
    public boolean CanInitiative(){
       return true;
    }
-   public boolean CanPassive(){
-      return true;
-   }
+
    public boolean RequireTarget() {
       return true;
    }
-   public void Use(Player player,Player targetPlayer){
+   public boolean Use(Player player,Player targetPlayer){
       //根据攻击距离，限制出杀次数，装备武器效果执行杀的效果
+      return true;
    }
+
+   //若杀被闪响应则返回true
    public boolean Resp(Player targetPlayer,int id){
       if(AbandonResp(targetPlayer)) return false;
       if(targetPlayer.handCardList.get(id).getTypeId()==2) return true;
       return false;
    }
+
+   //若对手放弃响应则根据当前是否喝酒执行对手血量变化
    public boolean AbandonResp(Player targetPlayer){
       int damage;
       if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isUseJiu
@@ -109,9 +121,6 @@ class Shan extends Card{
       super.setCardPhotoPath("controller/img/ShouPai/Shan.jpg");
    }
 
-   public boolean CanPassive(){
-      return true;
-   }
 }
 
 //桃：可在自己回合已受伤时或濒死时使用回复一点体力，typeId 3
@@ -182,6 +191,17 @@ class ShunShouQianYang extends Card {
    public boolean RequireTarget() {
       return true;
    }
+   public boolean Resp(Player targetPlayer,int id){
+      if(AbandonResp(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==10) return true;
+      return false;
+   }
+
+   public boolean AbandonResp(Player targetPlayer) {
+      targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).ifUseShunShouQianYang=true;
+      return true;
+   }
+
 }
 
 //过河拆桥：可弃置对手区域内一张牌，  typeId 6
@@ -199,8 +219,15 @@ class GuoHeChaiQiao extends Card{
       return true;
    }
 
-   public void discardFromTargetPlayer(Player targetPlayer,int locationCard) {      //location为玩家选中的对方牌在对方牌组里的索引
-     // targetPlayer
+   public boolean Resp(Player targetPlayer,int id){
+      if(AbandonResp(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==10) return true;
+      return false;
+   }
+
+   public boolean AbandonResp(Player targetPlayer) {
+      targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).ifUseGuoHeChaiQiao=true;
+      return true;
    }
 }
 
@@ -212,6 +239,16 @@ class WuZhongShengYou extends Card{
    }
 
    public boolean CanInitiative() {
+      return true;
+   }
+   public boolean Resp(Player targetPlayer,int id){
+      if(AbandonResp(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==10) return true;
+      return false;
+   }
+
+   public boolean AbandonResp(Player targetPlayer) {
+      targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).ifUseGuoHeChaiQiao=true;
       return true;
    }
 }
@@ -250,7 +287,7 @@ class JueDou extends Card{
 }
 
 //无懈可击：可使敌方打出的锦囊牌无效， typeId 10
-class WuXieKeJi extends Card{
+class WuXieKeJi extends Card {
    public WuXieKeJi(int typeId) {
       super(typeId);
       super.setCardPhotoPath("controller/img/ShouPai/WuXieKeJi.jpg");
@@ -260,10 +297,32 @@ class WuXieKeJi extends Card{
       return true;
    }
 
-   public boolean CanPassive() {
+   @Override
+   public boolean Use(Player player, int id) {
+      Card card = player.handCardList.get(id);
+      if (card.getTypeId() != 10) return false;
+      Player respPlayer = player.room.respPlayers.get(0);
+      boolean value = respPlayer.Wxkj;
+      addWxkj(player.room.getPlayerBySeatId(player.seatId++));
+      for (int i = 0; i < player.room.wxkjPlayers.size(); i++) {
+         if (player.room.wxkjPlayers.get(i).getSeatId() == player.seatId) {
+            player.room.wxkjPlayers.remove(i);
+            break;
+         }
+      }
+      if (player.room.wxkjPlayers.size() > 0) {
+         respPlayer.Wxkj = !respPlayer.Wxkj;
+         value = respPlayer.Wxkj;
+      } else {
+         respPlayer.Wxkj = false;
+         Card cCard = player.room.currentCard;
+         cCard.wxkjResp(respPlayer, !value);
+      }
       return true;
    }
+
 }
+
 
 //乐不思蜀：置于敌方判定区，敌方摸牌前进行判定，有75%几率不能出牌， typeId 11
 class LeBuSiShu extends Card{
@@ -278,6 +337,30 @@ class LeBuSiShu extends Card{
 
    public boolean RequireTarget() {
       return true;
+   }
+   public void wxkjResp(Player player,boolean success){
+      player.room.wxkjPlayers.clear();
+      player.room.respPlayers.remove(0);
+      player.buffStatus=2;
+      if(success){
+         player.judgeCardList[0]=false;
+      }
+      else{
+         boolean suc=player.IsAbleToPlay((int)(Math.random()*4));
+         if(!suc) {
+            player.judgeCardList[0] = false;
+            player.isAbleToPlay=false;
+         }
+      }
+   }
+   public void setResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
    }
 }
 
@@ -294,6 +377,21 @@ class BingLiangCunDuan extends Card{
 
    public boolean RequireTarget() {
       return true;
+   }
+   public void wxkjResp(Player player,boolean success){
+      player.room.wxkjPlayers.clear();
+      player.room.respPlayers.remove(0);
+      player.buffStatus=2;
+      if(success){
+         player.judgeCardList[1]=false;
+      }
+      else{
+         boolean suc=player.IsAbleToDraw((int)(Math.random()*4));
+         if(!suc) {
+            player.judgeCardList[1] = false;
+            player.isAbleToDraw=false;
+         }
+      }
    }
 }
 

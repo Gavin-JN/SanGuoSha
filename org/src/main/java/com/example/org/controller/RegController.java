@@ -95,14 +95,14 @@ public class RegController {
     public void register(ActionEvent event) throws SQLException, ClassNotFoundException {
         System.out.println("register");
         IUserDaoImpl user = new IUserDaoImpl();
-        user.UserRegister(txtName.getText(),"11110",txtPassword.getText(),txtConfirm.getText(),"151512");
+        boolean isReg=user.UserRegister(txtName.getText(),"11110",txtPassword.getText(),txtConfirm.getText(),txtEmail.getText());
         SQLExecImpl sql = new SQLExecImpl();
 //        boolean is = sql.queryAccount(txtName.getText());
 //
 //
 //        System.out.printf(txtName.getText());
 
-        if(!sql.queryAccount(txtName.getText())){
+        if(isReg){
 
 
             FXMLLoader fxmlLoader2=new FXMLLoader(getClass().getResource("start.fxml"));
@@ -154,5 +154,6 @@ public class RegController {
             //关闭当前窗口
             stage2.close();
         }
+
         }
 }

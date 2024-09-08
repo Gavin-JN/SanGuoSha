@@ -11,17 +11,22 @@ public class Player {
 
     public List<Card> handCardList;
     public List<Card> equipCardList;
-    public List<Card> judgeCardList;
+    public boolean judgeCardList[] = new boolean[2];
     public Heroes hero;
     public int hp;
     //    final static int hp= ;设置一个静态变量代表当前血量
     public int hpLimit;//血量上限
     public boolean isUseJiu=false;
     public boolean isNextShaAddDamage=false;
+    public boolean ifUseShunShouQianYang =false;
     public boolean ifUseGuoHeChaiQiao=false;
 
     public Room room;
-    private int attackDistance;
+    public int attackDistance;
+    public boolean Wxkj = false;
+    public int buffStatus=0;
+    public boolean isAbleToPlay=true;
+    public boolean isAbleToDraw=true;
 
     //构造器（与析构器）
     public Player() {
@@ -76,22 +81,6 @@ public class Player {
         return number;
     }
 
-
-    public void JudgeCardList(Player player) {
-        if (player.judgeCardList.size() == 0)
-            return;
-                     else {
-                int judge = (int)(Math.random()*4);
-                switch (judgeCardList.get(0).getTypeId()) {
-                    case 11:
-                        player.IsAbleToPlay(judge);
-                    case 12:
-                        player.IsAbleToDraw(judge);
-                }
-                player.judgeCardList.remove(0);
-                JudgeCardList(player);
-            }
-        }
 
         public boolean IsAbleToDraw(int judge) {
             if(judge==0) return false;
