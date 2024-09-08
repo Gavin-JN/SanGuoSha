@@ -13,7 +13,6 @@ import static javafx.application.Application.launch;
 
 public class Sound{
     public Sound() {
-        StackPane root = new StackPane();
 
         // 创建媒体对象，指定音乐文件路径
         Media media = new Media(this.getClass().getResource("music/BGM.mp3").toString());
