@@ -75,8 +75,8 @@ for(int m=0;m<4;m++) {
 //        }
 
         //随机分配英雄操作
-     selectHero(players.get(0));
-     selectHero(players.get(1));
+     players.get(0).setHero(new caoCao());
+        players.get(1).setHero(new caoCao());
 
     }
 

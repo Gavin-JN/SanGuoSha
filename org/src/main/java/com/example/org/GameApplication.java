@@ -7,10 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
-import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -48,14 +49,10 @@ public class GameApplication extends Application {
         stage.getIcons().add(image);
         stage.setTitle("注册页");
         stage.setScene(scene);
-//
-//
-//        // 添加背景音乐
-//        Sound p=new Sound();
+
        stage.show();
 
     }
-
 
     public static void main(String[] args) {
         launch();
