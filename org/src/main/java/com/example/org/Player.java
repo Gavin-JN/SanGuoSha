@@ -50,7 +50,9 @@ public class Player {
     public int getHp() {
         return hp;
     }
-    public void setHpLimit() {this.hpLimit = this.hero.hpLimit;}
+    public void setHpLimit() {
+
+    }
     public int getHpLimit() {
         return hpLimit;
     }

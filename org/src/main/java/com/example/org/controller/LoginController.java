@@ -41,7 +41,6 @@ public class LoginController {
 //        SQLExecImpl sqlExec=new SQLExecImpl();
 //        boolean isValid=sqlExec.queryAccount(NameOfLogin.getText(),PasswordOfLogin.getText());
         boolean isValid= true;
-
         if(NameOfLogin.getText().equals("") || PasswordOfLogin.getText().equals("")){
             prompt.setText("用户名或者密码不能为空！！");
         } else if (!isValid) {//不匹配
