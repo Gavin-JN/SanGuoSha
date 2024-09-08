@@ -4,9 +4,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
@@ -26,6 +28,8 @@ public class fireWindow extends Parent {
     private List <Integer> checkedCardFromTarget;
     private List<Integer> checkedCards;
     private BorderPane root;
+    private StackPane bloodPone1;
+    private StackPane bloodPone2;
 
 
     public fireWindow(Player player1, Player targetPlayer) {
@@ -43,6 +47,10 @@ public class fireWindow extends Parent {
         checkedCards = new ArrayList<Integer>();
         //敌方武将
         heroCardPane2 = new Pane();
+        //己方血条区域
+        bloodPone1 = new StackPane();
+        //敌方血条区域
+        bloodPone2 = new StackPane();
 
 
         //设置根区域的背景图片
@@ -215,6 +223,76 @@ public class fireWindow extends Parent {
             //玩家手牌列表更新之后再展示手牌
             renderPlayerCards(cardContainer,player1);
             checkedCards.clear();
+
+            //执行所处的牌的作用
+            for(int i =0;i<checkedCards.size();i++){
+                Card cardOut=player1.handCardList.get(checkedCards.get(i));
+                switch (cardOut.getTypeId())
+                {
+                    //所出的牌为杀
+                    case 1:
+                        break;
+                    //所出的牌为闪
+                    case 2:
+                        break;
+                    //所出的牌为桃
+                    case 3:
+                        break;
+                    //
+                    case 4:
+                        break;
+                    //
+                    case 5:
+                        break;
+                    //
+                    case 6:
+                        break;
+                    //
+                    case 7:
+                        break;
+                    //
+                    case 8:
+                        break;
+                    //
+                    case 9:
+                        break;
+                    //
+                    case 10:
+                        break;
+                    //
+                    case 11:
+                        break;
+                    //
+                    case 12:
+                        break;
+                    //
+                    case 13:
+                        break;
+                    //
+                    case 14:
+                        break;
+                    //
+                    case 15:
+                        break;
+                    //
+                    case 16:
+                        break;
+                    //
+                    case 17:
+                        break;
+                    //
+                    case 18:
+                        break;
+                    //
+                    case 19:
+                        break;
+                    //
+                    case 20:
+                        break;
+                }
+
+            }
+
         });
 
         //结束回合按钮
@@ -318,22 +396,37 @@ public class fireWindow extends Parent {
         gameAreaPane.getChildren().add(down);
         gameAreaPane.getChildren().add(fold);
 
+        bloodPone1.setPrefSize(100,20);
+        heroCardPane.getChildren().add(bloodPone1);
         //设置血条(己方)
         ProgressBar healthBar1 = new ProgressBar();
         healthBar1.setProgress(1.0);  // 初始为满血
         healthBar1.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
         healthBar1.setPrefWidth(100);  // 设置血条的宽度
         healthBar1.setLayoutX(0);
-        heroCardPane.getChildren().add(healthBar1);
+        //文字标签
+        Label healthLabel1 = new Label();
+        healthLabel1.setTextFill(Color.WHITE);  // 设置标签文字颜色
+        healthLabel1.setStyle("-fx-font-weight: bold;");  // 设置字体粗体
+        healthLabel1.setText("100");
+        bloodPone1.getChildren().addAll(healthBar1,healthLabel1);
 
+
+        bloodPone2.setPrefSize(100,20);
+        heroCardPane2.getChildren().add(bloodPone2);
         //设置血条（敌方）
         ProgressBar healthBar2 = new ProgressBar();
         healthBar2.setProgress(1.0);  // 初始为满血
         healthBar2.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
         healthBar2.setPrefWidth(100);  // 设置血条的宽度
         healthBar2.setLayoutX(0);
-        healthBar2.setProgress(80.0/100);
-        heroCardPane2.getChildren().addAll(healthBar2);
+
+        Label healthLabel2 = new Label();
+        healthLabel2.setTextFill(Color.WHITE);  // 设置标签文字颜色
+        healthLabel2.setStyle("-fx-font-weight: bold;");  // 设置字体粗体
+        healthLabel2.setText("100");
+        bloodPone2.getChildren().addAll(healthBar2,healthLabel2);
+
 
         //设置Scane和Stage的大小
         Scene scene = new Scene(root, 1250, 700);
@@ -401,12 +494,10 @@ public class fireWindow extends Parent {
                     checkedCards.remove(Integer.valueOf(finalI));
                 }
             });
-
             // 将卡牌添加到卡牌容器中
             cardContainer.getChildren().add(cardPane);
         }
     }
-
 
     //将出的牌展示在对战区域
     private void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
@@ -437,4 +528,11 @@ public class fireWindow extends Parent {
         healthBar.setProgress(nowBlood/MaxBlood);
         heroCardPhone00.getChildren().add(healthBar);
     }
+
+    //    public void updateHealth(Player player,) {
+//
+//
+//        healthBar2.setProgress(healthPercentage);  // 更新进度条
+//        healthLabel2.setText((int)(healthPercentage * 100) + "%");  // 更新标签文字
+//    }
 }
