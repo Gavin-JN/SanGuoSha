@@ -48,10 +48,10 @@ public class GameApplication extends Application {
         stage.getIcons().add(image);
         stage.setTitle("注册页");
         stage.setScene(scene);
-
-
-        // 添加背景音乐
-        Sound p=new Sound();
+//
+//
+//        // 添加背景音乐
+//        Sound p=new Sound();
        stage.show();
 
     }
