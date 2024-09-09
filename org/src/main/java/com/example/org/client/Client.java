@@ -1,6 +1,7 @@
 package com.example.org.client;
 
 import com.example.org.GameApplication;
+import com.example.org.Player;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -8,49 +9,50 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Client extends Application {
-    //阿三大苏打实打实
+
+
+
+    //传输数据的JSON文件
+    public JSONObject massage = new JSONObject();
+
+    public Player we =new Player();
+    public Player enemy =new Player();
+
+
     public static void main(String[] args) throws IOException {
+
         //获取本机ip地址
         InetAddress localhost = InetAddress.getLocalHost();
         String ipAddress = localhost.getHostAddress();
 
-        //连接服务端，去找到指定服务器
-        Socket socket = new Socket("192.168.185.82", 1688);
+//        // 创建一个 JSON 格式的字符串
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("ipAddress", ipAddress);
+//        jsonObject.put("player", "JohnDoe");
+//        jsonObject.put("score", "100");
+//
+//
+//        //传输信息
+//        pw.println(jsonObject);
+//        System.out.println("消息已发送: " + jsonObject);
+//        pw.flush();
+//        pw.close();
+//        //最后记得关闭socket                socket.close();
+//        //每一次传输信息之后都关闭传入传出流，每一次退出游戏关闭节点
 
-        //创建socket的输出流
-        OutputStream os = socket.getOutputStream();
-        //把低级的输出流包装成高级的数据输出流
-        DataOutputStream dos = new DataOutputStream(os);
-
+        //开始界面
         GameApplication app = new GameApplication();
         app.launch(args);
 
-        //反复发消息
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            System.out.println("请说");
-            String msg = sc.nextLine();
-
-            if (msg.equals("exit")) {
-                System.out.println("欢迎下次使用");
-                dos.close();
-                socket.close();
-                break;
-            }
-            dos.writeUTF(ipAddress + ":" + msg);
-            dos.flush();
-
-        }
 
     }
     @Override
