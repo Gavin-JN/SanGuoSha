@@ -121,6 +121,7 @@ public class fireWindow extends Parent {
             Pane cardPane = new Pane();
             cardPane.setPickOnBounds(true); // 确保整个Pane的边界都可以接受点击事件
             cardPane.setPrefSize(100, 150);
+            cardPane.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
             Image imageCard = new Image(getClass().getResourceAsStream(player1.handCardList.get(i).getCardPhotoPath()));
             BackgroundSize backgroundSizeCard = new BackgroundSize(100, 150, false, false, false, false);
             BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCard);
@@ -141,6 +142,8 @@ public class fireWindow extends Parent {
                         checkedCards.add(finalI);
                         //将玩家出的牌的索引赋给玩家  putId
                         player1.setPutId(finalI);
+                        player1.chooseCard=player1.getCardByType(finalI);
+                        ifPlayCard.set(true);
 
                     } else {
                         cardPane.setTranslateY(0);
@@ -212,8 +215,8 @@ public class fireWindow extends Parent {
         Button up = new Button();
         up.setPrefSize(80, 40);
         up.setText("出牌");
-        up.setLayoutX(250);
-        up.setLayoutY(320);
+        up.setLayoutX(300);
+        up.setLayoutY(420);
         up.backgroundProperty();
         up.setStyle("-fx-background-color: #000fff");
         up.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
@@ -328,8 +331,8 @@ public class fireWindow extends Parent {
         Button down = new Button();
         down.setPrefSize(80, 40);
         down.setText("结束回合");
-        down.setLayoutX(850);
-        down.setLayoutY(320);
+        down.setLayoutX(900);
+        down.setLayoutY(420);
         down.backgroundProperty();
         down.setStyle("-fx-background-color: #000fff");
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
@@ -357,8 +360,8 @@ public class fireWindow extends Parent {
         Button fold = new Button();
         fold.setPrefSize(80, 40);
         fold.setText("决定弃牌");
-        fold.setLayoutX(550);
-        fold.setLayoutY(320);
+        fold.setLayoutX(600);
+        fold.setLayoutY(420);
         fold.backgroundProperty();
         fold.setStyle("-fx-background-color: #000fff");
         fold.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
@@ -432,7 +435,7 @@ public class fireWindow extends Parent {
         Pane skillContainer = new Pane();
         skillContainer.setPrefSize(80,30);
         skillContainer.setLayoutX(30);
-        skillContainer.setLayoutY(355);
+        skillContainer.setLayoutY(420);
         gameAreaPane.getChildren().add(skillContainer);
         Button skillButton = new Button();
         skillButton.setPrefSize(80,30);
@@ -551,8 +554,8 @@ public class fireWindow extends Parent {
         //设置Scane和Stage的大小
         Scene scene = new Scene(root, 1300, 800);
         Stage stage = new Stage();
-        stage.setMaxWidth(1000);
-        stage.setMaxHeight(700);
+        stage.setMaxWidth(1300);
+        stage.setMaxHeight(800);
         stage.setResizable(false); //固定窗口的大小
         stage.setScene(scene);
         InputStream in = this.getClass().getResourceAsStream("img/title.png");
