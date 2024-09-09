@@ -4,9 +4,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
@@ -26,6 +28,13 @@ public class fireWindow extends Parent {
     private List <Integer> checkedCardFromTarget;
     private List<Integer> checkedCards;
     private BorderPane root;
+    private StackPane bloodPone1;
+    private StackPane bloodPone2;
+    private ProgressBar healthBar1;
+    private ProgressBar healthBar2;
+    private Label healthLabel1;
+    private Label healthLabel2;
+    private Pane equipmentContainer;
 
 
     public fireWindow(Player player1, Player targetPlayer) {
@@ -43,6 +52,10 @@ public class fireWindow extends Parent {
         checkedCards = new ArrayList<Integer>();
         //敌方武将
         heroCardPane2 = new Pane();
+        //己方血条区域
+        bloodPone1 = new StackPane();
+        //敌方血条区域
+        bloodPone2 = new StackPane();
 
 
         //设置根区域的背景图片
@@ -79,15 +92,19 @@ public class fireWindow extends Parent {
         heroCardPane.setLayoutY(0);
         player1Pane.getChildren().add(heroCardPane);
         //己方装备
+        equipmentContainer = new Pane();
+        equipmentContainer.setPrefSize(100,150);
+        equipmentContainer.setLayoutX(180);
         equipmentPane.setPrefSize(100, 150);
-        Image imageEquipment = new Image(getClass().getResourceAsStream("img/equipment.png"));
+        player1Pane.getChildren().add(equipmentContainer);
+        Image imageEquipment = new Image(getClass().getResourceAsStream("img/zhuangBei.jpg"));
         BackgroundSize backgroundSizeEquipment = new BackgroundSize(100, 150, false, false, false, false);
         BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment);
         Background equipmentBackground = new Background(equipmentImage);
         equipmentPane.setBackground(equipmentBackground);
-        equipmentPane.setLayoutX(180);
+        equipmentPane.setLayoutX(0);
         equipmentPane.setLayoutY(0);
-        player1Pane.getChildren().add(equipmentPane);
+        equipmentContainer.getChildren().add(equipmentPane);
 
         //己方卡牌区
         Pane cardContainer = new Pane();  //卡牌区域
@@ -121,9 +138,7 @@ public class fireWindow extends Parent {
                     cardPane.setLayoutY(0);
                     ifUp.set(false);
                 }
-
             });
-
             int finalI = i;
             Integer finaLi=i;
             //鼠标悬浮以及点击事件
@@ -141,6 +156,7 @@ public class fireWindow extends Parent {
                     cardPane.setTranslateY(0);
                     isClicked.set(false);
                     checkedCards.remove(finaLi);
+                    canHover.set(true);
                 }
                 //被点击后标记事件，即该张牌可能会出
             });
@@ -207,7 +223,9 @@ public class fireWindow extends Parent {
         up.setOnAction(event -> {
             System.out.println("决定出牌");
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
+
             showCardInArea(cardContainer2,player1,checkedCards); //展示
+
             for(int i=0;i<checkedCards.size();i++)  //删除本地
             {
                 player1.handCardList.remove((int)(checkedCards.get(i)));
@@ -215,6 +233,80 @@ public class fireWindow extends Parent {
             //玩家手牌列表更新之后再展示手牌
             renderPlayerCards(cardContainer,player1);
             checkedCards.clear();
+
+            //执行所处的牌的作用
+            for(int i =0;i<checkedCards.size();i++){
+                Card cardOut=player1.handCardList.get(checkedCards.get(i));
+                switch (cardOut.getTypeId())
+                {
+                    //所出的牌为杀
+                    case 1:
+                        break;
+                    //所出的牌为闪
+                    case 2:
+                        break;
+                    //所出的牌为桃
+                    case 3:
+                        break;
+                    //
+                    case 4:
+                        break;
+                    //
+                    case 5:
+                        break;
+                    //
+                    case 6:
+                        break;
+                    //
+                    case 7:
+                        break;
+                    //
+                    case 8:
+                        break;
+                    //
+                    case 9:
+                        break;
+                    //
+                    case 10:
+                        break;
+                    //
+                    case 11:
+                        break;
+                    //
+                    case 12:
+                        break;
+                    //
+                    case 13:
+                        break;
+                    //
+                    case 14:
+                        break;
+                    //
+                    case 15:
+                        break;
+                    //
+                    case 16:
+                        break;
+                    //
+                    case 17:
+                        break;
+                    //
+                    case 18:
+                        break;
+                    //
+                    case 19:
+                        break;
+                    //
+                    case 20:
+                        break;
+                }
+
+            }
+            //更新己方血条
+            upDateAllBlood(bloodPone1,player1,healthBar1,healthLabel1);
+            //更新敌方血条
+            upDateAllBlood(bloodPone2,targetPlayer,healthBar2,healthLabel2);
+
         });
 
         //结束回合按钮
@@ -261,18 +353,6 @@ public class fireWindow extends Parent {
             //需要判断是弃自己的牌还是其对方的牌，看是否使用了过河拆桥
             if(player1.isIfUseGuoHeChaiQiao())   //使用的是过河拆桥，故此时弃对方玩家的牌
             {
-//                for(int i=0;i<checkedCardFromTarget.size();i++) {   //将弃的卡牌展示在对战区域
-//                    Pane showCardPane = new Pane();
-//                    showCardPane.setPrefSize(100, 150);
-//                    Image imageShowCard = new Image(getClass().getResourceAsStream(targetPlayer.handCardList.get(checkedCardFromTarget.get(i)).getCardPhotoPath()));
-//                    BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
-//                    BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
-//                    Background showCardBackground=new Background(showCardImage);
-//                    showCardPane.setBackground(showCardBackground);
-//                    showCardPane.setLayoutX(400+i*40);
-//                    showCardPane.setLayoutY(100);
-//                    gameAreaPane.getChildren().add(showCardPane);
-//                }
                 showCardInArea(cardContainer2,targetPlayer,checkedCardFromTarget); //在gameArea区域展示
 
                 for(int i=0;i<checkedCardFromTarget.size();i++) {
@@ -297,43 +377,72 @@ public class fireWindow extends Parent {
 
         });
 
-        //返回按钮
-        Button back = new Button();
-        back.setPrefSize(100, 60);
-        back.setText("返回");
-        back.setLayoutX(0);
-        back.setLayoutY(0);
-        back.backgroundProperty();
-        back.setStyle("-fx-background-color: #000fff");
-        back.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
-        back.setOnAction(event -> {
-
-            System.out.println("返回开始页面");
-            checkedCards.clear();
-
-        });
-
-        player2Pane.getChildren().add(back);
         gameAreaPane.getChildren().add(up);
         gameAreaPane.getChildren().add(down);
         gameAreaPane.getChildren().add(fold);
 
+        bloodPone1.setPrefSize(100,20);
+        heroCardPane.getChildren().add(bloodPone1);
         //设置血条(己方)
-        ProgressBar healthBar1 = new ProgressBar();
+        healthBar1 = new ProgressBar();
         healthBar1.setProgress(1.0);  // 初始为满血
         healthBar1.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
         healthBar1.setPrefWidth(100);  // 设置血条的宽度
         healthBar1.setLayoutX(0);
-        heroCardPane.getChildren().add(healthBar1);
+        //文字标签
+        healthLabel1 = new Label();
+        healthLabel1.setTextFill(Color.WHITE);  // 设置标签文字颜色
+        healthLabel1.setStyle("-fx-font-weight: bold;");  // 设置字体粗体
+        String Limithp1=String.valueOf(player1.getHpLimit());
+        healthLabel1.setText(Limithp1);
+        bloodPone1.getChildren().addAll(healthBar1,healthLabel1);
 
+
+        bloodPone2.setPrefSize(100,20);
+        heroCardPane2.getChildren().add(bloodPone2);
         //设置血条（敌方）
-        ProgressBar healthBar2 = new ProgressBar();
+        healthBar2 = new ProgressBar();
         healthBar2.setProgress(1.0);  // 初始为满血
         healthBar2.setStyle("-fx-accent: red;");  // 设置血条颜色为红色
         healthBar2.setPrefWidth(100);  // 设置血条的宽度
         healthBar2.setLayoutX(0);
-        healthBar2.setProgress(80.0/100);
-        heroCardPane2.getChildren().addAll(healthBar2);
+
+        healthLabel2 = new Label();
+        healthLabel2.setTextFill(Color.WHITE);  // 设置标签文字颜色
+        healthLabel2.setStyle("-fx-font-weight: bold;");  // 设置字体粗体
+        String Limithp2=String.valueOf(targetPlayer.getHpLimit());
+        healthLabel2.setText(Limithp2);
+        bloodPone2.getChildren().addAll(healthBar2,healthLabel2);
+
+        //创建武将技能的容器
+        Pane skillContainer = new Pane();
+        skillContainer.setPrefSize(80,30);
+        skillContainer.setLayoutX(30);
+        skillContainer.setLayoutY(355);
+        gameAreaPane.getChildren().add(skillContainer);
+        Button skillButton = new Button();
+        skillButton.setPrefSize(80,30);
+        skillContainer.getChildren().add(skillButton);
+        int heroId=player1.getHero().getHeroId();
+        switch (heroId)
+        {
+            case 1:skillButton.setText("制衡");
+            break;
+            case 2:skillButton.setText("奸雄");
+            break;
+            case 3:skillButton.setText("龙胆");
+            break;
+            case 4:skillButton.setText("咆哮");
+            break;
+            case 5:skillButton.setText("空城");
+            break;
+            case 6:skillButton.setText("突袭");
+            break;
+            case 7:skillButton.setText("流离");
+            break;
+            case 8:skillButton.setText("遗技");
+            break;
+        }
 
         //设置Scane和Stage的大小
         Scene scene = new Scene(root, 1250, 700);
@@ -401,40 +510,62 @@ public class fireWindow extends Parent {
                     checkedCards.remove(Integer.valueOf(finalI));
                 }
             });
-
             // 将卡牌添加到卡牌容器中
             cardContainer.getChildren().add(cardPane);
         }
     }
 
-
     //将出的牌展示在对战区域
     private void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
     {
-        cardContainer2.getChildren().clear();
-      for(int i=0;i<checked.size();i++)
-      {
-          Pane showCardPane = new Pane();
-          showCardPane.setPrefSize(100, 150);
-          Image imageShowCard = new Image(getClass().getResourceAsStream(player.handCardList.get(checked.get(i)).getCardPhotoPath()));
-          BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
-          BackgroundImage showCardImage=new BackgroundImage(imageShowCard,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,backgroundSizeCardBack);
-          Background showCardBackground=new Background(showCardImage);
-          showCardPane.setBackground(showCardBackground);
-          showCardPane.setLayoutX(0+i*30);
-          showCardPane.setLayoutY(0);
-          cardContainer2.getChildren().add(showCardPane);
-      }
+            cardContainer2.getChildren().clear();
+            for (int i = 0; i < checked.size(); i++) {
+                if(player.handCardList.get(checked.get(i)).getTypeId()<15) {
+                    Pane showCardPane = new Pane();
+                    showCardPane.setPrefSize(100, 150);
+                    Image imageShowCard = new Image(getClass().getResourceAsStream(player.handCardList.get(checked.get(i)).getCardPhotoPath()));
+                    BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
+                    BackgroundImage showCardImage = new BackgroundImage(imageShowCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCardBack);
+                    Background showCardBackground = new Background(showCardImage);
+                    showCardPane.setBackground(showCardBackground);
+                    showCardPane.setLayoutX(0 + i * 30);
+                    showCardPane.setLayoutY(0);
+                    cardContainer2.getChildren().add(showCardPane);
+                }
+                //当出的牌为装备牌时，将装备牌展示在装备牌处
+                else {
+                    equipmentContainer.getChildren().clear();
+                    Image imageEquipment = new Image(getClass().getResourceAsStream(player.handCardList.get(checked.get(i)).getCardPhotoPath()));
+                    BackgroundSize backgroundSizeEquipment = new BackgroundSize(100, 150, false, false, false, false);
+                    BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment);
+                    Background equipmentBackground = new Background(equipmentImage);
+                    equipmentPane.setBackground(equipmentBackground);
+                    equipmentPane.setLayoutX(0);
+                    equipmentPane.setLayoutY(0);
+                    equipmentContainer.getChildren().add(equipmentPane);
+                }
+            }
 
     }
 
     //当玩家的血量发生变化的时候调用此函数更新界面上的血条
-    private void updataBlood(Pane heroCardPhone00,Player player,ProgressBar healthBar)   //更新血条长度
+    private void updataBlood(StackPane heroCardPhone00,Player player,ProgressBar healthBar,Label healthLabel)   //更新血条长度
     {
         heroCardPhone00.getChildren().clear();
         double MaxBlood=player.getHpLimit();
         double nowBlood=player.getHp();
         healthBar.setProgress(nowBlood/MaxBlood);
-        heroCardPhone00.getChildren().add(healthBar);
+        heroCardPhone00.getChildren().addAll(healthBar,healthLabel);
+    }
+
+    public void upDateAllBlood(StackPane pane,Player player,ProgressBar healthBar,Label healthLabel)
+    {
+        double limit=player.getHpLimit();
+        int now=(int)player.getHp();
+        String nowHp=String.valueOf(now);
+        //更新血条内的文字提示
+        healthLabel.setText(nowHp);
+        //更新血条图像
+        updataBlood(pane,player,healthBar,healthLabel);
     }
 }

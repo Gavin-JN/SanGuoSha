@@ -6,6 +6,10 @@ import java.util.List;
 public class Receiver {
     public Room room;
 
+    public Receiver(Room room) {
+        this.room = room;
+    }
+
     //确认玩家手中是否有某张牌
     public boolean CheckContains(Player player,int typeId){
         for(int i=0;i<player.handCardList.size();i++){
@@ -55,8 +59,9 @@ public class Receiver {
             Card card = player.handCardList.get(id);
             if(card.CanInitiative()){
                 boolean user = card.Use(player,id);
-                if(user){
-                    player.handCardList.remove(id);
+                if(!user){}
+                else{
+                    card.setResp(player);
                 }
             }
         }
@@ -64,20 +69,28 @@ public class Receiver {
             Card card = player.handCardList.get(id);
             boolean resp = room.currentCard.Resp(player,id);
             if(resp) {
-                room.respPlayers.remove(player);
-                if(room.respPlayers.size()==0){
-                    room.status= Room.roomStatus.PlayStatus;
-                }
+
             }
         }
     }
     //
     public void Abandon(Player player){
-        if(room.turn==player.getSeatId()&&room.status == Room.roomStatus.PlayStatus){
+        if(room.wxkjPlayers.size()>0){
+            for (Player wxkjPlayer : room.wxkjPlayers) {
+                if(wxkjPlayer.seatId == player.seatId){
+                    room.wxkjPlayers.remove(wxkjPlayer);
+                    if(room.wxkjPlayers.size()>0){
+                        return;
+                    }
+                    else{
+                        Card card = player.room.currentCard;
+                        card.wxkjResp(player,false);
+                    }
+                }
+            }
+        }
+        else if(room.turn==player.getSeatId()&&room.status == Room.roomStatus.PlayStatus){
             room.status= Room.roomStatus.DiscardStatus;
-            int nextTurn = (++room.turn)%room.players.size();
-            room.turn = nextTurn;
-            room.status= Room.roomStatus.JudgeStatus;
         }
         else if(room.status== Room.roomStatus.RescueStatus){
             room.helpPlayers.remove(0);
