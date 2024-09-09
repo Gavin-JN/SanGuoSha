@@ -57,6 +57,7 @@ public class StartController extends Client{
             in.close();
             socket.close();
             isPlayGame = true;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,7 +75,9 @@ public class StartController extends Client{
 
             Room room=new Room(1);
             room.Init(players);
+
             fireWindow player=new fireWindow(players.get(0),players.get(1));  //传入两个玩家
+
 
         }
     }
