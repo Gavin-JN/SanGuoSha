@@ -1,6 +1,7 @@
 package com.example.org.server;
 
 import com.example.org.Player;
+import com.example.org.Room;
 import com.example.org.fireWindow;
 import com.example.org.server.impl.GameEventHandlingImpl;
 import org.json.JSONObject;
@@ -65,30 +66,56 @@ public class GameServer {
 
             new Thread(new ClientHandler(clientSocket,clientId,clientIpMap[clientId])).start();
 
-//            massage.put("Order",0);
-//            String jsonString = massage.toString();
-//            sendMessageToClient(0,jsonString);
-//            massage.clear();
+
+//            Player player0 =new Player();
+//            Player player1 =new Player();
+//            List<Player> players = new ArrayList<Player>();
+//            players.add(player0);
+//            players.add(player1);
+//            if(players.get(0).seatId==0)
+//            {
+//                players.get(1).setSeatId(1);
+//            }
+//            else {
+//                players.get(1).setSeatId(0);
+//            }
 //
-//            massage.put("Order",1);
-//            jsonString = massage.toString();
-//            sendMessageToClient(1,jsonString);
 //
-//            massage.put("Order",2);
-//            jsonString = massage.toString();
-//            sendMessageToClient(2,jsonString);
+//            Room room = new Room(1);
+//            room.Init(players);
 //
-//            massage.put("Order",3);
-//            jsonString = massage.toString();
-//            sendMessageToClient(3,jsonString);
-//
-//            massage.put("Order",4);
+//            player0.ip = player0_ip;
+//            player1.ip = player1_ip;
+
+            //player0.getHero().getHeroId()
+            //player1.getHero().getHeroId()
+            //发送出牌顺序和武将信息
+            massage.put("MassageIdentified", "YES");
+            massage.put("Order",0);
+            massage.put("HeroId",1);
+            massage.put("enemyHeroId",2);
+            String jsonString = massage.toString();
+            sendMessageToClient(2,jsonString);
+            massage.clear();
+
+            massage.put("MassageIdentified", "YES");
+            massage.put("Order",1);
+            massage.put("HeroId",2);
+            massage.put("enemyHeroId",1);
+            jsonString = massage.toString();
+            sendMessageToClient(3,jsonString);
+            massage.clear();
+
+//            massage.put("HeroId",0);
 //            jsonString = massage.toString();
 //            sendMessageToClient(4,jsonString);
+//            massage.clear();
+//
+//            massage.put("HeroId",0);
+//           jsonString = massage.toString();
+//            sendMessageToClient(5,jsonString);
+//            massage.clear();
 
-            //打印一下是否会存储到客户端的ip地址
-            PrintWriter writer = clientMap_everyone.get(0);
-            System.out.println("Client ID: " + 0 + ", PrintWriter: " + writer);
         }
     }
 
@@ -131,22 +158,26 @@ public class GameServer {
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
             ) {
                 clientMap.put(clientSocket, out);
-
+//
                 String jsonString = in.readLine();
                 massage = new JSONObject(jsonString);
-                netCode = massage.getInt("NetCode");
-                System.out.println(massage.getString("ip")+"：加入游戏");
-                if(player0_ip!=null){
-                    player0_ip = massage.getString("ip");
-                }else {
-                    player1_ip = massage.getString("ip");
-                }
+                //
+                //
+                //神
+//                netCode = massage.getInt("NetCode");
+//                System.out.println(massage.getString("ip")+"：加入游戏");
+//
+//                if(player0_ip!=null){
+//                    player0_ip = massage.getString("ip");
+//                }else {
+//                    player1_ip = massage.getString("ip");
+//                }
 
                 switch(netCode){
                     case 1002:
                         //匹配
                         int msg = massage.getInt("count");
-//                        Boolean is = gameEventHandling.Matching(msg);
+//                      Boolean is = gameEventHandling.Matching(msg);
                         count = count+msg;
                         System.out.println(count);
 
@@ -170,8 +201,7 @@ public class GameServer {
                         break;
                     case 1010:    //第二个信息
                     {
-
-
+                        System.out.println("执行了");
                         Player player0 =new Player();
                         Player player1 =new Player();
                         List<Player> players = new ArrayList<Player>();
@@ -185,20 +215,51 @@ public class GameServer {
                             players.get(1).setSeatId(0);
                         }
 
+                        Room room = new Room(1);
+                        room.Init(players);
+
                         player0.ip = player0_ip;
                         player1.ip = player1_ip;
+
+
+
+//                        massage.put("Order",-1);
+//                        jsonString = massage.toString();
+//                        sendMessageToClient(-1,jsonString);
+//                        massage.clear();
+//
+//                        massage.put("Order",0);
+//                        jsonString = massage.toString();
+//                        sendMessageToClient(0,jsonString);
+//                        massage.clear();
+//
+//                        massage.put("Order",1);
+//                        jsonString = massage.toString();
+//                        sendMessageToClient(1,jsonString);
+//
+//                        massage.put("Order",2);
+//                        jsonString = massage.toString();
+//                        sendMessageToClient(2,jsonString);
+//
+//                        massage.put("Order",3);
+//                        jsonString = massage.toString();
+//                        sendMessageToClient(3,jsonString);
+//
+//                        massage.put("Order",4);
+//                        jsonString = massage.toString();
+//                        sendMessageToClient(4,jsonString);
 //                        PrintWriter writer = clientMap_everyone.get(2);
 //                        System.out.println("Client ID: " + 2 + ", PrintWriter: " + writer);
-
-                        massage.put("Order",0);
-                       jsonString = massage.toString();
-                        sendMessageToClient(2,jsonString);
-                        massage.clear();
-
-                        massage.put("Order",1);
-                        jsonString = massage.toString();
-                        sendMessageToClient(3,jsonString);
-                        massage.clear();
+//
+//                        massage.put("Order",0);
+//                       jsonString = massage.toString();
+//                        sendMessageToClient(2,jsonString);
+//                        massage.clear();
+//
+//                        massage.put("Order",1);
+//                        jsonString = massage.toString();
+//                        sendMessageToClient(3,jsonString);
+//                        massage.clear();
 
 //                        //随机发 0_ip的是0
 //                        //1_ip的是1

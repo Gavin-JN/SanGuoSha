@@ -22,6 +22,10 @@ public class Heroes {
         this.heroPhotoPath = heroPhotoPath;
     }
 
+    public Heroes(int heroIderoId) {
+
+    }
+
     public int getHeroId() {return heroId;}
 
     public void setHeroId(int heroId) {this.heroId = heroId;}
@@ -32,6 +36,29 @@ public class Heroes {
 
     public int getHpLimit() {
         return hpLimit;
+    }
+
+    public Heroes getHeroById(int id) {
+        switch (id)
+        {
+            case 1:
+                return new sunQuan();
+            case 2:
+                return new caoCao();
+            case 3:
+                return new zhaoYun();
+            case 4:
+                return new zhangFei();
+            case 5:
+                return new zhuGeLiang();
+            case 6:
+                return new zhangLiao();
+            case 7:
+                return new guoJia();
+            default:
+                return new sunQuan();
+        }
+
     }
 
 //    public void setPlayer(Player player) {

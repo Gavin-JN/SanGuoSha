@@ -58,6 +58,7 @@ public class StartController extends Client{
                 }
             }
 
+            massage.clear();
             out.close();
             in.close();
             socket.close();
@@ -94,25 +95,43 @@ public class StartController extends Client{
                 out.println(jsonString);
                 massage.clear();
 
-                //设置回复信息0
-                massage.put("Order",0);
-                String jsonString0 = massage.toString();
-                massage.clear();
-
-                //设置回复信息1
-                massage.put("Order",1);
-                String jsonString1 = massage.toString();
-                massage.clear();
+//                //设置回复信息0
+//                massage.put("MassageIdentified", "YES");
+//                massage.put("Order",0);
+//                massage.put("HeroId",1);
+//                massage.put("enemyHeroId",2);
+//                String jsonString0 = massage.toString();
+//                massage.clear();
+//
+//                //设置回复信息1
+//                massage.put("MassageIdentified", "YES");
+//                massage.put("Order",1);
+//                massage.put("HeroId",2);
+//                massage.put("enemyHeroId",1);
+//                String jsonString1 = massage.toString();
+//                massage.clear();
+                jsonString = in.readLine();
+                massage = new JSONObject(jsonString);
 
                 // 读取并打印服务器的响应
                 String response;
-                while ((response = in.readLine()) != null) {
-                    if(response.equals(jsonString0)||response.equals(jsonString1)) {
+                while ((response = massage.getString("MassageIdentified" )) != null) {
+                    if(response.equals("YES")) {
                         System.out.println(response);
                         break;
                     }
                 }
-                jsonString = response;
+
+                if(jsonString==null) {
+                    System.out.println("errornull");
+                }else{
+                    massage = new JSONObject(jsonString);
+                    System.out.println(massage.getInt("Order"));
+                    Order = massage.getInt("Order");
+                    we.getHero().getHeroById(massage.getInt("HeroId"));
+                    enemy.getHero().getHeroById(massage.getInt("enemyHeroId"));
+
+                }
 
 
                 out.close();
@@ -124,7 +143,11 @@ public class StartController extends Client{
                 e.printStackTrace();
             }
 
-            fireWindow player=new fireWindow(players.get(0),players.get(1));  //传入两个玩家
+            //出牌顺序已经确定
+            //确定角色
+
+
+            fireWindow player=new fireWindow(we,enemy);  //传入两个玩家
 
             we.ip=ipAddress;
 
