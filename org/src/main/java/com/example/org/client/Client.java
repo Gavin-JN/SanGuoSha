@@ -23,6 +23,8 @@ public class Client extends Application {
 
     //传输数据的JSON文件
     public JSONObject massage = new JSONObject();
+    //0先手 1后手
+    public int Order;
 
     public Player we =new Player();
     public Player enemy =new Player();

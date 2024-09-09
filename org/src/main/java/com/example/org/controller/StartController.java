@@ -5,18 +5,12 @@ import com.example.org.Room;
 import com.example.org.client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import com.example.org.fireWindow;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,42 +34,17 @@ public class StartController extends Client{
 
     @FXML
     public void StartGame(ActionEvent event)throws IOException {
+        InetAddress localhost = InetAddress.getLocalHost();
+        String ipAddress = localhost.getHostAddress();
 
-        FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("match.fxml"));
-//
-//            //获取当前窗口
-//            Stage stage=(Stage) ((Node)event.getSource()).getScene().getWindow();
-        try {
-
-            Node root = fxmlLoader.load();
-            StackPane stackPane = new StackPane();
-            // 将FXML加载的内容添加到StackPane中
-            stackPane.getChildren().add(root);
-            // 使用StackPane的默认大小来创建场景
-            Scene scene = new Scene(stackPane);
-            Stage Match=new Stage();
-            //弹出模式
-            Match.initModality(Modality.WINDOW_MODAL);
-            InputStream in = this.getClass().getResourceAsStream("img/title.png");
-            Image image = new Image(in);
-            Match.getIcons().add(image);
-//                StartStage.setTitle("");
-            //设置场景scene
-            Match.setScene(scene);
-            Match.show();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        try (Socket socket = new Socket("192.168.185.82", 1688);
+        try (Socket socket = new Socket("192.168.58.82", 1688);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
 
             massage.put("NetCode", 1002);
             massage.put("count", 1);
+            massage.put("ip", ipAddress);
             String jsonString = massage.toString();
 
             // 发送消息到服务器
@@ -89,6 +58,7 @@ public class StartController extends Client{
                 }
             }
 
+            massage.clear();
             out.close();
             in.close();
             socket.close();
@@ -100,7 +70,8 @@ public class StartController extends Client{
 
 
         if(isPlayGame){
-            System.out.println("开始游戏了");
+
+            System.out.println(ipAddress+"开始游戏了");
             List<Player> players = new ArrayList<Player>();
 
             //玩家1
@@ -112,8 +83,73 @@ public class StartController extends Client{
             Room room=new Room(1);
             room.Init(players);
 
-            fireWindow player=new fireWindow(players.get(0),players.get(1));  //传入两个玩家
 
+            try (Socket socket = new Socket("192.168.58.82", 1688);
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+            ) {
+
+                // 发送消息到服务器
+                massage.put("NetCode", 1010);
+                String jsonString = massage.toString();
+                out.println(jsonString);
+                massage.clear();
+
+//                //设置回复信息0
+//                massage.put("MassageIdentified", "YES");
+//                massage.put("Order",0);
+//                massage.put("HeroId",1);
+//                massage.put("enemyHeroId",2);
+//                String jsonString0 = massage.toString();
+//                massage.clear();
+//
+//                //设置回复信息1
+//                massage.put("MassageIdentified", "YES");
+//                massage.put("Order",1);
+//                massage.put("HeroId",2);
+//                massage.put("enemyHeroId",1);
+//                String jsonString1 = massage.toString();
+//                massage.clear();
+                jsonString = in.readLine();
+                massage = new JSONObject(jsonString);
+
+                // 读取并打印服务器的响应
+                String response;
+                while ((response = massage.getString("MassageIdentified" )) != null) {
+                    if(response.equals("YES")) {
+                        System.out.println(response);
+                        break;
+                    }
+                }
+
+                if(jsonString==null) {
+                    System.out.println("errornull");
+                }else{
+                    massage = new JSONObject(jsonString);
+                    System.out.println(massage.getInt("Order"));
+                    Order = massage.getInt("Order");
+                    we.getHero().getHeroById(massage.getInt("HeroId"));
+                    enemy.getHero().getHeroById(massage.getInt("enemyHeroId"));
+
+                }
+
+
+                out.close();
+                in.close();
+                socket.close();
+                isPlayGame = true;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //出牌顺序已经确定
+            //确定角色
+
+
+            fireWindow player=new fireWindow(we,enemy);  //传入两个玩家
+
+            we.ip=ipAddress;
 
         }
     }

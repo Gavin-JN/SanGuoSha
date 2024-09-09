@@ -42,17 +42,7 @@ public class GameServetReaderThread extends GameServer implements Runnable{
             //把低级的输出流包装成高级的输出流
             PrintWriter pw = new PrintWriter(os, true);
 
-            switch(netCode){
-                case 1002:
-                    //匹配
-                    System.out.println(massage.getBoolean("Matching_Situation"));
-//                    massage.put("Matching_Situation",gameEventHandling.Matching());
-//                    if(massage.getBoolean("Matching_Situation")){
-//
-//                    }
-                    //清空massage
-                    massage.clear();
-            }
+
 
 //            String line = reader.readLine();
 //            JSONObject jsonObject = new JSONObject(line);

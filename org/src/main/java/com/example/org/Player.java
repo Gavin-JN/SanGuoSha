@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Player {
     public int seatId;
+    public String ip;
 
     public List<Card> handCardList;
     public Card equipCardList[]=new Card[3];

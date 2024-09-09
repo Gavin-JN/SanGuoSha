@@ -38,6 +38,7 @@ public class fireWindow extends Parent {
     private Label healthLabel2;
     private Pane equipmentContainer;
     private int checkedSeatId;
+    private Pane targetContainer;
 
     public fireWindow(Player player1, Player targetPlayer) {
         //己方
@@ -175,6 +176,12 @@ public class fireWindow extends Parent {
                 });
 
         //敌方卡牌信息
+
+        targetContainer=new Pane();
+        targetContainer.setPrefSize(400, 150);
+        targetContainer.setLayoutX(650);
+        targetContainer.setLayoutY(0);
+        player2Pane.getChildren().add(targetContainer);
         for (int i = 0; i < targetPlayer.handCardList.size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
             Pane cardPane = new Pane();
             cardPane.setPrefSize(100, 150);
@@ -183,12 +190,12 @@ public class fireWindow extends Parent {
             BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCard);
             Background cardBackground = new Background(cardImage);
             cardPane.setBackground(cardBackground);
-            cardPane.setLayoutX(650 + i * 45);
+            cardPane.setLayoutX(0 + i * 45);
             cardPane.setLayoutY(0);
-            player2Pane.getChildren().add(cardPane);
+            targetContainer.getChildren().add(cardPane);
 
-            //要判断玩家是否可以弃对方的牌
-            AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
+            //用于判断该pane是否已经被点击过
+            AtomicBoolean isClicked = new AtomicBoolean(false);
             int finalI = i;
             Integer FinaLi=i;
             cardPane.setOnMouseClicked(event -> {
@@ -317,11 +324,13 @@ public class fireWindow extends Parent {
                             break;
                     }
                 }
-                showCardInArea(cardContainer2, player1, checkedCards); //展示
+                //展示
+                showCardInArea(cardContainer2, player1, checkedCards);
                 //玩家手牌列表更新之后再展示手牌
                 renderPlayerCards(cardContainer, player1);
                 checkedCards.clear();
-
+                //更新地方卡牌区域
+                updateTarget(targetContainer,targetPlayer);
                 //更新己方血条
                 upDateAllBlood(bloodPone1, player1, healthBar1, healthLabel1);
                 //更新敌方血条
@@ -385,6 +394,7 @@ public class fireWindow extends Parent {
                 for(int i=0;i<checkedCardFromTarget.size();i++) {
                     targetPlayer.handCardList.remove((int)checkedCardFromTarget.get(i));//删除对方玩家的被选中的手牌
                 }
+                player1.setIfUseGuoHeChaiQiao(false);
             }
             else {  //不是过河 拆桥，则删除己方玩家的被选中的卡牌
 
@@ -675,6 +685,7 @@ public class fireWindow extends Parent {
         heroCardPhone00.getChildren().addAll(healthBar,healthLabel);
     }
 
+    //刷新血量
     public void upDateAllBlood(StackPane pane,Player player,ProgressBar healthBar,Label healthLabel)
     {
         double limit=player.getHpLimit();
@@ -684,5 +695,39 @@ public class fireWindow extends Parent {
         healthLabel.setText(nowHp);
         //更新血条图像
         updataBlood(pane,player,healthBar,healthLabel);
+    }
+
+    //刷新敌方玩家手牌区域
+    public  void updateTarget(Pane targetContainer,Player targetPlayer)
+    {
+        targetContainer.getChildren().clear();
+        for (int i = 0; i < targetPlayer.handCardList.size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
+            Pane cardPane = new Pane();
+            cardPane.setPrefSize(100, 150);
+            Image imageCard = new Image(getClass().getResourceAsStream("img/cardBack.png"));
+            BackgroundSize backgroundSizeCard = new BackgroundSize(100, 150, false, false, false, false);
+            BackgroundImage cardImage = new BackgroundImage(imageCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCard);
+            Background cardBackground = new Background(cardImage);
+            cardPane.setBackground(cardBackground);
+            cardPane.setLayoutX(0 + i * 45);
+            cardPane.setLayoutY(0);
+            targetContainer.getChildren().add(cardPane);
+
+            //用于判断该pane是否已经被点击过
+            AtomicBoolean isClicked = new AtomicBoolean(false);
+            int finalI = i;
+            Integer FinaLi=i;
+            cardPane.setOnMouseClicked(event -> {
+                if (!isClicked.get()) {
+                    cardPane.setTranslateY(30);
+                    isClicked.set(true);
+                    checkedCardFromTarget.add(finalI);
+                } else {
+                    cardPane.setTranslateY(0);
+                    isClicked.set(false);
+                    checkedCardFromTarget.remove(FinaLi);
+                }
+            });
+        }
     }
 }
