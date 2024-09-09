@@ -31,6 +31,7 @@ public class Player {
     public boolean isAbleToDraw=true;
     //玩家选中出的牌在玩家手牌中的索引
     public int putId=-1;
+    public  int chooseCard;
 
     //构造器（与析构器）
     public Player() {

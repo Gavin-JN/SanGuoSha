@@ -193,15 +193,19 @@ class zhaoYun extends Heroes {
 
         //遗计——你每受到1点伤害，可摸两张牌
         //当受到伤害时该技能直接发动
-        public void yiJi(Player player,List <Card> cardList) {
+        public void yiJi(Player player, List<Card> cardList) {
             //if里面应为条件及受到一点伤害
-//            if()
-//            {
-//                for(int i=0;i<2;i++) {   //抽取与弃牌数量相同的新牌
-//                    int typeOfCard=player.DrawCard(cardList);  //cardList为待抽取的剩余的所有卡牌
-//                    Card cardIn=player.getCardByType(typeOfCard);
-//                    player.handCardList.add(cardIn);
-//                }
+
+            //判断条件
+//           if(player.getHero.getHeroId==7)
+//            for (int i = 0; i < 2; i++) {   //抽取与弃牌数量相同的新牌
+//                int typeOfCard = player.DrawCard(cardList);  //cardList为待抽取的剩余的所有卡牌
+//                Card cardIn = player.getCardByType(typeOfCard);
+//                player.handCardList.add(cardIn);
+
             }
         }
+
+
+
 
