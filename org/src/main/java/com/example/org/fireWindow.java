@@ -466,14 +466,24 @@ public class fireWindow extends Parent {
             switch (heroId)
             {
                 case 1:
-                sunQuan sun=new sunQuan();
-                    //此时该按钮充当出牌
-                    //展示要弃的牌
-                    showCardInArea(cardContainer2,player1,checkedCards);
-                    //弃牌并摸等量牌
-                    sun.zhiheng(player1,player1.room.cardList,checkedCards);
-                    //更新玩家手牌区域
-                    renderPlayerCards(cardContainer,player1);
+                    if(checkedCards.size()!=0) {
+                        sunQuan sun = new sunQuan();
+                        //此时该按钮充当出牌
+                        //展示要弃的牌
+                        showCardInArea(cardContainer2, player1, checkedCards);
+                        //弃牌并摸等量牌
+                        sun.zhiheng(player1, player1.room.cardList, checkedCards);
+                        //更新玩家手牌区域
+                        renderPlayerCards(cardContainer, player1);
+                    }
+                    else {
+                        Alert sunquanAlert = new Alert(Alert.AlertType.WARNING);
+                        sunquanAlert.setTitle("警告");
+                        sunquanAlert.setHeaderText(null);
+                        sunquanAlert.setContentText("（孙权）请选择要弃的卡牌，之后获得等量的新牌");
+                        sunquanAlert.showAndWait();
+
+                    }
                     break;
                 case 2:
                     Alert skillAlert = new Alert(Alert.AlertType.WARNING);
@@ -485,20 +495,30 @@ public class fireWindow extends Parent {
                     break;
                 case 3:
                     //此时此按钮依然充当出牌
-                    zhaoYun zhaoyun=new zhaoYun();
-                    int chengedTypeId=zhaoyun.longDan(player1.getPutId());
-                    for(int i=0;i<checkedCards.size();i++)  //删除本地
-                    {
-                        player1.handCardList.remove((int)(checkedCards.get(i)));
+                    if(checkedCards.size()!=0) {
+                        zhaoYun zhaoyun = new zhaoYun();
+                        int chengedTypeId = zhaoyun.longDan(player1.getPutId());
+                        for (int i = 0; i < checkedCards.size(); i++)  //删除本地
+                        {
+                            player1.handCardList.remove((int) (checkedCards.get(i)));
+                        }
+
+                        //将出的牌给为对应牌
+                        player1.setPutId(chengedTypeId);
+                        checkedCards.clear();
+                        checkedCards.add(chengedTypeId);
+                        showCardInArea(cardContainer2, player1, checkedCards);
+
+                        checkedCards.clear();
                     }
-
-                    //将出的牌给为对应牌
-                    player1.setPutId(chengedTypeId);
-                    checkedCards.clear();
-                    checkedCards.add(chengedTypeId);
-                    showCardInArea(cardContainer2,player1,checkedCards);
-
-                    checkedCards.clear();
+                    else
+                    {
+                        Alert zhaoyunAlert = new Alert(Alert.AlertType.WARNING);
+                        zhaoyunAlert.setTitle("警告");
+                        zhaoyunAlert.setHeaderText(null);
+                        zhaoyunAlert.setContentText("（赵云）请选择“杀”或者“闪” ！");
+                        zhaoyunAlert.showAndWait();
+                    }
                     break;
                 case 4:
                     Alert skillAlert2 = new Alert(Alert.AlertType.WARNING);
@@ -517,12 +537,12 @@ public class fireWindow extends Parent {
                     //诸葛亮被动，当玩家手牌数量为0的时候不可以成为杀或者决斗的对象，直接在杀和决斗的卡牌属性里面写
                     break;
                 case 6:
-                    //可以放在摸排的程序，
-                    zhangLiao zhangliao=new zhangLiao();
-                    zhangliao.tuXi(player1,targetPlayer);
-                    //更新玩家自己的手牌列表
-                    renderPlayerCards(cardContainer,player1);
-                    break;
+//                    //可以放在摸排的程序，
+//                    zhangLiao zhangliao=new zhangLiao();
+//                    zhangliao.tuXi(player1,targetPlayer);
+//                    //更新玩家自己的手牌列表
+//                    renderPlayerCards(cardContainer,player1);
+//                    break;
                 case 7:
                     Alert skillAlert4 = new Alert(Alert.AlertType.WARNING);
                     skillAlert4.setTitle("警告");
