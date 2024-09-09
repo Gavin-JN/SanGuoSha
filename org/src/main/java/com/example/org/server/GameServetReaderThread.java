@@ -18,8 +18,6 @@ public class GameServetReaderThread extends GameServer implements Runnable{
         }
     }
 
-
-
     //信号
     public int netCode;
     //信号处理者

@@ -1,5 +1,6 @@
 package com.example.org.controller;
 
+import com.example.org.Heroes;
 import com.example.org.Player;
 import com.example.org.Room;
 import com.example.org.client.Client;
@@ -25,6 +26,9 @@ public class StartController extends Client{
     public Player we =new Player();
     //敌对玩家
     public Player enemy =new Player();
+
+    //上帝hero
+    public Heroes hero = new Heroes();
 
     //传输数据的JSON文件
     public JSONObject massage = new JSONObject();
@@ -98,64 +102,46 @@ public class StartController extends Client{
             massage.put("NetCode", 1010);
             String jsonString = massage.toString();
             out.println(jsonString);
-            //out.close();
-            massage.clear();
-            //设置回复信息0
-            massage.put("MassageIdentified", "YES");
-            massage.put("Order",0);
-            massage.put("HeroId",1);
-            massage.put("enemyHeroId",2);
-            String jsonString0 = massage.toString();
+//            out.close();
             massage.clear();
 
-            //设置回复信息1
-            massage.put("MassageIdentified", "YES");
-            massage.put("Order",1);
-            massage.put("HeroId",2);
-            massage.put("enemyHeroId",1);
-            String jsonString1 = massage.toString();
-            massage.clear();
 
+            //读从服务器来的信息
             jsonString = in.readLine();
-            if(jsonString == null){
-                System.out.println("error ");
-            }else{
-                massage = new JSONObject(jsonString);
-                // 读取并打印服务器的响应
-                String response;
-
-                while ((response = massage.getString("MessageIdentified" )) != null) {
-                    if(response.equals("YES")) {
-                        System.out.println(response);
-                        break;
-                    }
+            massage = new JSONObject(jsonString);
+            // 读取并打印服务器的响应
+            String response;
+            while ((response = massage.getString("MessageIdentified" )) != null) {
+                if(response.equals("YES")) {
+                    System.out.println(response);
+                    break;
                 }
+            }
 
-                if(jsonString==null) {
-                    System.out.println("errornull");
-                }else{
-                    System.out.println(jsonString);
-                    massage = new JSONObject(jsonString);
-                    Order = massage.getInt("Order");
-                    we.getHero().getHeroById(massage.getInt("HeroId"));
-                    enemy.getHero().getHeroById(massage.getInt("enemyHeroId"));
-            }
-                out.close();
-                in.close();
-                socket.close();
-                isPlayGame = true;
-            }
+            System.out.println(jsonString);
+            massage = new JSONObject(jsonString);
+
+            Order = massage.getInt("Order");
+            we.setHero(hero.getHeroById(massage.getInt("HeroId")));
+            enemy.setHero(hero.getHeroById(massage.getInt("enemyHeroId")));
+
+            out.close();
+            in.close();
+            socket.close();
+            isPlayGame = true;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     //出牌顺序已经确定
     //确定角色
+    //先传入两个玩家
+    //传入两个玩家之前要确定1出牌顺序2我方武将3敌方武将4自己手牌
         fireWindow player=new fireWindow(we,enemy);  //传入两个玩家
-        we.ip=ipAddress;
+
     }
-        //先传入两个玩家
-        //传入两个玩家之前要确定1出牌顺序2我方武将3敌方武将4自己手牌
+
 
     }
 }

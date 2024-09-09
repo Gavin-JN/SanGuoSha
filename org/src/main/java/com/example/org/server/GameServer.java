@@ -45,6 +45,13 @@ public class GameServer {
     private static int clientIdCounter = 0;  // 用于分配唯一的客户端ID
     private static String[] clientIpMap = new String[100];
 
+    //是否进行初始化
+    public static Boolean isInitGame = true;
+    //初始化获得的msg0，msg1信息
+    public static JSONObject Game_msg[];
+    //暴力使用参数
+    public static int violent = 0;
+
 
     public static void main(String[] args) throws IOException {
         //线程集初始化
@@ -59,32 +66,42 @@ public class GameServer {
 
         //把这个客户端对应的通信管道交给一个独立的线程进行处理
         while (true) {
+
+            if(isInitGame){
+                gameEventHandling.InitGame();
+                Game_msg=new JSONObject[]{
+                        gameEventHandling.Getmsg0(),
+                        gameEventHandling.Getmsg1()
+                };
+                System.out.println(Game_msg[0].toString());
+                System.out.println(Game_msg[1].toString());
+                isInitGame = false;
+            }
             //连接客户端
             Socket clientSocket = serverSocket.accept();
             //获取分配id
             int clientId = clientIdCounter++;
-//            clientIpMap[clientId] = clientSocket.getInetAddress().getHostAddress();
-
+            //clientIpMap[clientId] = clientSocket.getInetAddress().getHostAddress();
             clientMap_everyone.put(clientId, new PrintWriter(clientSocket.getOutputStream(), true));
-
-            new Thread(new ClientHandler(clientSocket,clientId,clientIpMap[clientId])).start();
-
-            massage.put("MessageIdentified", "YES");
-            massage.put("Order",0);
-            massage.put("HeroId",1);
-            massage.put("enemyHeroId",2);
-            String jsonString = massage.toString();
-            sendMessageToClient(0,jsonString);
-            sendMessageToClient(2,jsonString);
-            massage.clear();
-
-            massage.put("MessageIdentified", "YES");
-            massage.put("Order",1);
-            massage.put("HeroId",2);
-            massage.put("enemyHeroId",1);
-            jsonString = massage.toString();
-            sendMessageToClient(3,jsonString);
-            massage.clear();
+            new Thread(new ClientHandler(clientSocket,clientId)).start();
+//
+//            massage.put("MessageIdentified", "YES");
+//            massage.put("Order",0);
+//            massage.put("HeroId",1);
+//            massage.put("enemyHeroId",2);
+//            String jsonString = massage.toString();
+//            sendMessageToClient(0,jsonString);
+//            sendMessageToClient(1,jsonString);
+//            sendMessageToClient(2,jsonString);
+//            massage.clear();
+//
+//            massage.put("MessageIdentified", "YES");
+//            massage.put("Order",1);
+//            massage.put("HeroId",2);
+//            massage.put("enemyHeroId",1);
+//            jsonString = massage.toString();
+//            sendMessageToClient(3,jsonString);
+//            massage.clear();
         }
     }//
 
@@ -95,8 +112,16 @@ public class GameServer {
         }
     }
 
+    public static void sendMessageToClient(Socket clientSocket, String message) {
+        PrintWriter writer = clientMap.get(clientSocket);
+        if (writer != null) {
+            writer.println(message);
+            writer.flush(); // 确保消息立即发送
+        }
+    }
+
     //给特定客户端发信息
-    public static void sendMessageToClient(int clientId, String message) {
+    public static void sendMessageToClientById(int clientId, String message) {
         PrintWriter writer = clientMap_everyone.get(clientId);
         if (writer != null) {
             writer.println(message);
@@ -109,14 +134,14 @@ public class GameServer {
         private final Socket clientSocket;
         //客户端在线程集中的编号
         private int clientId;
-        //客户端在线程集中的ip地址记录
-        private String clientIp;
+//        //客户端在线程集中的ip地址记录
+//        private String clientIp;
 
         //构造器
-        public ClientHandler(Socket socket, int clientId,String clientIp) {
+        public ClientHandler(Socket socket,int clientId) {
             this.clientSocket = socket;
             this.clientId = clientId;
-            this.clientIp = clientIp;
+//            this.clientIp = clientIp;
         }
 
 
@@ -129,6 +154,7 @@ public class GameServer {
                 clientMap.put(clientSocket, out);
                 String jsonString = in.readLine();
                 massage = new JSONObject(jsonString);
+                netCode = massage.getInt("NetCode");
 
                 switch(netCode){
                     //匹配
@@ -161,69 +187,27 @@ public class GameServer {
                     case 1010:    //第二个信息
                     {
                         System.out.println("执行了");
-                        Player player0 =new Player();
-                        Player player1 =new Player();
-                        List<Player> players = new ArrayList<Player>();
-                        players.add(player0);
-                        players.add(player1);
-                        if(players.get(0).seatId==0)
-                        {
-                            players.get(1).setSeatId(1);
+                        //一定是这样的
+                        JSONObject tmp_massage;
+                        //暴力算法
+                        if((violent%2)==0){
+                            tmp_massage = Game_msg[violent];
+                            violent++;
+                        }else{
+                            tmp_massage = Game_msg[violent];
                         }
-                        else {
-                            players.get(1).setSeatId(0);
-                        }
-
-                        Room room = new Room(1);
-                        room.Init(players);
-
-                        player0.ip = player0_ip;
-                        player1.ip = player1_ip;
-
-
-
-//                        massage.put("Order",-1);
-//                        jsonString = massage.toString();
-//                        sendMessageToClient(-1,jsonString);
-//                        massage.clear();
-//
-//                        massage.put("Order",0);
-//                        jsonString = massage.toString();
-//                        sendMessageToClient(0,jsonString);
-//                        massage.clear();
-//
-//                        massage.put("Order",1);
-//                        jsonString = massage.toString();
-//                        sendMessageToClient(1,jsonString);
-//
-//                        massage.put("Order",2);
-//                        jsonString = massage.toString();
-//                        sendMessageToClient(2,jsonString);
-//
-//                        massage.put("Order",3);
-//                        jsonString = massage.toString();
-//                        sendMessageToClient(3,jsonString);
-//
-//                        massage.put("Order",4);
-//                        jsonString = massage.toString();
-//                        sendMessageToClient(4,jsonString);
-//                        PrintWriter writer = clientMap_everyone.get(2);
-//                        System.out.println("Client ID: " + 2 + ", PrintWriter: " + writer);
-//
-//                        massage.put("Order",0);
-//                       jsonString = massage.toString();
-//                        sendMessageToClient(2,jsonString);
-//                        massage.clear();
-//
-//                        massage.put("Order",1);
-//                        jsonString = massage.toString();
-//                        sendMessageToClient(3,jsonString);
-//                        massage.clear();
-
-//                        //随机发 0_ip的是0
-//                        //1_ip的是1
+                        //
+                        massage.put("MessageIdentified", "YES");
+                        massage.put("Order",tmp_massage.getInt("Order"));
+                        massage.put("HeroId",tmp_massage.getInt("HeroId"));
+                        massage.put("enemyHeroId",tmp_massage.getInt("enemyHeroId"));
+                        jsonString = massage.toString();
+                        //这里应该会输出
+                        System.out.println(jsonString);
+                        massage.clear();
+//                        broadcastMessage(jsonString);
+                        sendMessageToClient(clientSocket, jsonString);
                     }
-
 
                 }
             } catch (IOException e) {
