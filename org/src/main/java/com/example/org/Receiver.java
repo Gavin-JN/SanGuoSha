@@ -59,8 +59,9 @@ public class Receiver {
             Card card = player.handCardList.get(id);
             if(card.CanInitiative()){
                 boolean user = card.Use(player,id);
-                if(user){
-                    player.handCardList.remove(id);
+                if(!user){}
+                else{
+                    card.setResp(player);
                 }
             }
         }
@@ -68,10 +69,7 @@ public class Receiver {
             Card card = player.handCardList.get(id);
             boolean resp = room.currentCard.Resp(player,id);
             if(resp) {
-                room.respPlayers.remove(player);
-                if(room.respPlayers.size()==0){
-                    room.status= Room.roomStatus.PlayStatus;
-                }
+
             }
         }
     }

@@ -10,7 +10,7 @@ public class Player {
     public int seatId;
 
     public List<Card> handCardList;
-    public List<Card> equipCardList;
+    public Card equipCardList[]=new Card[3];
     public boolean judgeCardList[] = new boolean[2];
     public Heroes hero;
     public int hp;
