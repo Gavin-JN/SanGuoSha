@@ -1,5 +1,8 @@
 package com.example.org;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import java.util.Currency;
 import java.util.List;
 
@@ -43,13 +46,6 @@ public class Card {
       return false;
    }
    public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
    }
    public boolean setResp(Player player,Player targetPlayer,Card card){
       return true;
@@ -106,11 +102,11 @@ public class Card {
    }
 }
 
-/*所有牌共99张，
+/*所有牌共98张，
 基本牌类：杀30张，闪15张，桃8张，酒5张；
 锦囊牌类：顺手牵羊5张，过河拆桥6张，无中生有4张，借刀杀人2张，决斗3张，无懈可击3张，
         乐不思蜀3张，兵粮寸断2张，南蛮入侵3张，万箭齐发1张；
-装备牌类：诸葛连弩2张，寒冰剑1张，古锭刀1张，青龙偃月刀1张，+1马2张，-1马2张。*/
+装备牌类：诸葛连弩2张，古锭刀1张，青龙偃月刀1张，+1马2张，-1马2张。*/
 
 /*杀：出牌阶段对敌方使用，可造成一点伤害，可在对方决斗，南蛮入侵，借刀杀人时打出，
     一般情况下每回合仅可使用1张，typeId 1 */
@@ -170,6 +166,22 @@ class Sha extends Card{
       if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==17
             &&targetPlayer.handCardList.size()==0)    damage++;
       targetPlayer.hp-=damage;
+      // 创建媒体对象，指定音乐文件路径
+      javafx.scene.media.Media media = new Media(this.getClass().getResource("music/NiGanMa.mp3").toString());
+      // 创建媒体播放器
+      MediaPlayer mediaPlayer = new MediaPlayer(media);
+      mediaPlayer.play();
+      if (targetPlayer.hero.getHeroId() == 7)
+         for(int j=0;j<damage;j++){
+            for (int i = 0; i < 2; i++) {
+               int typeOfCard = targetPlayer.DrawCard(targetPlayer.room.cardList);  //cardList为待抽取的剩余的所有卡牌
+               Card cardIn = targetPlayer.getCardByType(typeOfCard);
+               targetPlayer.handCardList.add(cardIn);
+            }
+         }
+      if(targetPlayer.hero.getHeroId()==2){
+         targetPlayer.handCardList.add(targetPlayer.room.currentCard);
+      }
       if(targetPlayer.hp<=0){
          List<Player> playerList = targetPlayer.room.players;
          boolean add = false;
@@ -222,6 +234,7 @@ class Tao extends Card{
       else if(player.hp<player.hpLimit){
          player.hp++;
       }
+      player.handCardList.remove(id);
       return true;
    }
 
@@ -237,24 +250,26 @@ class Jiu extends Card{
       super.setCardPhotoPath("controller/img/ShouPai/Jiu.jpg");
    }
    public boolean Use(Player player,int id) {
-      if (player.hp <= 0) {//濒死回血
+      if (player.hp <= 0&&player.room.status== Room.roomStatus.RescueStatus) {//濒死回血
          player.hp++;
          player.handCardList.remove(id);
+         return true;
       }
       //杀的伤害+1
       if (player.room.status == Room.roomStatus.PlayStatus && player.seatId==player.room.turn && player.isUseJiu==false) {
          player.isUseJiu = true;
          player.isNextShaAddDamage = true;
          player.handCardList.remove(id);
+         return true;
       }
-      return true;
+      return false;
    }
    public boolean CanInitiative(){
       return true;
    }
 }
 
-//顺手牵羊：可从距离为1的对手处拿走一张牌， typeId 5
+//顺手牵羊：可从距离为1的对手手牌处拿走一张牌， typeId 5
 class ShunShouQianYang extends Card {
    public ShunShouQianYang(int typeId) {
       super(typeId);
@@ -268,24 +283,52 @@ class ShunShouQianYang extends Card {
    public boolean RequireTarget() {
       return true;
    }
-   public boolean Resp(Player targetPlayer,int id){
-      if(AbandonResp(targetPlayer)) return false;
-      if(targetPlayer.handCardList.get(id).getTypeId()==10) return true;
-      return false;
+   public void setResp(Player player){
+      int cTurn=player.room.turn;
+      addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
    }
-
-   public boolean AbandonResp(Player targetPlayer) {
-      targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).ifUseShunShouQianYang=true;
+   public void wxkjResp(Player targetPlayer,boolean success){
+      if(success){
+         targetPlayer.room.respPlayers.remove(0);
+         addWxkj(targetPlayer);
+      }
+   }
+   public boolean Abandon(Player targetPlayer){
+      targetPlayer.room.respPlayers.remove(0);
+      if(targetPlayer.room.wxkjPlayers.size()==0){
+         targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).DrawCard(targetPlayer.handCardList);
+      }
       return true;
+   }
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
    }
    public boolean Use(Player player,Player targetPlayer){
       if(!Card.distance(player,targetPlayer,false)) return false;
       return true;
    }
+   public boolean Resp(Player targetPlayer,int id){
+      if(Abandon(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==10) {
+         targetPlayer.handCardList.remove(id);
+         targetPlayer.room.respPlayers.remove(targetPlayer);
+         if(targetPlayer.room.respPlayers.size()==0){
+            targetPlayer.room.status= Room.roomStatus.PlayStatus;
+         }
+         return true;
+      }
+      return false;
+   }
 
 }
 
-//过河拆桥：可弃置对手区域内一张牌，  typeId 6
+//过河拆桥：可弃置对手手牌区域内一张牌，  typeId 6
 class GuoHeChaiQiao extends Card{
    public GuoHeChaiQiao(int typeId) {
       super(typeId);
@@ -300,15 +343,43 @@ class GuoHeChaiQiao extends Card{
       return true;
    }
 
-   public boolean Resp(Player targetPlayer,int id){
-      if(AbandonResp(targetPlayer)) return false;
-      if(targetPlayer.handCardList.get(id).getTypeId()==10) return true;
-      return false;
+   public void setResp(Player player){
+      int cTurn=player.room.turn;
+      addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
    }
-
-   public boolean AbandonResp(Player targetPlayer) {
-      targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).ifUseGuoHeChaiQiao=true;
+   public void wxkjResp(Player targetPlayer,boolean success){
+      if(success){
+         targetPlayer.room.respPlayers.remove(0);
+         addWxkj(targetPlayer);
+      }
+   }
+   public boolean Abandon(Player player){
+      player.room.respPlayers.remove(0);
+      if(player.room.wxkjPlayers.size()==0){
+         player.setIfUseGuoHeChaiQiao(true);
+      }
       return true;
+   }
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
+   }
+   public boolean Resp(Player targetPlayer,int id){
+      if(Abandon(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==10) {
+         targetPlayer.handCardList.remove(id);
+         targetPlayer.room.respPlayers.remove(targetPlayer);
+         if(targetPlayer.room.respPlayers.size()==0){
+            targetPlayer.room.status= Room.roomStatus.PlayStatus;
+         }
+         return true;
+      }
+      return false;
    }
 }
 
@@ -357,6 +428,27 @@ class WuZhongShengYou extends Card{
          }
       }
       return true;
+   }
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
+   }
+   public boolean Resp(Player targetPlayer,int id){
+      if(Abandon(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==10) {
+         targetPlayer.handCardList.remove(id);
+         targetPlayer.room.respPlayers.remove(targetPlayer);
+         if(targetPlayer.room.respPlayers.size()==0){
+            targetPlayer.room.status= Room.roomStatus.PlayStatus;
+         }
+         return true;
+      }
+      return false;
    }
 }
 
@@ -420,6 +512,15 @@ class JieDaoShaRen extends Card{
          targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).handCardList.add(card);
          return true;
    }
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
+   }
 }
 
 //决斗：双方轮流出杀直到一人不出杀受到一点伤害， typeId 9
@@ -477,6 +578,20 @@ class JueDou extends Card{
    public boolean AbandonResp(Player targetPlayer){
       targetPlayer.room.respPlayers.clear();
       targetPlayer.hp--;
+      // 创建媒体对象，指定音乐文件路径
+      javafx.scene.media.Media media = new Media(this.getClass().getResource("music/NiGanMa.mp3").toString());
+      // 创建媒体播放器
+      MediaPlayer mediaPlayer = new MediaPlayer(media);
+      mediaPlayer.play();
+      if (targetPlayer.hero.getHeroId() == 7)
+            for (int i = 0; i < 2; i++) {
+               int typeOfCard = targetPlayer.DrawCard(targetPlayer.room.cardList);  //cardList为待抽取的剩余的所有卡牌
+               Card cardIn = targetPlayer.getCardByType(typeOfCard);
+               targetPlayer.handCardList.add(cardIn);
+            }
+      if(targetPlayer.hero.getHeroId()==2){
+         targetPlayer.handCardList.add(targetPlayer.room.currentCard);
+      }
       if(targetPlayer.hp<=0){
          List<Player> playerList = targetPlayer.room.players;
          boolean add = false;
@@ -488,6 +603,15 @@ class JueDou extends Card{
          }
       }
       return targetPlayer.hp<=0;
+   }
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
    }
 }
 
@@ -526,7 +650,15 @@ class WuXieKeJi extends Card {
       }
       return true;
    }
-
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
+   }
 }
 
 
@@ -610,6 +742,15 @@ class BingLiangCunDuan extends Card{
       player.handCardList.remove(id);
       return true;
    }
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
+   }
 }
 
 //南蛮入侵：使用后其余所有角色需打出一张杀相应，否则受到一点伤害， typeId 13
@@ -664,6 +805,20 @@ class NanManRuQin extends Card{
    public boolean Abandon(Player targetPlayer){
       targetPlayer.room.respPlayers.remove(0);
       targetPlayer.hp--;
+      // 创建媒体对象，指定音乐文件路径
+      javafx.scene.media.Media media = new Media(this.getClass().getResource("music/NiGanMa.mp3").toString());
+      // 创建媒体播放器
+      MediaPlayer mediaPlayer = new MediaPlayer(media);
+      mediaPlayer.play();
+      if (targetPlayer.hero.getHeroId() == 7)
+         for (int i = 0; i < 2; i++) {
+            int typeOfCard = targetPlayer.DrawCard(targetPlayer.room.cardList);  //cardList为待抽取的剩余的所有卡牌
+            Card cardIn = targetPlayer.getCardByType(typeOfCard);
+            targetPlayer.handCardList.add(cardIn);
+         }
+      if(targetPlayer.hero.getHeroId()==2){
+         targetPlayer.handCardList.add(targetPlayer.room.currentCard);
+      }
       if(targetPlayer.hp<=0){
          List<Player> playerList = targetPlayer.room.players;
          boolean add = false;
@@ -675,6 +830,15 @@ class NanManRuQin extends Card{
          }
       }
       return targetPlayer.hp<=0;
+   }
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
    }
 }
 
@@ -730,6 +894,20 @@ class WanJianQiFa extends Card{
    public boolean Abandon(Player targetPlayer){
       targetPlayer.room.respPlayers.remove(0);
       targetPlayer.hp--;
+      // 创建媒体对象，指定音乐文件路径
+      javafx.scene.media.Media media = new Media(this.getClass().getResource("music/NiGanMa.mp3").toString());
+      // 创建媒体播放器
+      MediaPlayer mediaPlayer = new MediaPlayer(media);
+      mediaPlayer.play();
+      if (targetPlayer.hero.getHeroId() == 7)
+         for (int i = 0; i < 2; i++) {
+            int typeOfCard = targetPlayer.DrawCard(targetPlayer.room.cardList);  //cardList为待抽取的剩余的所有卡牌
+            Card cardIn = targetPlayer.getCardByType(typeOfCard);
+            targetPlayer.handCardList.add(cardIn);
+         }
+      if(targetPlayer.hero.getHeroId()==2){
+         targetPlayer.handCardList.add(targetPlayer.room.currentCard);
+      }
       if(targetPlayer.hp<=0){
          List<Player> playerList = targetPlayer.room.players;
          boolean add = false;
@@ -741,6 +919,15 @@ class WanJianQiFa extends Card{
          }
       }
       return targetPlayer.hp<=0;
+   }
+   public void setwxkjResp(Player player){
+      addWxkj(player);
+      if(player.room.wxkjPlayers.size()>0){
+         player.Wxkj=false;
+      }
+      else{
+         wxkjResp(player,false);
+      }
    }
 }
 
@@ -765,28 +952,8 @@ class ZhuGeLianNu extends Card{
    }
 }
 
-//寒冰剑：攻击距离为2，装备后使用杀对敌方造成伤害时，可防止此伤害，改为弃置敌方2张牌， typeId 16
-class HanBingJian extends Card{
-   public HanBingJian(int typeId) {
-      super(typeId);
-      super.setCardPhotoPath("controller/img/ShouPai/HanBingJian.png");
-   }
 
-   public boolean CanInitiative() {
-      return true;
-   }
-   public boolean Use(Player player,int id){
-      Card card = player.handCardList.remove(id);
-      if(player.equipCardList[0]!=null){
-         player.equipCardList[0]=null;
-      }
-      player.equipCardList[0]=card;
-      player.attackDistance=2;
-      return true;
-   }
-}
-
-//古锭刀：攻击距离为2，装备后使用杀对敌方造成伤害时，若敌方无手牌，此伤害+1， typeId 17
+//古锭刀：攻击距离为2，装备后使用杀对敌方造成伤害时，若敌方无手牌，此伤害+1， typeId 16
 class GuDingDao extends Card{
    public GuDingDao(int typeId) {
       super(typeId);
@@ -807,7 +974,7 @@ class GuDingDao extends Card{
    }
 }
 
-//青龙偃月刀：攻击距离为3，装备后使用杀被闪响应后，可继续出杀， typeId 18
+//青龙偃月刀：攻击距离为3，装备后使用杀被闪响应后，可继续出杀， typeId 17
 class QingLongYanYueDao extends Card{
    public QingLongYanYueDao(int typeId) {
       super(typeId);
@@ -828,7 +995,7 @@ class QingLongYanYueDao extends Card{
    }
 }
 
-//加1马：装备后别人计算与你的距离+1，typeId 19
+//加1马：装备后别人计算与你的距离+1，typeId 18
 class HorseIncrease1 extends Card{
    public HorseIncrease1(int typeId) {
       super(typeId);
@@ -848,7 +1015,7 @@ class HorseIncrease1 extends Card{
    }
 }
 
-//减1马：装备后别人计算与你的距离-1， typeId 20
+//减1马：装备后别人计算与你的距离-1， typeId 19
 class HorseDecrease1 extends Card{
    public HorseDecrease1(int typeId) {
       super(typeId);

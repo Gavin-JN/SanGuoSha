@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<!--        fx:controller="com.example.org.controller.match"-->
+
+<AnchorPane prefHeight="92.0" prefWidth="305.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <Pane layoutX="-2.0" prefHeight="117.0" prefWidth="305.0">
+         <children>
+            <Label layoutX="83.0" layoutY="28.0" prefHeight="61.0" prefWidth="158.0" text="匹配中">
+               <font>
+                  <Font size="48.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
