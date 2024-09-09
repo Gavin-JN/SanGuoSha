@@ -73,6 +73,12 @@ public class Room {
         CardManager.CreateCardList();
         cardList=CardManager.cardsPile;
         turn=0;
+        for(int i=0;i< players.size();i++){
+            players.get(i).handCardList.clear();
+            players.get(i).equipCardList=null;
+            players.get(i).judgeCardList[0]=false;
+            players.get(i).judgeCardList[1]=false;
+        }
        for(int m=0;m<4;m++) {
           for (Player player : players)
           for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
