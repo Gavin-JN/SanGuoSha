@@ -85,10 +85,13 @@ public class GameServer {
                                 System.out.println(count);
                             }else {
                                 System.out.println(count);
-                                count = count-2;
+                                count = 0;
                                 System.out.println("游戏开始");
                                 // 发送回消息或处理其他逻辑
                                 out.println("1");
+                                out.close();
+                                in.close();
+                                clientSocket.close();
                                 break;
                             }
                         }

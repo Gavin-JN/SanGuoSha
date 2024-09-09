@@ -130,20 +130,6 @@ public class fireWindow extends Parent {
             AtomicBoolean ifPlayCard=new AtomicBoolean(false);
             //用于判断该pane是否已经被点击过
             AtomicBoolean isClicked = new AtomicBoolean(false);
-            AtomicBoolean canHover = new AtomicBoolean(true);
-            AtomicBoolean ifUp= new AtomicBoolean(false);
-            cardPane.setOnMouseEntered(event -> {
-                if(canHover.get()) {
-                    cardPane.setLayoutY(-20);
-                    ifUp.set(true);
-                }
-            });
-            cardPane.setOnMouseExited(event2 -> {
-                if(ifUp.get()) {
-                    cardPane.setLayoutY(0);
-                    ifUp.set(false);
-                }
-            });
             int finalI = i;
             Integer finaLi=i;
             //鼠标悬浮以及点击事件
@@ -152,7 +138,6 @@ public class fireWindow extends Parent {
                     if (!isClicked.get()) {
                         cardPane.setTranslateY(-38);
                         isClicked.set(true);
-                        canHover.set(false);
                         checkedCards.add(finalI);
                         //将玩家出的牌的索引赋给玩家  putId
                         player1.setPutId(finalI);
@@ -161,7 +146,6 @@ public class fireWindow extends Parent {
                         cardPane.setTranslateY(0);
                         isClicked.set(false);
                         checkedCards.remove(finaLi);
-                        canHover.set(true);
                         //还将玩家的 putId初始化
                         player1.setPutId(-1);
                     }
@@ -181,16 +165,16 @@ public class fireWindow extends Parent {
         heroCardPane2.setLayoutX(450);
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
-        player2Pane.setOnMouseClicked(event -> {
+        heroCardPane2.setOnMouseClicked(event -> {
                     System.out.println("所选座位号：" + targetPlayer.seatId);
                     checkedSeatId = targetPlayer.seatId;
 
-                    player2Pane.setStyle("-fx-background-color: red;");
+                    heroCardPane2.setLayoutY(20);
 
                     // 设置延迟，延迟结束后恢复原始背景颜色
                     PauseTransition pause = new PauseTransition(Duration.seconds(0.3)); // 0.3秒延迟//
                     pause.setOnFinished(e -> {
-                        player2Pane.setStyle(""); // 恢复原始样式
+                        heroCardPane2.setLayoutY(0); // 恢复原始样式
                     });
                 });
 
