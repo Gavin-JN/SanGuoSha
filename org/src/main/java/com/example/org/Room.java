@@ -97,7 +97,7 @@ public class Room {
         }
 
         assignRoomToPlayers();  // 为每个玩家分配房间
-
+        status=roomStatus.JudgeStatus;
 
     }
 
