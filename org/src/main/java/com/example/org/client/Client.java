@@ -19,44 +19,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Client extends Application {
 
-
-
-    //传输数据的JSON文件
-    public JSONObject massage = new JSONObject();
-    //0先手 1后手
-    public int Order;
-
-    public Player we =new Player();
-    public Player enemy =new Player();
-
-
     public static void main(String[] args) throws IOException {
 
         //获取本机ip地址
         InetAddress localhost = InetAddress.getLocalHost();
         String ipAddress = localhost.getHostAddress();
-
-//        // 创建一个 JSON 格式的字符串
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("ipAddress", ipAddress);
-//        jsonObject.put("player", "JohnDoe");
-//        jsonObject.put("score", "100");
-//
-//
-//        //传输信息
-//        pw.println(jsonObject);
-//        System.out.println("消息已发送: " + jsonObject);
-//        pw.flush();
-//        pw.close();
-//        //最后记得关闭socket                socket.close();
-//        //每一次传输信息之后都关闭传入传出流，每一次退出游戏关闭节点
-
-        //开始界面
+        //开启app
         GameApplication app = new GameApplication();
         app.launch(args);
-
-
     }
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(GameApplication.class.getResource("reg.fxml"));

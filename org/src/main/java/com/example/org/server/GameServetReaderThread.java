@@ -33,7 +33,7 @@ public class GameServetReaderThread extends GameServer implements Runnable{
 
             //输入流
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            massage = new JSONObject(br.readLine());
+            JSONObject massage = new JSONObject(br.readLine());
             netCode = massage.getInt("NetCode");
             System.out.println(netCode);
 
