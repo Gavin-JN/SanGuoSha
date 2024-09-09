@@ -124,7 +124,10 @@ public class fireWindow extends Parent {
             cardPane.setLayoutX(0 + i * 110);
             cardPane.setLayoutY(0);
 
-            AtomicBoolean isClicked = new AtomicBoolean(false); //用于判断该pane是否已经被点击过
+            //限制每次出牌只可以出一张
+            AtomicBoolean ifPlayCard=new AtomicBoolean(false);
+            //用于判断该pane是否已经被点击过
+            AtomicBoolean isClicked = new AtomicBoolean(false);
             AtomicBoolean canHover = new AtomicBoolean(true);
             AtomicBoolean ifUp= new AtomicBoolean(false);
             cardPane.setOnMouseEntered(event -> {
@@ -143,20 +146,23 @@ public class fireWindow extends Parent {
             Integer finaLi=i;
             //鼠标悬浮以及点击事件
             cardPane.setOnMouseClicked(event -> {
-                if(!isClicked.get()) {
-                    cardPane.setTranslateY(-38);
-                    isClicked.set(true);
-                    canHover.set(false);
+                if(!ifPlayCard.get()) {
+                    if (!isClicked.get()) {
+                        cardPane.setTranslateY(-38);
+                        isClicked.set(true);
+                        canHover.set(false);
+                        checkedCards.add(finalI);
+                        //将玩家出的牌的索引赋给玩家  putId
+                        player1.setPutId(finalI);
 
-                    System.out.println(finalI);
-
-                    checkedCards.add(finalI);
-                }
-                else {
-                    cardPane.setTranslateY(0);
-                    isClicked.set(false);
-                    checkedCards.remove(finaLi);
-                    canHover.set(true);
+                    } else {
+                        cardPane.setTranslateY(0);
+                        isClicked.set(false);
+                        checkedCards.remove(finaLi);
+                        canHover.set(true);
+                        //还将玩家的 putId初始化
+                        player1.setPutId(-1);
+                    }
                 }
                 //被点击后标记事件，即该张牌可能会出
             });
@@ -223,89 +229,104 @@ public class fireWindow extends Parent {
         up.setOnAction(event -> {
             System.out.println("决定出牌");
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
-
-            showCardInArea(cardContainer2,player1,checkedCards); //展示
-
-            for(int i=0;i<checkedCards.size();i++)  //删除本地
-            {
-                player1.handCardList.remove((int)(checkedCards.get(i)));
-            }
-            //玩家手牌列表更新之后再展示手牌
-            renderPlayerCards(cardContainer,player1);
-            checkedCards.clear();
-
+            //player属性中putId为玩家出的牌在自己手牌列表中的索引
             //执行所处的牌的作用
-            for(int i =0;i<checkedCards.size();i++){
-                Card cardOut=player1.handCardList.get(checkedCards.get(i));
-                switch (cardOut.getTypeId())
-                {
-                    //所出的牌为杀
-                    case 1:
-                        break;
-                    //所出的牌为闪
-                    case 2:
-                        break;
-                    //所出的牌为桃
-                    case 3:
-                        break;
-                    //
-                    case 4:
-                        break;
-                    //
-                    case 5:
-                        break;
-                    //
-                    case 6:
-                        break;
-                    //
-                    case 7:
-                        break;
-                    //
-                    case 8:
-                        break;
-                    //
-                    case 9:
-                        break;
-                    //
-                    case 10:
-                        break;
-                    //
-                    case 11:
-                        break;
-                    //
-                    case 12:
-                        break;
-                    //
-                    case 13:
-                        break;
-                    //
-                    case 14:
-                        break;
-                    //
-                    case 15:
-                        break;
-                    //
-                    case 16:
-                        break;
-                    //
-                    case 17:
-                        break;
-                    //
-                    case 18:
-                        break;
-                    //
-                    case 19:
-                        break;
-                    //
-                    case 20:
-                        break;
-                }
+            if((player1.room.status== Room.roomStatus.PlayStatus&&player1.seatId==player1.room.turn)||
+                    (player1.room.status== Room.roomStatus.RespStatus&&player1.seatId==player1.room.respPlayers.get(0).seatId)) {
+                for (int i = 0; i < checkedCards.size(); i++) {
+                    Card cardOut = player1.handCardList.get(checkedCards.get(i));
+                    switch (cardOut.getTypeId()) {
+                        //所出的牌为杀
+                        case 1:
+                            Sha sha = new Sha(1);
+                            //当杀未被闪响应时
+                            if (!sha.Resp(targetPlayer, targetPlayer.getPutId())) {
 
+                            }
+
+                            break;
+                        //所出的牌为闪
+                        case 2:
+                            break;
+                        //所出的牌为桃
+                        case 3:
+                            break;
+                        //
+                        case 4:
+                            break;
+                        //
+                        case 5:
+                            break;
+                        //
+                        case 6:
+                            break;
+                        //
+                        case 7:
+                            break;
+                        //
+                        case 8:
+                            break;
+                        //
+                        case 9:
+                            break;
+                        //
+                        case 10:
+                            break;
+                        //
+                        case 11:
+                            break;
+                        //
+                        case 12:
+                            break;
+                        //
+                        case 13:
+                            break;
+                        //
+                        case 14:
+                            break;
+                        //
+                        case 15:
+                            break;
+                        //
+                        case 16:
+                            break;
+                        //
+                        case 17:
+                            break;
+                        //
+                        case 18:
+                            break;
+                        //
+                        case 19:
+                            break;
+                        //
+                        case 20:
+                            break;
+                    }
+
+                }
+                showCardInArea(cardContainer2, player1, checkedCards); //展示
+
+                for (int i = 0; i < checkedCards.size(); i++)  //删除本地
+                {
+                    player1.handCardList.remove((int) (checkedCards.get(i)));
+                }
+                //玩家手牌列表更新之后再展示手牌
+                renderPlayerCards(cardContainer, player1);
+                checkedCards.clear();
+
+                //更新己方血条
+                upDateAllBlood(bloodPone1, player1, healthBar1, healthLabel1);
+                //更新敌方血条
+                upDateAllBlood(bloodPone2, targetPlayer, healthBar2, healthLabel2);
             }
-            //更新己方血条
-            upDateAllBlood(bloodPone1,player1,healthBar1,healthLabel1);
-            //更新敌方血条
-            upDateAllBlood(bloodPone2,targetPlayer,healthBar2,healthLabel2);
+            else {
+                Alert cardoutAlert = new Alert(Alert.AlertType.WARNING);
+                cardoutAlert.setTitle("警告");
+                cardoutAlert.setHeaderText(null);
+                cardoutAlert.setContentText("当前阶段无法出牌！");
+                cardoutAlert.showAndWait();
+            }
 
         });
 
@@ -348,7 +369,6 @@ public class fireWindow extends Parent {
         fold.setStyle("-fx-background-color: #000fff");
         fold.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         fold.setOnAction(event -> {
-
 
             //需要判断是弃自己的牌还是其对方的牌，看是否使用了过河拆桥
             if(player1.isIfUseGuoHeChaiQiao())   //使用的是过河拆桥，故此时弃对方玩家的牌
@@ -438,11 +458,101 @@ public class fireWindow extends Parent {
             break;
             case 6:skillButton.setText("突袭");
             break;
-            case 7:skillButton.setText("流离");
-            break;
-            case 8:skillButton.setText("遗技");
+            case 7:skillButton.setText("遗技");
             break;
         }
+        //点击技能按钮事件
+        skillButton.setOnAction(event -> {
+            switch (heroId)
+            {
+                case 1:
+                    if(checkedCards.size()!=0) {
+                        sunQuan sun = new sunQuan();
+                        //此时该按钮充当出牌
+                        //展示要弃的牌
+                        showCardInArea(cardContainer2, player1, checkedCards);
+                        //弃牌并摸等量牌
+                        sun.zhiheng(player1, player1.room.cardList, checkedCards);
+                        //更新玩家手牌区域
+                        renderPlayerCards(cardContainer, player1);
+                    }
+                    else {
+                        Alert sunquanAlert = new Alert(Alert.AlertType.WARNING);
+                        sunquanAlert.setTitle("警告");
+                        sunquanAlert.setHeaderText(null);
+                        sunquanAlert.setContentText("（孙权）请选择要弃的卡牌，之后获得等量的新牌");
+                        sunquanAlert.showAndWait();
+
+                    }
+                    break;
+                case 2:
+                    Alert skillAlert = new Alert(Alert.AlertType.WARNING);
+                    skillAlert.setTitle("警告");
+                    skillAlert.setHeaderText(null);
+                    skillAlert.setContentText("（曹操）此技能为被动技能，无需点击！");
+                    skillAlert.showAndWait();
+                    //被动，当收到伤害的时候自动调用
+                    break;
+                case 3:
+                    //此时此按钮依然充当出牌
+                    if(checkedCards.size()!=0) {
+                        zhaoYun zhaoyun = new zhaoYun();
+                        int chengedTypeId = zhaoyun.longDan(player1.getPutId());
+                        for (int i = 0; i < checkedCards.size(); i++)  //删除本地
+                        {
+                            player1.handCardList.remove((int) (checkedCards.get(i)));
+                        }
+
+                        //将出的牌给为对应牌
+                        player1.setPutId(chengedTypeId);
+                        checkedCards.clear();
+                        checkedCards.add(chengedTypeId);
+                        showCardInArea(cardContainer2, player1, checkedCards);
+
+                        checkedCards.clear();
+                    }
+                    else
+                    {
+                        Alert zhaoyunAlert = new Alert(Alert.AlertType.WARNING);
+                        zhaoyunAlert.setTitle("警告");
+                        zhaoyunAlert.setHeaderText(null);
+                        zhaoyunAlert.setContentText("（赵云）请选择“杀”或者“闪” ！");
+                        zhaoyunAlert.showAndWait();
+                    }
+                    break;
+                case 4:
+                    Alert skillAlert2 = new Alert(Alert.AlertType.WARNING);
+                    skillAlert2.setTitle("警告");
+                    skillAlert2.setHeaderText(null);
+                    skillAlert2.setContentText("（张飞）此技能为被动技能，无需点击！");
+                    skillAlert2.showAndWait();
+                    //张飞被动，解除玩家的出杀的限制
+                    break;
+                case 5:
+                    Alert skillAlert3 = new Alert(Alert.AlertType.WARNING);
+                    skillAlert3.setTitle("警告");
+                    skillAlert3.setHeaderText(null);
+                    skillAlert3.setContentText("（诸葛亮）此技能为被动技能，无需点击！");
+                    skillAlert3.showAndWait();
+                    //诸葛亮被动，当玩家手牌数量为0的时候不可以成为杀或者决斗的对象，直接在杀和决斗的卡牌属性里面写
+                    break;
+                case 6:
+//                    //可以放在摸排的程序，
+//                    zhangLiao zhangliao=new zhangLiao();
+//                    zhangliao.tuXi(player1,targetPlayer);
+//                    //更新玩家自己的手牌列表
+//                    renderPlayerCards(cardContainer,player1);
+//                    break;
+                case 7:
+                    Alert skillAlert4 = new Alert(Alert.AlertType.WARNING);
+                    skillAlert4.setTitle("警告");
+                    skillAlert4.setHeaderText(null);
+                    skillAlert4.setContentText("（郭嘉）此技能为被动技能，无需点击！");
+                    skillAlert4.showAndWait();
+                    //被动技能，当玩家血量减1时，给玩家分配两张牌
+                    break;
+            }
+        });
 
         //设置Scane和Stage的大小
         Scene scene = new Scene(root, 1250, 700);

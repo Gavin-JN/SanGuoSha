@@ -42,7 +42,7 @@ public class Card {
    public boolean AbandonResp(Player targetPlayer){
       return false;
    }
-   public void setResp(Player player){
+   public void setwxkjResp(Player player){
       addWxkj(player);
       if(player.room.wxkjPlayers.size()>0){
          player.Wxkj=false;
@@ -50,6 +50,9 @@ public class Card {
       else{
          wxkjResp(player,false);
       }
+   }
+   public boolean setResp(Player player,Player targetPlayer,Card card){
+      return true;
    }
    public void addWxkj(Player player){
       for(int i=0;i<player.room.players.size();i++){
@@ -61,20 +64,20 @@ public class Card {
    }
    public void wxkjResp(Player player,boolean success){
    }
-   public static boolean distance(Player player , Player targetPlayer, boolean considerWeapon){
-      int index1=getInitDistance(player,targetPlayer,considerWeapon);
-      int cTurn=player.room.turn;
-      Player next = player.room.getPlayerBySeatId((++cTurn)%player.room.players.size());
-      for(int i=0;i<player.room.players.size();i++){
-         if(next.seatId==targetPlayer.seatId){
+   public static boolean distance(Player player , Player targetPlayer, boolean considerWeapon) {
+      int index1 = getInitDistance(player, targetPlayer, considerWeapon);
+      int cTurn = player.room.turn;
+      Player next = player.room.getPlayerBySeatId((++cTurn) % player.room.players.size());
+      for (int i = 0; i < player.room.players.size(); i++) {
+         if (next.seatId == targetPlayer.seatId) {
             break;
          }
-         if(next.hp>0){
-            index1++;
-         }
          next=next.room.getPlayerBySeatId((++cTurn)%player.room.players.size());
+
+         next = next.room.getPlayerBySeatId((++cTurn) % player.room.players.size());
+
       }
-      if(index1<=0){
+      if (index1 <= 0) {
          return true;
       }
       int index2=getInitDistance(player,targetPlayer,considerWeapon);
@@ -82,19 +85,15 @@ public class Card {
          next=targetPlayer.room.getPlayerBySeatId(++targetSeatId%targetPlayer.room.players.size());
          for(int i=0;i<player.room.players.size();i++){
             if(next.seatId==player.seatId) break;
-            if(next.hp>0){
-               index1++;
-            }
             next=next.room.getPlayerBySeatId(++targetSeatId%targetPlayer.room.players.size());
          }
-
       return index2<=0;
    }
    static int getInitDistance(Player player, Player targetPlayer,boolean considerWeapon){
       int index=0;
       if(considerWeapon){
          if(player.equipCardList[0]!=null){
-            //****************************
+            index+=player.attackDistance;
          }
       }
       if(player.equipCardList[1]!=null){
@@ -128,20 +127,33 @@ class Sha extends Card{
    public boolean RequireTarget() {
       return true;
    }
-   public boolean Use(Player player,Player targetPlayer){
+
       //根据攻击距离，限制出杀次数，装备武器效果执行杀的效果
-      return true;
-   }
+      public boolean Use(Player player,Player targetPlayer , int id){
+         if(!Card.distance(player,targetPlayer,true)) return false;
+         if(!player.canUseSha) return false;
+         if(targetPlayer.hero.getHeroId()==5&&targetPlayer.handCardList.size()==0) return false;
+         return true;
+      }
 
    //若杀被闪响应则返回true
    public boolean Resp(Player targetPlayer,int id){
-      if(AbandonResp(targetPlayer)) return false;
+      if(AbandonResp(targetPlayer)) {
+         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==15
+               ||targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).hero.getHeroId()==4){
+            targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
+         }
+         else targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=false;
+         return false;
+      }
       if(targetPlayer.handCardList.get(id).getTypeId()==2) {
          targetPlayer.handCardList.remove(id);
          targetPlayer.room.respPlayers.remove(targetPlayer);
-         if(targetPlayer.room.respPlayers.size()==0){
-            targetPlayer.room.status= Room.roomStatus.PlayStatus;
+         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==18){
+            targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
          }
+         else targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=false;
+         targetPlayer.room.status= Room.roomStatus.PlayStatus;
          return true;
       }
       return false;
@@ -149,13 +161,14 @@ class Sha extends Card{
 
    //若对手放弃响应则根据当前是否喝酒执行对手血量变化
    public boolean AbandonResp(Player targetPlayer){
-      int damage;
+      int damage=1;
       if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isUseJiu
               &&targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isNextShaAddDamage) {
-         damage = 2;
+         damage++;
          targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isNextShaAddDamage=false;
       }
-      else damage = 1;
+      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==17
+            &&targetPlayer.handCardList.size()==0)    damage++;
       targetPlayer.hp-=damage;
       if(targetPlayer.hp<=0){
          List<Player> playerList = targetPlayer.room.players;
@@ -169,7 +182,14 @@ class Sha extends Card{
       }
       return targetPlayer.hp<=0;
    }
+   public boolean setResp(Player player,Player targetPlayer,Card card){
+      player.room.status= Room.roomStatus.RespStatus;
+      player.room.currentCard=card;
+      player.room.respPlayers.add(targetPlayer);
+      return true;
+   }
 }
+
 
 //闪：可在对方杀，万箭齐发时打出，防止受到伤害， typeId 2
 class Shan extends Card{
@@ -351,6 +371,51 @@ class JieDaoShaRen extends Card{
    public boolean RequireTarget() {
       return true;
    }
+   public boolean setResp(Player player,Player targetPlayer,Card card){
+      if(targetPlayer.equipCardList[0]==null) return false;
+      player.room.status= Room.roomStatus.RespStatus;
+      player.room.currentCard=card;
+      addWxkj(targetPlayer);
+      player.room.respPlayers.add(targetPlayer);
+      player.handCardList.remove(card);
+      if(player.room.wxkjPlayers.size()>0){
+
+      }
+      else{
+         wxkjResp(targetPlayer,false);
+      }
+      return true;
+   }
+   public void wxkjResp(Player targetPlayer,boolean success) {
+      targetPlayer.room.wxkjPlayers.clear();
+      if (success) {
+         targetPlayer.room.respPlayers.remove(0);
+         targetPlayer.room.jdsrPlayer=null;
+      } else {
+
+         }
+      }
+
+   public boolean Resp(Player targetPlayer,int id){
+      if(AbandonResp(targetPlayer)) return false;
+      if(targetPlayer.handCardList.get(id).getTypeId()==1) {
+         targetPlayer.room.currentCard=targetPlayer.handCardList.remove(id);
+         targetPlayer.room.respPlayers.clear();
+         targetPlayer.room.respPlayers.add(targetPlayer.room.jdsrPlayer);
+         targetPlayer.room.respPlayers.remove(targetPlayer);
+         if(targetPlayer.room.respPlayers.size()==0){
+            targetPlayer.room.status= Room.roomStatus.PlayStatus;
+         }
+         return true;
+      }
+      return false;
+   }
+   public boolean AbandonResp(Player targetPlayer){
+         Card card=targetPlayer.equipCardList[0];
+         targetPlayer.equipCardList[0]=null;
+         targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).handCardList.add(card);
+         return true;
+   }
 }
 
 //决斗：双方轮流出杀直到一人不出杀受到一点伤害， typeId 9
@@ -368,6 +433,7 @@ class JueDou extends Card{
       return true;
    }
    public boolean Use(Player player,Player targetPlayer , int id){
+      if(targetPlayer.hero.getHeroId()==5&&targetPlayer.handCardList.size()==0) return false;
       player.room.status= Room.roomStatus.RespStatus;
       player.room.currentCard=player.handCardList.get(id);
       addWxkj(targetPlayer);
@@ -683,6 +749,15 @@ class ZhuGeLianNu extends Card{
    public boolean CanInitiative() {
       return true;
    }
+   public boolean Use(Player player,int id){
+      Card card = player.handCardList.remove(id);
+      if(player.equipCardList[0]!=null){
+         player.equipCardList[0]=null;
+      }
+      player.equipCardList[0]=card;
+      player.attackDistance=1;
+      return true;
+   }
 }
 
 //寒冰剑：攻击距离为2，装备后使用杀对敌方造成伤害时，可防止此伤害，改为弃置敌方2张牌， typeId 16
@@ -693,6 +768,15 @@ class HanBingJian extends Card{
    }
 
    public boolean CanInitiative() {
+      return true;
+   }
+   public boolean Use(Player player,int id){
+      Card card = player.handCardList.remove(id);
+      if(player.equipCardList[0]!=null){
+         player.equipCardList[0]=null;
+      }
+      player.equipCardList[0]=card;
+      player.attackDistance=2;
       return true;
    }
 }
@@ -707,6 +791,15 @@ class GuDingDao extends Card{
    public boolean CanInitiative() {
       return true;
    }
+   public boolean Use(Player player,int id){
+      Card card = player.handCardList.remove(id);
+      if(player.equipCardList[0]!=null){
+         player.equipCardList[0]=null;
+      }
+      player.equipCardList[0]=card;
+      player.attackDistance=2;
+      return true;
+   }
 }
 
 //青龙偃月刀：攻击距离为3，装备后使用杀被闪响应后，可继续出杀， typeId 18
@@ -717,6 +810,15 @@ class QingLongYanYueDao extends Card{
    }
 
    public boolean CanInitiative() {
+      return true;
+   }
+   public boolean Use(Player player,int id){
+      Card card = player.handCardList.remove(id);
+      if(player.equipCardList[0]!=null){
+         player.equipCardList[0]=null;
+      }
+      player.equipCardList[0]=card;
+      player.attackDistance=3;
       return true;
    }
 }
@@ -731,6 +833,14 @@ class HorseIncrease1 extends Card{
    public boolean CanInitiative() {
       return true;
    }
+   public boolean Use(Player player,int id){
+      Card card = player.handCardList.remove(id);
+      if(player.equipCardList[1]!=null){
+         player.equipCardList[1]=null;
+      }
+      player.equipCardList[1]=card;
+      return true;
+   }
 }
 
 //减1马：装备后别人计算与你的距离-1， typeId 20
@@ -741,6 +851,14 @@ class HorseDecrease1 extends Card{
    }
 
    public boolean CanInitiative() {
+      return true;
+   }
+   public boolean Use(Player player,int id){
+      Card card = player.handCardList.remove(id);
+      if(player.equipCardList[2]!=null){
+         player.equipCardList[2]=null;
+      }
+      player.equipCardList[2]=card;
       return true;
    }
 }
