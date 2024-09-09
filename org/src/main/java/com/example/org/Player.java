@@ -163,15 +163,13 @@ public class Player {
             case 15:
                 return new ZhuGeLianNu(15);
             case 16:
-                return new HanBingJian(16);
+                return new GuDingDao(16);
             case 17:
-                return new GuDingDao(17);
+                return new QingLongYanYueDao(17);
             case 18:
-                return new QingLongYanYueDao(18);
+                return new HorseIncrease1(18);
             case 19:
-                return new HorseIncrease1(19);
-            case 20:
-                return new HorseDecrease1(20);
+                return new HorseDecrease1(19);
         }
         return new Card();
         }
