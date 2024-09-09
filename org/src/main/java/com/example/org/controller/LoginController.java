@@ -38,14 +38,15 @@ public class LoginController {
         //比较数据
         //成功之后进入游戏
         //不成功就提示错误
-        SQLExecImpl sqlExec=new SQLExecImpl();
-        boolean isValid=sqlExec.queryAccount(NameOfLogin.getText(),PasswordOfLogin.getText());
+//        SQLExecImpl sqlExec=new SQLExecImpl();
+//        boolean isValid=sqlExec.queryAccount(NameOfLogin.getText(),PasswordOfLogin.getText());
 
         if(NameOfLogin.getText().equals("") || PasswordOfLogin.getText().equals("")){
             prompt.setText("用户名或者密码不能为空！！");
-        } else if (!isValid) {//不匹配
-            prompt.setText("用户名或者密码错误！！");
-        }else if(isValid){ //匹配
+//        } else if (!true) {//不匹配
+//            prompt.setText("用户名或者密码错误！！");
+//        }else if(isValid){ //匹配
+        }else if(true){ //匹配
             System.out.println("play");
             FXMLLoader fxmlLoader2=new FXMLLoader(getClass().getResource("start.fxml"));
             //获取当前窗口

@@ -9,7 +9,7 @@ public class SQLExecImpl implements SQLExec
     private Connection conn;
     public SQLExecImpl() throws ClassNotFoundException {
         String url="jdbc:mysql://192.168.185.82:3306/db1?useSSL=false&allowPublicKeyRetrieval=true";
-        String username="root";
+        String username="username";
         String password="17727096201";
 
         try

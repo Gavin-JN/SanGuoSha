@@ -77,7 +77,7 @@ public class Card {
       if(index1<=0){
          return true;
       }
-      int index2=getInitDistance(player,targetPlayer,considerWeapon){
+      int index2=getInitDistance(player,targetPlayer,considerWeapon);
          int targetSeatId= targetPlayer.seatId;
          next=targetPlayer.room.getPlayerBySeatId(++targetSeatId%targetPlayer.room.players.size());
          for(int i=0;i<player.room.players.size();i++){
@@ -87,7 +87,7 @@ public class Card {
             }
             next=next.room.getPlayerBySeatId(++targetSeatId%targetPlayer.room.players.size());
          }
-      }
+
       return index2<=0;
    }
    static int getInitDistance(Player player, Player targetPlayer,boolean considerWeapon){
