@@ -117,7 +117,7 @@ public class GameServer {
 //            massage.clear();
 
         }
-    }
+    }//
 
     //统一发信息
     public static void broadcastMessage(String message) {
