@@ -75,7 +75,7 @@ public class GameServer {
                     case 1002:
                         //匹配
                         int msg = massage.getInt("count");
-                        Boolean is = gameEventHandling.Matching(msg);
+//                        Boolean is = gameEventHandling.Matching(msg);
                         count = count+msg;
                         System.out.println(count);
 
@@ -94,6 +94,7 @@ public class GameServer {
                                 clientSocket.close();
                                 break;
                             }
+
                         }
                         break;
                     case 1010:    //第二个信息
