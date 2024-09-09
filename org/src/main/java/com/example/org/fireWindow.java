@@ -142,7 +142,7 @@ public class fireWindow extends Parent {
                         checkedCards.add(finalI);
                         //将玩家出的牌的索引赋给玩家  putId
                         player1.setPutId(finalI);
-                        player1.chooseCard=player1.getCardByType(finalI);
+                        player1.chooseCard=finalI;
                         ifPlayCard.set(true);
 
                     } else {
@@ -235,71 +235,87 @@ public class fireWindow extends Parent {
                     switch (cardOut.getTypeId()) {
                         //所出的牌为杀
                         case 1:
-                        if(!cardOut.Use(player1,checkedCards.get(0))) return;
-                        else{
-                            player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
-                            cardOut.Resp(targetPlayer,checkedCardFromTarget);
-                        }
+                            if (!cardOut.Use(player1, checkedCards.get(0))) return;
+                            else {
+                                player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
+                                cardOut.Resp(targetPlayer, targetPlayer.chooseCard);
+                            }
                             break;
-                        //所出的牌为闪
-                        case 2:
-                            break;
-                        //所出的牌为桃
                         case 3:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithoutTarget(player1, checkedCards.get(0));
                             break;
                         //
                         case 4:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithoutTarget(player1, checkedCards.get(0));
                             break;
                         //
                         case 5:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
                         //
                         case 6:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
                         //
                         case 7:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithoutTarget(player1, checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
                         //
                         case 8:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
                         //
                         case 9:
-                            break;
-                        //
-                        case 10:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
                         //
                         case 11:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
                         //
                         case 12:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
                         //
                         case 13:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithoutTarget(player1,  checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
                         //
                         case 14:
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
+                            player1.room.receiver.PlayCardWithoutTarget(player1, checkedCards.get(0));
+                            cardOut.setwxkjResp(targetPlayer);
+                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
                             break;
-                        //
-                        case 15:
-                            break;
-                        //
-                        case 16:
-                            break;
-                        //
-                        case 17:
-                            break;
-                        //
-                        case 18:
-                            break;
-                        //
-                        case 19:
-                            break;
-                        //
-                        case 20:
+                        default:
                             break;
                     }
-
                 }
                 showCardInArea(cardContainer2, player1, checkedCards); //展示
                 //玩家手牌列表更新之后再展示手牌
