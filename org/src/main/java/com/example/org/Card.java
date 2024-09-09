@@ -64,17 +64,20 @@ public class Card {
    }
    public void wxkjResp(Player player,boolean success){
    }
-   public static boolean distance(Player player , Player targetPlayer, boolean considerWeapon){
-      int index1=getInitDistance(player,targetPlayer,considerWeapon);
-      int cTurn=player.room.turn;
-      Player next = player.room.getPlayerBySeatId((++cTurn)%player.room.players.size());
-      for(int i=0;i<player.room.players.size();i++){
-         if(next.seatId==targetPlayer.seatId){
+   public static boolean distance(Player player , Player targetPlayer, boolean considerWeapon) {
+      int index1 = getInitDistance(player, targetPlayer, considerWeapon);
+      int cTurn = player.room.turn;
+      Player next = player.room.getPlayerBySeatId((++cTurn) % player.room.players.size());
+      for (int i = 0; i < player.room.players.size(); i++) {
+         if (next.seatId == targetPlayer.seatId) {
             break;
          }
          next=next.room.getPlayerBySeatId((++cTurn)%player.room.players.size());
+
+         next = next.room.getPlayerBySeatId((++cTurn) % player.room.players.size());
+
       }
-      if(index1<=0){
+      if (index1 <= 0) {
          return true;
       }
       int index2=getInitDistance(player,targetPlayer,considerWeapon);
@@ -186,6 +189,7 @@ class Sha extends Card{
       return true;
    }
 }
+
 
 //闪：可在对方杀，万箭齐发时打出，防止受到伤害， typeId 2
 class Shan extends Card{

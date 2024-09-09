@@ -7,7 +7,7 @@ public class Heroes {
     //血量上限
     public int hpLimit;
     //将武将与玩家绑定
-    public Player player;
+//    public Player player;
     //武将图片资源路径
     private String heroPhotoPath;
     //判断当前玩家技能能否主动使用
@@ -34,13 +34,13 @@ public class Heroes {
         return hpLimit;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
+//    public void setPlayer(Player player) {
+//        this.player = player;
+//    }
+//
+//    public Player getPlayer() {
+//        return player;
+//    }
 
     public void setHeroPhotoPath(String heroPhotoPath) {
         this.heroPhotoPath = heroPhotoPath;
@@ -69,7 +69,7 @@ class sunQuan extends Heroes {
         }
 
         //1、制衡。弃任意牌，摸等量牌，每回合一次
-        public void zhiheng( List <Card> cardList,List<Integer> checkedCard) {//制衡（使用制衡之前要先判断玩家是否还有牌）
+        public void zhiheng(Player player, List <Card> cardList,List<Integer> checkedCard) {//制衡（使用制衡之前要先判断玩家是否还有牌）
             int discardCards=checkedCard.size();
             if (balanceUsed) {
                 System.out.println("本回合制衡已经使用过了！");
@@ -120,14 +120,17 @@ class zhaoYun extends Heroes {
 
     //1、龙胆——你可以将你手牌的【杀】当【闪】、【闪】当【杀】使用或打出。
     //(该技能需要角色自己主动选择是否使用）
-    public void longDan(int cardType) {
+    public int longDan(int cardType) {
         if (cardType == 1) {
             System.out.println("赵云将杀当作闪使用。");
             //需传递某种信号
+            return 2;
         } else if (cardType == 2) {
             System.out.println("赵云将闪当作杀使用。");
+            return 1;
         } else {
             System.out.println("卡牌类型错误。");
+            return 0;
         }
     }
 }
@@ -157,16 +160,6 @@ class zhaoYun extends Heroes {
         }
 
         //空城——锁定技，当你没有手牌时，你不能成为【杀】或【决斗】的目标。◆当你在“决斗”过程中没有手牌无法打出杀时，你仍然会受到【决斗】的伤害。
-        //返回的布尔类型决定角色是否可以被杀
-        public boolean kongCheng(Player player) {
-            if (player.getCardsNum() == 0) {
-
-                //  player.
-                System.out.println("诸葛亮发动了空城，不能成为杀或决斗的目标。");
-                return true;
-            }
-            return false;
-        }
     }
 
     class zhangLiao extends Heroes {
@@ -178,42 +171,24 @@ class zhaoYun extends Heroes {
         }
 
         //突袭——摸牌阶段，你可以放弃摸牌，然后从至多两名（至少一名）角色的手牌里各抽取一张牌。◆摸牌阶段，你一旦发动突袭，就不能从牌堆获得牌；只剩一名其他角色时，你就只能选择这一名角色；若此时其他任何人都没有手牌，你就不能发动突袭。
-        public void yuXi(Player targetPlayer)
+        public void tuXi(Player player, Player targetPlayer)
         {
             if(player.room.getStatus()== Room.roomStatus.DrawStatus) {
                 //放弃摸牌
-               int typeofCard=player.DrawCard(player.handCardList);
+                //从对方手牌中随机得到一张牌
+               int typeofCard=player.DrawCard(targetPlayer.handCardList);
                player.handCardList.add(player.getCardByType(typeofCard));
             }
         }
     }
 
-    class daQiao extends Heroes {
-        public daQiao() {
-            this.setSkillInitiate(true);
-            this.setHpLimit(3);
-            this.setHeroPhotoPath("controller/img/heroPic/daQiao.jpg");
-            this.setHeroId(7);
-        }
-
-        //流离——当你成为【杀】的目标时，你可以弃一张牌，并将此【杀】转移给你攻击范围内的另一名角色。（该角色不得是【杀】的使用者）
-        //当玩家被杀时，可自主选择是否使用该技能
-        public void liuLi(Player targetPlayer) {
-//            if()    //条件为被杀的时候
-//            {
-//                //弃一张牌
-//                //把杀指向对方（对敌方杀）
-//            }
-
-        }
-    }
 
     class guoJia extends Heroes {
         public guoJia() {
             this.setSkillInitiate(false);
             this.setHpLimit(3);
             this.setHeroPhotoPath("controller/img/heroPic/guoJia.jpg");
-            this.setHeroId(8);
+            this.setHeroId(7);
         }
 
         //遗计——你每受到1点伤害，可摸两张牌
