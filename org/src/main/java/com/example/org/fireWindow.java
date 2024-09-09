@@ -232,7 +232,11 @@ public class fireWindow extends Parent {
                     switch (cardOut.getTypeId()) {
                         //所出的牌为杀
                         case 1:
-                        if(!cardOut.Use(player1,))
+                        if(!cardOut.Use(player1,checkedCards.get(0))) return;
+                        else{
+                            player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
+                            cardOut.Resp(targetPlayer,checkedCardFromTarget);
+                        }
                             break;
                         //所出的牌为闪
                         case 2:

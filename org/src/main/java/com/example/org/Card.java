@@ -93,7 +93,7 @@ public class Card {
       int index=0;
       if(considerWeapon){
          if(player.equipCardList[0]!=null){
-            index+=player.attackDistance;
+            index+=--player.attackDistance;
          }
       }
       if(player.equipCardList[1]!=null){
@@ -276,6 +276,10 @@ class ShunShouQianYang extends Card {
 
    public boolean AbandonResp(Player targetPlayer) {
       targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).ifUseShunShouQianYang=true;
+      return true;
+   }
+   public boolean Use(Player player,Player targetPlayer){
+      if(!Card.distance(player,targetPlayer,false)) return false;
       return true;
    }
 
@@ -601,6 +605,7 @@ class BingLiangCunDuan extends Card{
       }
    }
    public boolean Use(Player player,Player targetPlayer,int id){
+      if(!Card.distance(player,targetPlayer,false)) return false;
       targetPlayer.judgeCardList[1]=true;
       player.handCardList.remove(id);
       return true;
