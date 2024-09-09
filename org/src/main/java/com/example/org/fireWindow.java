@@ -63,7 +63,8 @@ public class fireWindow extends Parent {
         //设置根区域的背景图片
         root = new BorderPane();
         Image image = new Image(getClass().getResourceAsStream("img/background.jpg"));
-        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        BackgroundSize backgroundsize=new BackgroundSize(1300,800,false,true,true,true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundsize);
         Background background = new Background(backgroundImage);
         root.setBackground(background);
         //将分区域添加到根里
@@ -108,7 +109,9 @@ public class fireWindow extends Parent {
         equipmentPane.setLayoutY(0);
         equipmentContainer.getChildren().add(equipmentPane);
 
-        //己方卡牌区
+        //限制每次出牌只可以出一张
+        AtomicBoolean ifPlayCard=new AtomicBoolean(false);//己方卡牌区
+
         Pane cardContainer = new Pane();  //卡牌区域
         cardContainer.setPrefSize(900, 150);
         cardContainer.setLayoutX(340);
@@ -125,9 +128,6 @@ public class fireWindow extends Parent {
             cardPane.setBackground(cardBackground);
             cardPane.setLayoutX(0 + i * 110);
             cardPane.setLayoutY(0);
-
-            //限制每次出牌只可以出一张
-            AtomicBoolean ifPlayCard=new AtomicBoolean(false);
             //用于判断该pane是否已经被点击过
             AtomicBoolean isClicked = new AtomicBoolean(false);
             int finalI = i;
@@ -148,6 +148,7 @@ public class fireWindow extends Parent {
                         checkedCards.remove(finaLi);
                         //还将玩家的 putId初始化
                         player1.setPutId(-1);
+                        ifPlayCard.set(false);
                     }
                 }
                 //被点击后标记事件，即该张牌可能会出
@@ -168,14 +169,6 @@ public class fireWindow extends Parent {
         heroCardPane2.setOnMouseClicked(event -> {
                     System.out.println("所选座位号：" + targetPlayer.seatId);
                     checkedSeatId = targetPlayer.seatId;
-
-                    heroCardPane2.setLayoutY(20);
-
-                    // 设置延迟，延迟结束后恢复原始背景颜色
-                    PauseTransition pause = new PauseTransition(Duration.seconds(0.3)); // 0.3秒延迟//
-                    pause.setOnFinished(e -> {
-                        heroCardPane2.setLayoutY(0); // 恢复原始样式
-                    });
                 });
 
         //敌方卡牌信息
@@ -229,19 +222,17 @@ public class fireWindow extends Parent {
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
             //player属性中putId为玩家出的牌在自己手牌列表中的索引
             //执行所处的牌的作用
+
             if((player1.room.status== Room.roomStatus.PlayStatus&&player1.seatId==player1.room.turn)||
                     (player1.room.status== Room.roomStatus.RespStatus&&player1.seatId==player1.room.respPlayers.get(0).seatId)) {
+
                 for (int i = 0; i < checkedCards.size(); i++) {
                     Card cardOut = player1.handCardList.get(checkedCards.get(i));
+
                     switch (cardOut.getTypeId()) {
                         //所出的牌为杀
                         case 1:
-                            Sha sha = new Sha(1);
-                            //当杀未被闪响应时
-                            if (!sha.Resp(targetPlayer, targetPlayer.getPutId())) {
-
-                            }
-
+                        if(!cardOut.Use(player1,))
                             break;
                         //所出的牌为闪
                         case 2:
@@ -304,11 +295,6 @@ public class fireWindow extends Parent {
 
                 }
                 showCardInArea(cardContainer2, player1, checkedCards); //展示
-
-                for (int i = 0; i < checkedCards.size(); i++)  //删除本地
-                {
-                    player1.handCardList.remove((int) (checkedCards.get(i)));
-                }
                 //玩家手牌列表更新之后再展示手牌
                 renderPlayerCards(cardContainer, player1);
                 checkedCards.clear();
@@ -553,7 +539,7 @@ public class fireWindow extends Parent {
         });
 
         //设置Scane和Stage的大小
-        Scene scene = new Scene(root, 1250, 700);
+        Scene scene = new Scene(root, 1300, 800);
         Stage stage = new Stage();
         stage.setMaxWidth(1000);
         stage.setMaxHeight(700);
