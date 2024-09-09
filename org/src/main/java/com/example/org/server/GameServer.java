@@ -86,7 +86,7 @@ public class GameServer {
             sendMessageToClient(3,jsonString);
             massage.clear();
         }
-    }
+    }//
 
     //统一发信息
     public static void broadcastMessage(String message) {
