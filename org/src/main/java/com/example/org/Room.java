@@ -88,12 +88,12 @@ public class Room {
         players.get(1).setHp(players.get(1).getHpLimit());
         //给玩家随机分配座位号，确保座位号不能一样
         players.get(0).setSeatId(players.get(0).randomSeatId());
-        if(players.get(0).seatId==1)
+        if(players.get(0).seatId==0)
         {
-            players.get(1).setSeatId(2);
+            players.get(1).setSeatId(1);
         }
         else {
-            players.get(1).setSeatId(1);
+            players.get(1).setSeatId(0);
         }
 
         assignRoomToPlayers();  // 为每个玩家分配房间

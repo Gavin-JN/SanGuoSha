@@ -1,5 +1,6 @@
 package com.example.org;
 
+import javafx.animation.PauseTransition;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ public class fireWindow extends Parent {
     private Label healthLabel1;
     private Label healthLabel2;
     private Pane equipmentContainer;
-
+    private int checkedSeatId;
 
     public fireWindow(Player player1, Player targetPlayer) {
         //己方
@@ -128,20 +130,6 @@ public class fireWindow extends Parent {
             AtomicBoolean ifPlayCard=new AtomicBoolean(false);
             //用于判断该pane是否已经被点击过
             AtomicBoolean isClicked = new AtomicBoolean(false);
-            AtomicBoolean canHover = new AtomicBoolean(true);
-            AtomicBoolean ifUp= new AtomicBoolean(false);
-            cardPane.setOnMouseEntered(event -> {
-                if(canHover.get()) {
-                    cardPane.setLayoutY(-20);
-                    ifUp.set(true);
-                }
-            });
-            cardPane.setOnMouseExited(event2 -> {
-                if(ifUp.get()) {
-                    cardPane.setLayoutY(0);
-                    ifUp.set(false);
-                }
-            });
             int finalI = i;
             Integer finaLi=i;
             //鼠标悬浮以及点击事件
@@ -150,7 +138,6 @@ public class fireWindow extends Parent {
                     if (!isClicked.get()) {
                         cardPane.setTranslateY(-38);
                         isClicked.set(true);
-                        canHover.set(false);
                         checkedCards.add(finalI);
                         //将玩家出的牌的索引赋给玩家  putId
                         player1.setPutId(finalI);
@@ -159,7 +146,6 @@ public class fireWindow extends Parent {
                         cardPane.setTranslateY(0);
                         isClicked.set(false);
                         checkedCards.remove(finaLi);
-                        canHover.set(true);
                         //还将玩家的 putId初始化
                         player1.setPutId(-1);
                     }
@@ -179,6 +165,18 @@ public class fireWindow extends Parent {
         heroCardPane2.setLayoutX(450);
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
+        heroCardPane2.setOnMouseClicked(event -> {
+                    System.out.println("所选座位号：" + targetPlayer.seatId);
+                    checkedSeatId = targetPlayer.seatId;
+
+                    heroCardPane2.setLayoutY(20);
+
+                    // 设置延迟，延迟结束后恢复原始背景颜色
+                    PauseTransition pause = new PauseTransition(Duration.seconds(0.3)); // 0.3秒延迟//
+                    pause.setOnFinished(e -> {
+                        heroCardPane2.setLayoutY(0); // 恢复原始样式
+                    });
+                });
 
         //敌方卡牌信息
         for (int i = 0; i < targetPlayer.handCardList.size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数

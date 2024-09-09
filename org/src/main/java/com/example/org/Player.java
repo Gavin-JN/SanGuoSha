@@ -176,6 +176,6 @@ public class Player {
         }
         public  int randomSeatId ()
         {
-           return  (int)(1+Math.random()*2);
+           return  (int)(Math.random()*2);
         }
     }
