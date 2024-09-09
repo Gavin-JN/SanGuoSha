@@ -10,7 +10,9 @@ public class Room {
     public int sid;
     public int roomId;
     public List<Card> cardList;  //牌堆
+
     public Card currentCard;  //当前处理的牌
+
     public List<Player> players; //房间内所有玩家
     public List<Player> respPlayers;  //房间内待响应的玩家
     public List<Player> helpPlayers;  //房间内考虑救援的玩家
@@ -82,6 +84,15 @@ public class Room {
         players.get(1).setHpLimit();
         //初始化血量为武将血量
         players.get(1).setHp(players.get(1).getHpLimit());
+
+        players.get(0).setSeatId(players.get(0).randomSeatId());
+        if(players.get(0).seatId==1)
+        {
+            players.get(1).setSeatId(2);
+        }
+        else {
+            players.get(1).setSeatId(1);
+        }
 
         assignRoomToPlayers();  // 为每个玩家分配房间
 
@@ -183,14 +194,14 @@ public class Room {
     }
     //初始化时分配英雄
     public void selectHero(Player player) {
-        int id = (int) (1 + Math.random() * 8);
+        int id = (int) (1 + Math.random() * 7);
         assignHero(player, id);
     }
 
     public void selectHero(Player player, Heroes otherHero) {
         int id;
         do {
-            id = (int) (1 + Math.random() * 8);
+            id = (int) (1 + Math.random() * 7);
         } while (isSameHero(id, otherHero));
         assignHero(player, id);
     }
@@ -203,8 +214,7 @@ public class Room {
             case 4: return otherHero instanceof zhangFei;
             case 5: return otherHero instanceof zhuGeLiang;
             case 6: return otherHero instanceof zhangLiao;
-            case 7: return otherHero instanceof daQiao;
-            case 8: return otherHero instanceof guoJia;
+            case 7: return otherHero instanceof guoJia;
             default: return false;
         }
     }
@@ -230,9 +240,6 @@ public class Room {
                 player.setHero(new zhangLiao());
                 break;
             case 7:
-                player.setHero(new daQiao());
-                break;
-            case 8:
                 player.setHero(new guoJia());
                 break;
         }

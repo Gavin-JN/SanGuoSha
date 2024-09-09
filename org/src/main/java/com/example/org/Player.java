@@ -27,6 +27,8 @@ public class Player {
     public int buffStatus=0;
     public boolean isAbleToPlay=true;
     public boolean isAbleToDraw=true;
+    //玩家选中出的牌在玩家手牌中的索引
+    public int putId=-1;
 
     //构造器（与析构器）
     public Player() {
@@ -40,37 +42,36 @@ public class Player {
 
 
     //set和get方法
-    public void setHero(Heroes hero) {
-        this.hero = hero;
-    }
-    public Heroes getHero() {
-        return hero;
-    }
+
+    public int getPutId() {return putId;}
+
+    public void setPutId(int putId) {this.putId = putId;}
+
+    public void setHero(Heroes hero) {this.hero = hero;}
+
+    public Heroes getHero() {return hero;}
+
     public void setIfUseGuoHeChaiQiao(boolean ifUseGuoHeChaiQiao) {this.ifUseGuoHeChaiQiao = ifUseGuoHeChaiQiao;}
-    public boolean isIfUseGuoHeChaiQiao() {
-        return ifUseGuoHeChaiQiao;
-    }
-    public void setHp(int CurrentHp) {
-        this.hp = CurrentHp;
-    }
-    public int getHp() {
-        return hp;
-    }
+
+    public boolean isIfUseGuoHeChaiQiao() {return ifUseGuoHeChaiQiao;}
+
+    public void setHp(int CurrentHp) {this.hp = CurrentHp;}
+
+    public int getHp() {return hp;}
+
     public void setHpLimit() {this.hpLimit = this.getHero().getHpLimit();}
-    public int getHpLimit() {
-        return hpLimit;
-    }
-    public void setSeatId(int seatId) {
-        this.seatId = seatId;
-    }
+
+    public int getHpLimit() {return hpLimit;}
+
+    public void setSeatId(int seatId) {this.seatId = seatId;}
+
     public int getSeatId() {return seatId;}
+
     public void setAttackDistance(int attackDistance) {this.attackDistance = attackDistance;}
+
     public int getAttackDistance() {return attackDistance;}
 
-
-    public int getCardsNum() {
-        return handCardList.size();
-    }//当前玩家手牌数量
+    public int getCardsNum() {return handCardList.size();}//当前玩家手牌数量
 
     public int getShaNum() {
         int number = 0;
@@ -170,5 +171,9 @@ public class Player {
                 return new HorseDecrease1(20);
         }
         return new Card();
+        }
+        public  int randomSeatId ()
+        {
+           return  (int)(1+Math.random()*2);
         }
     }
