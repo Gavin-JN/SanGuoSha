@@ -33,6 +33,7 @@ public class Player {
     //构造器（与析构器）
     public Player() {
         this.handCardList = new ArrayList<>();
+        //初始设定玩家血量为最大值
         this.setHp(this.getHpLimit());
     }
     public Player(Heroes hero) {
