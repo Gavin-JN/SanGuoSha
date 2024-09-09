@@ -236,12 +236,7 @@ public class fireWindow extends Parent {
                     switch (cardOut.getTypeId()) {
                         //所出的牌为杀
                         case 1:
-                            Sha sha = new Sha(1);
-                            //当杀未被闪响应时
-                            if (!sha.Resp(targetPlayer, targetPlayer.getPutId())) {
-
-                            }
-
+                        if(!cardOut.Use(player1,))
                             break;
                         //所出的牌为闪
                         case 2:
@@ -304,11 +299,6 @@ public class fireWindow extends Parent {
 
                 }
                 showCardInArea(cardContainer2, player1, checkedCards); //展示
-
-                for (int i = 0; i < checkedCards.size(); i++)  //删除本地
-                {
-                    player1.handCardList.remove((int) (checkedCards.get(i)));
-                }
                 //玩家手牌列表更新之后再展示手牌
                 renderPlayerCards(cardContainer, player1);
                 checkedCards.clear();
