@@ -414,6 +414,35 @@ public class fireWindow extends Parent {
         healthLabel2.setText(Limithp2);
         bloodPone2.getChildren().addAll(healthBar2,healthLabel2);
 
+        //创建武将技能的容器
+        Pane skillContainer = new Pane();
+        skillContainer.setPrefSize(80,30);
+        skillContainer.setLayoutX(30);
+        skillContainer.setLayoutY(355);
+        gameAreaPane.getChildren().add(skillContainer);
+        Button skillButton = new Button();
+        skillButton.setPrefSize(80,30);
+        skillContainer.getChildren().add(skillButton);
+        int heroId=player1.getHero().getHeroId();
+        switch (heroId)
+        {
+            case 1:skillButton.setText("制衡");
+            break;
+            case 2:skillButton.setText("奸雄");
+            break;
+            case 3:skillButton.setText("龙胆");
+            break;
+            case 4:skillButton.setText("咆哮");
+            break;
+            case 5:skillButton.setText("空城");
+            break;
+            case 6:skillButton.setText("突袭");
+            break;
+            case 7:skillButton.setText("流离");
+            break;
+            case 8:skillButton.setText("遗技");
+            break;
+        }
 
         //设置Scane和Stage的大小
         Scene scene = new Scene(root, 1250, 700);

@@ -68,11 +68,10 @@ public class Room {
         setStatus(roomStatus.InitStatus);
         CardManager.CreateCardList();
         cardList=CardManager.cardsPile;
-for(int m=0;m<4;m++) {
-    for (Player player : players)
-        for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
-}
-
+       for(int m=0;m<4;m++) {
+          for (Player player : players)
+          for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
+       }
         //随机分配英雄操作
         selectHero(players.get(0));
         players.get(0).setHpLimit();
@@ -82,6 +81,8 @@ for(int m=0;m<4;m++) {
         players.get(1).setHpLimit();
         //初始化血量为武将血量
         players.get(1).setHp(players.get(1).getHpLimit());
+
+        assignRoomToPlayers();  // 为每个玩家分配房间
 
 
     }
@@ -233,6 +234,12 @@ for(int m=0;m<4;m++) {
             case 8:
                 player.setHero(new guoJia());
                 break;
+        }
+    }
+
+    public void assignRoomToPlayers() {
+        for (Player player : players) {
+            player.room = this;
         }
     }
 }
