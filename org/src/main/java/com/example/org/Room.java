@@ -10,17 +10,19 @@ public class Room {
     public int sid;
     public int roomId;
     public List<Card> cardList;  //牌堆
-    public List<Card> discardList;  //弃牌堆
     public Card currentCard;  //当前处理的牌
     public List<Player> players; //房间内所有玩家
     public List<Player> respPlayers;  //房间内待响应的玩家
     public List<Player> helpPlayers;  //房间内考虑救援的玩家
     public Player dyingPlayer;  //濒死求援的玩家
+    public List<Player> wxkjPlayers;  //无懈可击响应玩家
+    public Player jdsrPlayer;  //借刀杀人被指定杀的玩家
     public List<Room> roomList;
     public int turn;
     enum roomStatus {InitStatus,SelectStatus,JudgeStatus,DrawStatus,PlayStatus,DiscardStatus,
                     RespStatus,RescueStatus,Closed}; //房间各阶段
     public roomStatus status;
+    public Receiver receiver;
 
     public Room(int roomId) {
         this.roomId = roomId;
@@ -59,24 +61,30 @@ public class Room {
     }
     //房间初始化,玩家武将及牌
     public void Init(List<Player> playerList){
+        receiver = new Receiver(this);
         this.players = playerList;
+        respPlayers = new ArrayList<>();
+        helpPlayers = new ArrayList<>();
+        wxkjPlayers = new ArrayList<>();
         setStatus(roomStatus.InitStatus);
         CardManager.CreateCardList();
         cardList=CardManager.cardsPile;
-for(int m=0;m<4;m++) {
-    for (Player player : players)
-        for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
-}
-
-//        Card card=new QingLongYanYueDao(18);
-//        for (Player player : players)
-//        {
-//            player.handCardList.add(card);
-//        }
-
+       for(int m=0;m<4;m++) {
+          for (Player player : players)
+          for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
+       }
         //随机分配英雄操作
-     players.get(0).setHero(new caoCao());
-        players.get(1).setHero(new caoCao());
+        selectHero(players.get(0));
+        players.get(0).setHpLimit();
+        //初始化血量为武将血量
+        players.get(0).setHp(players.get(0).getHpLimit());
+        selectHero(players.get(1), players.get(0).getHero()); // 确保第二个玩家的武将不同
+        players.get(1).setHpLimit();
+        //初始化血量为武将血量
+        players.get(1).setHp(players.get(1).getHpLimit());
+
+        assignRoomToPlayers();  // 为每个玩家分配房间
+
 
     }
 
@@ -100,10 +108,109 @@ for(int m=0;m<4;m++) {
         else
             return false;
     }
-    public  void selectHero(Player player){
-        int id=(int)(1+Math.random()*8);
-        switch (id)
-        {
+    public void update(){
+        switch(status){
+            case JudgeStatus:{
+                if(getPlayerBySeatId(turn).judgeCardList[0]){
+                    //多种情况：1.第一次进入判断，通知他人出无懈可击
+                    //2.是否处于他人无懈可击状态
+                    //3.已经不是无懈可击了，判定是否生效
+                    int status = getPlayerBySeatId(turn).buffStatus;
+                    if(status == 0){
+                        currentCard=new LeBuSiShu(11);
+                        respPlayers.add(getPlayerBySeatId(turn));
+                        currentCard.setResp(getPlayerBySeatId(turn));
+                        getPlayerBySeatId(turn).buffStatus=1;
+                        return;
+                    }
+                    else if(status==1){
+                        return;
+                    }
+                    else if(status==2){
+                        getPlayerBySeatId(turn).buffStatus=0;
+                    }
+                }
+                if(getPlayerBySeatId(turn).judgeCardList[1]){
+                    //多种情况：1.第一次进入判断，通知他人出无懈可击
+                    //2.是否处于他人无懈可击状态
+                    //3.已经不是无懈可击了，判定是否生效
+                    int status = getPlayerBySeatId(turn).buffStatus;
+                    if(status == 0){
+                        currentCard=new BingLiangCunDuan(12);
+                        respPlayers.add(getPlayerBySeatId(turn));
+                        currentCard.setResp(getPlayerBySeatId(turn));
+                        getPlayerBySeatId(turn).buffStatus=1;
+                        return;
+                    }
+                    else if(status==1){
+                        return;
+                    }
+                    else if(status==2){
+                        getPlayerBySeatId(turn).buffStatus=0;
+                    }
+                }
+                status=roomStatus.DrawStatus;
+                return;
+            }
+            case DrawStatus:{
+                if(!getPlayerBySeatId(turn).isAbleToDraw){
+                    getPlayerBySeatId(turn).isAbleToDraw=true;
+                    status=roomStatus.PlayStatus;
+                }
+                else{
+                    for(int i=0;i<2;i++) {
+                        getPlayerBySeatId(turn).DrawCard(cardList);
+                    }
+                    status=roomStatus.PlayStatus;
+                }
+            }
+            case PlayStatus:{
+                if(!getPlayerBySeatId(turn).isAbleToPlay){
+                    getPlayerBySeatId(turn).isAbleToDraw=true;
+                    status=roomStatus.DiscardStatus;
+                }
+                else{
+                    //出牌直到Abandon
+                }
+            }
+            case DiscardStatus:{
+                //弃牌至当前血量
+                int nextTurn = (++turn)%players.size();
+                turn = nextTurn;
+                status= Room.roomStatus.JudgeStatus;
+            }
+        }
+    }
+    //初始化时分配英雄
+    public void selectHero(Player player) {
+        int id = (int) (1 + Math.random() * 8);
+        assignHero(player, id);
+    }
+
+    public void selectHero(Player player, Heroes otherHero) {
+        int id;
+        do {
+            id = (int) (1 + Math.random() * 8);
+        } while (isSameHero(id, otherHero));
+        assignHero(player, id);
+    }
+
+    private boolean isSameHero(int id, Heroes otherHero) {
+        switch (id) {
+            case 1: return otherHero instanceof sunQuan;
+            case 2: return otherHero instanceof caoCao;
+            case 3: return otherHero instanceof zhaoYun;
+            case 4: return otherHero instanceof zhangFei;
+            case 5: return otherHero instanceof zhuGeLiang;
+            case 6: return otherHero instanceof zhangLiao;
+            case 7: return otherHero instanceof daQiao;
+            case 8: return otherHero instanceof guoJia;
+            default: return false;
+        }
+    }
+
+    private void assignHero(Player player, int id) {
+        switch (id) {
             case 1:
                 player.setHero(new sunQuan());
                 break;
@@ -128,6 +235,12 @@ for(int m=0;m<4;m++) {
             case 8:
                 player.setHero(new guoJia());
                 break;
+        }
+    }
+
+    public void assignRoomToPlayers() {
+        for (Player player : players) {
+            player.room = this;
         }
     }
 }
