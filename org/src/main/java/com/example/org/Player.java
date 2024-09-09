@@ -20,6 +20,7 @@ public class Player {
     public boolean isNextShaAddDamage=false;
     public boolean ifUseShunShouQianYang =false;
     public boolean ifUseGuoHeChaiQiao=false;
+    public boolean canUseSha=true;
 
     public Room room;
     public int attackDistance;

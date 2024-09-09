@@ -66,9 +66,11 @@ public class Room {
         respPlayers = new ArrayList<>();
         helpPlayers = new ArrayList<>();
         wxkjPlayers = new ArrayList<>();
+        jdsrPlayer = new Player();
         setStatus(roomStatus.InitStatus);
         CardManager.CreateCardList();
         cardList=CardManager.cardsPile;
+        turn=0;
        for(int m=0;m<4;m++) {
           for (Player player : players)
           for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
@@ -119,7 +121,7 @@ public class Room {
                     if(status == 0){
                         currentCard=new LeBuSiShu(11);
                         respPlayers.add(getPlayerBySeatId(turn));
-                        currentCard.setResp(getPlayerBySeatId(turn));
+                        currentCard.setwxkjResp(getPlayerBySeatId(turn));
                         getPlayerBySeatId(turn).buffStatus=1;
                         return;
                     }
@@ -138,7 +140,7 @@ public class Room {
                     if(status == 0){
                         currentCard=new BingLiangCunDuan(12);
                         respPlayers.add(getPlayerBySeatId(turn));
-                        currentCard.setResp(getPlayerBySeatId(turn));
+                        currentCard.setwxkjResp(getPlayerBySeatId(turn));
                         getPlayerBySeatId(turn).buffStatus=1;
                         return;
                     }

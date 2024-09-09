@@ -61,7 +61,7 @@ public class Receiver {
                 boolean user = card.Use(player,id);
                 if(!user){}
                 else{
-                    card.setResp(player);
+                    card.setwxkjResp(player);
                 }
             }
         }
@@ -110,5 +110,21 @@ public class Receiver {
                 else room.setStatus(Room.roomStatus.PlayStatus);
             }
         }
+    }
+    public void Jdsr(Player player,int d,int r,int id){
+        Player D=player.room.getPlayerBySeatId(d);
+        if(D==null) return;
+        Player R=player.room.getPlayerBySeatId(r);
+        if(R==null) return;
+        if(D.equipCardList[0]==null) return;
+        Card card = player.handCardList.get(id);
+        if(!card.RequireTarget()){
+            PlayCardWithoutTarget(player,id);
+            return;
+        }
+        if(!card.CanInitiative()) return;
+        if(!Card.distance(D,R,true)) return;
+        room.jdsrPlayer=R;
+        boolean resp = card.setResp(player,D, card);
     }
 }
