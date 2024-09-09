@@ -182,16 +182,17 @@ public class fireWindow extends Parent {
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
         player2Pane.setOnMouseClicked(event -> {
-            System.out.println("所选座位号："+targetPlayer.seatId);
-            checkedSeatId= targetPlayer.seatId;
+                    System.out.println("所选座位号：" + targetPlayer.seatId);
+                    checkedSeatId = targetPlayer.seatId;
 
                     player2Pane.setStyle("-fx-background-color: red;");
 
                     // 设置延迟，延迟结束后恢复原始背景颜色
                     PauseTransition pause = new PauseTransition(Duration.seconds(0.3)); // 0.3秒延迟//
-                         pause.setOnFinished(e -> {
+                    pause.setOnFinished(e -> {
                         player2Pane.setStyle(""); // 恢复原始样式
-        });
+                    });
+                });
 
         //敌方卡牌信息
         for (int i = 0; i < targetPlayer.handCardList.size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
