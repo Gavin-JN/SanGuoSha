@@ -27,22 +27,37 @@ public class fireWindow extends Parent {
     public  Pane player1Pane;
     public Pane player2Pane;
     public Pane gameAreaPane;
+    //己方玩家英雄区
     public Pane heroCardPane;
+    //己方玩家装备区
     public  Pane equipmentPane;
+    //敌方玩家英雄区
     public   Pane heroCardPane2;
+    //选择的敌方玩家手牌索引
     public List <Integer> checkedCardFromTarget;
+    //选择的己方玩家的手牌索引
     public List<Integer> checkedCards;
+    //根
     public BorderPane root;
+    //己方玩家血条
     public StackPane bloodPone1;
+    //敌方玩家血条
     public StackPane bloodPone2;
     public ProgressBar healthBar1;
     public ProgressBar healthBar2;
     public Label healthLabel1;
     public Label healthLabel2;
+    //己方玩家 仅装备容器
     public Pane equipmentContainer;
+    //敌方玩家座位号
     public int checkedSeatId;
+    //仅敌方玩家手牌容器
     public Pane targetContainer;
+    //己方玩家手牌容器
     public Pane cardContainer;
+    //对战区域卡牌展示容器
+    public Pane cardContainer2;
+
     public boolean IsPlay = false;
     public int outCard=-1;
     public FireWindowController fireWindowController = new FireWindowController();
@@ -228,7 +243,7 @@ public class fireWindow extends Parent {
         }
 
        //在gameArea区域展示牌
-        Pane cardContainer2 = new Pane();
+        cardContainer2 = new Pane();
         cardContainer2.setPrefSize(400,400);
         cardContainer2.setLayoutX(400);
         cardContainer2.setLayoutY(100);
@@ -613,7 +628,7 @@ public class fireWindow extends Parent {
     }
 
     //更新己方玩家的卡牌区域
-  public void renderPlayerCards(Pane cardContainer, Player player) {
+    public void renderPlayerCards(Pane cardContainer, Player player) {
         // 清空卡牌容器
         cardContainer.getChildren().clear();
 
@@ -668,7 +683,7 @@ public class fireWindow extends Parent {
     }
 
     //将出的牌展示在对战区域
-    private void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
+    public void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
     {
             cardContainer2.getChildren().clear();
             for (int i = 0; i < checked.size(); i++) {
@@ -701,7 +716,7 @@ public class fireWindow extends Parent {
     }
 
     //当玩家的血量发生变化的时候调用此函数更新界面上的血条
-    private void updataBlood(StackPane heroCardPhone00,Player player,ProgressBar healthBar,Label healthLabel)   //更新血条长度
+    public void updataBlood(StackPane heroCardPhone00,Player player,ProgressBar healthBar,Label healthLabel)   //更新血条长度
     {
         heroCardPhone00.getChildren().clear();
         double MaxBlood=player.getHpLimit();
@@ -755,4 +770,34 @@ public class fireWindow extends Parent {
             });
         }
     }
+
+    //在gameArea区域展示牌，参数为一张Card
+    public void showByCard(Pane cardContainer2,Player player,Card card)  //对战区展示一张牌
+    {
+        cardContainer2.getChildren().clear();
+            if(card.getTypeId()<15) {
+                Pane showCardPane = new Pane();
+                showCardPane.setPrefSize(100, 150);
+                Image imageShowCard = new Image(getClass().getResourceAsStream(card.getCardPhotoPath()));
+                BackgroundSize backgroundSizeCardBack = new BackgroundSize(100, 150, false, false, false, false);
+                BackgroundImage showCardImage = new BackgroundImage(imageShowCard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeCardBack);
+                Background showCardBackground = new Background(showCardImage);
+                showCardPane.setBackground(showCardBackground);
+                showCardPane.setLayoutY(0);
+                cardContainer2.getChildren().add(showCardPane);
+            }
+            //当出的牌为装备牌时，将装备牌展示在装备牌处
+            else {
+                equipmentContainer.getChildren().clear();
+                Image imageEquipment = new Image(getClass().getResourceAsStream(card.getCardPhotoPath()));
+                BackgroundSize backgroundSizeEquipment = new BackgroundSize(100, 150, false, false, false, false);
+                BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment);
+                Background equipmentBackground = new Background(equipmentImage);
+                equipmentPane.setBackground(equipmentBackground);
+                equipmentPane.setLayoutX(0);
+                equipmentPane.setLayoutY(0);
+                equipmentContainer.getChildren().add(equipmentPane);
+            }
+        }
+
 }
