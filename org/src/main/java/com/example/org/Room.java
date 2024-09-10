@@ -79,9 +79,9 @@ public class Room {
             players.get(i).judgeCardList[0]=false;
             players.get(i).judgeCardList[1]=false;
         }
-       for(int m=0;m<4;m++) {
-          for (Player player : players)
-          for (int i = 0; i < 1; i++) player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
+        for (Player player : players) {
+          for (int i=0;i<4;i++)
+           player.handCardList.add(player.getCardByType(player.DrawCard(cardList)));
        }
         //随机分配英雄操作
         selectHero(players.get(0));

@@ -217,7 +217,6 @@ class zhaoYun extends Heroes {
             this.setHeroPhotoPath("controller/img/heroPic/guoJia.jpg");
             this.setHeroId(7);
         }
-
         //遗计——你每受到1点伤害，可摸两张牌
         //当受到伤害时该技能直接发动
         public void yiJi(Player player, List<Card> cardList) {

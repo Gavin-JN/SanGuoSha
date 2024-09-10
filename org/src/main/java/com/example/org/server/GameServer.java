@@ -59,6 +59,7 @@ public class GameServer {
         clientMap.clear();
         clientMap_everyone.clear();
         clientIdCounter = 0;
+        violent = 0;
         //服务器启动提示
         System.out.println("---服务端启动成功---");
         //创建服务端Socket对象，同时注册端口
@@ -184,6 +185,7 @@ public class GameServer {
                             }
                         }
                         break;
+                    //初始化界面
                     case 1010:    //第二个信息
                     {
                         System.out.println("执行了");
@@ -197,48 +199,18 @@ public class GameServer {
                             tmp_massage = Game_msg[violent];
                         }
                         //
+
                         massage.put("MessageIdentified", "YES");
                         massage.put("Order",tmp_massage.getInt("Order"));
                         massage.put("HeroId",tmp_massage.getInt("HeroId"));
                         massage.put("enemyHeroId",tmp_massage.getInt("enemyHeroId"));
+                        massage.put("HandCardList",tmp_massage.getJSONArray("HandCardList"));
                         jsonString = massage.toString();
-                        //这里应该会输出
+                        //打印对应信息
                         System.out.println(jsonString);
                         massage.clear();
-//                      broadcastMessage(jsonString);
                         sendMessageToClient(clientSocket, jsonString);
-                        break;
                     }
-                    //出杀
-                    case 1011:
-                    //出闪
-                    case 1012:
-                    //出桃
-                    case 1013:
-                    //出酒
-                    case 1014:
-                    //出顺手牵羊
-                    case 1015:
-                    //出过河拆桥
-                    case 1016:
-                    //出无中生有
-                    case 1017:
-                    //出借刀杀人
-                    case 1018:
-                    //出决斗
-                    case 1019:
-                    //出无懈可击
-                    case 1020:
-                    //出乐不思蜀
-                    case 1021:
-                    //出兵粮寸断
-                    case 1022:
-                    //出南蛮入侵
-                    case 1023:
-                    //出万箭齐发
-                    case 1024:
-                    //出诸葛连弩
-                    case 1025:
 
                 }
             } catch (IOException e) {
