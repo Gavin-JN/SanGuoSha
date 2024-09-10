@@ -29,7 +29,7 @@ public class Receiver {
             return;
         }
         if(card.CanInitiative()==false) return;
-        player.handCardList.remove(id);
+        //player.handCardList.remove(id);
         room.RespWithTarget(player,targetPlayer,card.getTypeId());
     }
 

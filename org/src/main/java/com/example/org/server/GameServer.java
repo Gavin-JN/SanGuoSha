@@ -85,24 +85,6 @@ public class GameServer {
             //clientIpMap[clientId] = clientSocket.getInetAddress().getHostAddress();
             clientMap_everyone.put(clientId, new PrintWriter(clientSocket.getOutputStream(), true));
             new Thread(new ClientHandler(clientSocket,clientId)).start();
-//
-//            massage.put("MessageIdentified", "YES");
-//            massage.put("Order",0);
-//            massage.put("HeroId",1);
-//            massage.put("enemyHeroId",2);
-//            String jsonString = massage.toString();
-//            sendMessageToClient(0,jsonString);
-//            sendMessageToClient(1,jsonString);
-//            sendMessageToClient(2,jsonString);
-//            massage.clear();
-//
-//            massage.put("MessageIdentified", "YES");
-//            massage.put("Order",1);
-//            massage.put("HeroId",2);
-//            massage.put("enemyHeroId",1);
-//            jsonString = massage.toString();
-//            sendMessageToClient(3,jsonString);
-//            massage.clear();
         }
     }//
 
@@ -211,7 +193,36 @@ public class GameServer {
                         massage.clear();
                         sendMessageToClient(clientSocket, jsonString);
                     }
-
+                    //出杀
+                    case 1011:
+                    //出闪
+                    case 1012:
+                    //出桃
+                    case 1013:
+                    //出酒
+                    case 1014:
+                    //出顺手牵羊
+                    case 1015:
+                    //出过河拆桥
+                    case 1016:
+                    //出无中生有
+                    case 1017:
+                    //出借刀杀人
+                    case 1018:
+                    //出决斗
+                    case 1019:
+                    //出无懈可击
+                    case 1020:
+                    //出乐不思蜀
+                    case 1021:
+                    //出兵粮寸断
+                    case 1022:
+                    //出南蛮入侵
+                    case 1023:
+                    //出万箭齐发
+                    case 1024:
+                    //出诸葛连弩
+                    case 1025:
                 }
             } catch (IOException e) {
                 e.printStackTrace();

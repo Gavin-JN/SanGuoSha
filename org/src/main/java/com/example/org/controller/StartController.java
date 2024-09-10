@@ -152,40 +152,94 @@ public class StartController extends Client{
                 e.printStackTrace();
             }
 
-            //出牌顺序已经确定
-            //确定角色
-            //先传入两个玩家
-            //传入两个玩家之前要确定1出牌顺序2我方武将3敌方武将4自己手牌
+
+            //传入两个玩家
             fireWindow game = new fireWindow(we, enemy);  //传入两个玩家
+
+
             System.out.println(room.status);
             //进行判定
             room.update();
 
-            //进入摸牌阶段
             System.out.println(room.status);
+            //进入摸牌阶段
             room.update();
 
-            //测试有没有手牌
+            //测试手牌的数量
             for (int i = 0; i < we.handCardList.size(); i++) {
                 System.out.println(we.handCardList.get(i).getTypeId() + "");
             }
             //摸牌之后更新手牌
             game.renderPlayerCards(game.cardContainer, we);
 
-            //进入
             System.out.println(room.status);
+            //进入出牌阶段
 
-            //如果有玩家死亡结束游戏
-//            if (false) {
-//
-//            }
-//            //游戏一直循环 直到有玩家死亡游戏结束
+
+            int curCardId = we.getPutId();
+            switch (curCardId){
+                //出杀
+                case 1:
+
+                case 2:
+                    //发信息
+                case 3:
+                    //发信息
+                case 4:
+                    //发信息
+                case 5:
+                    //发信息
+                case 6:
+                    //发信息
+                case 7:
+                    //发信息
+                case 8:
+                    //发信息
+                case 9:
+                    //发信息
+                case 10:
+                    //发信息
+                case 11:
+                    //发信息
+                case 12:
+                    //发信息
+                case 13:
+                    //发信息
+                case 14:
+                    //发信息
+                case 15:
+                    //发信息
+                case 16:
+                    //发信息
+                case 17:
+                    //发信息
+                case 18:
+                    //发信息
+                case 19:
+                    //发信息
+                case 20:
+                    //发信息
+                case 21:
+                    //发信息
+                case 22:
+                    //发信息
+                case 23:
+                    //发信息
+                case 24:
+                    //发信息
+
+            }
+
+            //游戏一直循环 直到有玩家死亡游戏结束
 //            while (true) {
 //
+////            如果有玩家死亡结束游戏
+//                if (false) {
+//                    break;
+//                }
 //            }
-
             //游戏结束
-            System.out.println("游戏结束");
+//            System.out.println("游戏结束");
         }
     }
 }

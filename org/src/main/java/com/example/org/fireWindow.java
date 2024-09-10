@@ -331,6 +331,7 @@ public class fireWindow extends Parent {
                 }
                 //在gameArea区域展示
                 showCardInArea(cardContainer2, player1, checkedCards);
+
                 for(int i=0;i<checkedCards.size();i++) {
                     player1.handCardList.remove((int)(checkedCards.get(i)));
                 }
