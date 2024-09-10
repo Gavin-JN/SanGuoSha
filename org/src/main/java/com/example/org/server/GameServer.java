@@ -205,9 +205,40 @@ public class GameServer {
                         //这里应该会输出
                         System.out.println(jsonString);
                         massage.clear();
-//                        broadcastMessage(jsonString);
+//                      broadcastMessage(jsonString);
                         sendMessageToClient(clientSocket, jsonString);
+                        break;
                     }
+                    //出杀
+                    case 1011:
+                    //出闪
+                    case 1012:
+                    //出桃
+                    case 1013:
+                    //出酒
+                    case 1014:
+                    //出顺手牵羊
+                    case 1015:
+                    //出过河拆桥
+                    case 1016:
+                    //出无中生有
+                    case 1017:
+                    //出借刀杀人
+                    case 1018:
+                    //出决斗
+                    case 1019:
+                    //出无懈可击
+                    case 1020:
+                    //出乐不思蜀
+                    case 1021:
+                    //出兵粮寸断
+                    case 1022:
+                    //出南蛮入侵
+                    case 1023:
+                    //出万箭齐发
+                    case 1024:
+                    //出诸葛连弩
+                    case 1025:
 
                 }
             } catch (IOException e) {

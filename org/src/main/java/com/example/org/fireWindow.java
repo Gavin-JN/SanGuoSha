@@ -39,6 +39,7 @@ public class fireWindow extends Parent {
     private Pane equipmentContainer;
     private int checkedSeatId;
     private Pane targetContainer;
+    private List
 
     public fireWindow(Player player1, Player targetPlayer) {
         //己方
@@ -118,6 +119,9 @@ public class fireWindow extends Parent {
         cardContainer.setLayoutX(340);
         cardContainer.setLayoutY(0);
         player1Pane.getChildren().add(cardContainer);
+
+        List <Pane>cardpane=new ArrayList<>();
+
         for (int i = 0; i < player1.handCardList.size(); i++) {
             Pane cardPane = new Pane();
             cardPane.setPickOnBounds(true); // 确保整个Pane的边界都可以接受点击事件
@@ -324,7 +328,7 @@ public class fireWindow extends Parent {
                             break;
                     }
                 }
-                //展示
+                //在gameArea区域展示
                 showCardInArea(cardContainer2, player1, checkedCards);
                 //玩家手牌列表更新之后再展示手牌
                 renderPlayerCards(cardContainer, player1);
@@ -335,6 +339,8 @@ public class fireWindow extends Parent {
                 upDateAllBlood(bloodPone1, player1, healthBar1, healthLabel1);
                 //更新敌方血条
                 upDateAllBlood(bloodPone2, targetPlayer, healthBar2, healthLabel2);
+                //更新ifPlayCard
+                ifPlayCard.set(false);
             }
             else {
                 Alert cardoutAlert = new Alert(Alert.AlertType.WARNING);
@@ -342,7 +348,7 @@ public class fireWindow extends Parent {
                 cardoutAlert.setHeaderText(null);
                 cardoutAlert.setContentText("当前阶段无法出牌！");
                 cardoutAlert.showAndWait();
-            }
+                ifPlayCard.set(false);            }
 
         });
 

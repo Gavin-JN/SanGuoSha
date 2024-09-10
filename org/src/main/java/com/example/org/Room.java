@@ -101,8 +101,8 @@ public class Room {
         else {
             players.get(1).setSeatId(0);
         }
-
-        assignRoomToPlayers();  // 为每个玩家分配房间
+        // 为每个玩家分配房间
+        assignRoomToPlayers();
         status=roomStatus.JudgeStatus;
 
     }
