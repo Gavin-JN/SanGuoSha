@@ -94,7 +94,6 @@ public class fireWindow extends Parent {
         Background background2 = new Background(backgroundImage2);
         player1Pane.setBackground(background2);
 
-
         //编辑己方区域的内容
         heroCardPane.setPrefSize(100, 150);
         Image imageHero = new Image(getClass().getResourceAsStream(player1.getHero().getHeroPhotoPath()));

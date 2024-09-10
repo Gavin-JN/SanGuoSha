@@ -22,7 +22,7 @@ public class GameServer {
     //游戏玩家数
     public static int count = 0;
     //传输数据的JSON文件
-    public static JSONObject massage = new JSONObject();
+    public static JSONObject message = new JSONObject();
     //信号
     public static int netCode;
     //信号处理者
@@ -38,19 +38,15 @@ public class GameServer {
     //线程集存储所有的客户端 通过Socket进行连接
     private static final ConcurrentHashMap<Socket, PrintWriter> clientMapBySocket = new ConcurrentHashMap<>();
     //用id进行标志
-    private static final ConcurrentHashMap<Integer, PrintWriter> clientMapById = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, PrintWriter> clientMapById = new ConcurrentHashMap<>();
+    //收集所有socket的pw
+    private static List<PrintWriter> clientWriters = new ArrayList<>();
 
     private static int clientIdCounter = 0;  // 用于分配唯一的客户端ID
     private static String[] clientIpMap = new String[100];
 
 
     public static void main(String[] args) throws IOException {
-        //线程集初始化
-//        count = 0;
-//        clientMapBySocket.clear();
-//        clientMapById.clear();
-//        clientIdCounter = 0;
-//        violent = 0;
         //服务器启动提示
         System.out.println("---服务端启动成功---");
         //创建服务端Socket对象，同时注册端口
@@ -74,8 +70,11 @@ public class GameServer {
             int clientId = clientIdCounter++;
             clientIpMap[clientId] = clientSocket.getInetAddress().getHostAddress();
             System.out.println("用id来表示socket"+clientIpMap[clientId]+"    "+clientId);
-            clientMapById.put(clientId, new PrintWriter(clientSocket.getOutputStream(), true));
+
+//            clientMapById.put(clientId, new PrintWriter(clientSocket.getOutputStream(), true));
+            clientMapById.put(clientIpMap[clientId], new PrintWriter(clientSocket.getOutputStream(), true));
             clientMapBySocket.put(clientSocket, new PrintWriter(clientSocket.getOutputStream(), true));
+            clientWriters.add(new PrintWriter(clientSocket.getOutputStream(), true));
             new Thread(new ClientHandler(clientSocket,clientId)).start();
         }
     }//
@@ -97,11 +96,13 @@ public class GameServer {
 
     //给特定客户端发信息
     public static void sendMessageToClientById(int clientId, String message) {
-        PrintWriter writer = clientMapById.get(clientId);
+        PrintWriter writer = clientMapById.get(clientIpMap[clientId]);
         if (writer != null) {
             writer.println(message);
         }
     }
+
+
 
     //初始化单例客户端
     private static class ClientHandler implements Runnable {
@@ -127,9 +128,13 @@ public class GameServer {
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
             ) {
                 clientMapBySocket.put(clientSocket, out);
-                String jsonString = in.readLine();
-                massage = new JSONObject(jsonString);
-                netCode = massage.getInt("NetCode");
+                String jsonString;
+                while ((jsonString = in.readLine()) !=null)
+                {
+                    message = new JSONObject(jsonString);
+                    netCode = message.getInt("NetCode");
+                    break;
+                }
 
                 switch(netCode){
                     //匹配
@@ -137,7 +142,7 @@ public class GameServer {
                     {
                         //收信息
                         //看人数够了没有
-                        int msg = massage.getInt("count");
+                        int msg = message.getInt("count");
 //                      Boolean is = gameEventHandling.Matching(msg);
                         count = count+msg;
                         System.out.println("游戏人数"+count);
@@ -151,11 +156,6 @@ public class GameServer {
 
                                 // 1表示开始游戏
                                 broadcastMessage("1");
-
-                                out.close();
-                                in.close();
-                                clientSocket.close();
-
                                 break;
                             }
                         }
@@ -175,15 +175,15 @@ public class GameServer {
                         }
 
                         //算法得到的初始化信息
-                        massage.put("MessageIdentified", "YES");
-                        massage.put("Order", tmp_massage.getInt("Order"));
-                        massage.put("HeroId", tmp_massage.getInt("HeroId"));
-                        massage.put("enemyHeroId", tmp_massage.getInt("enemyHeroId"));
-                        massage.put("HandCardList", tmp_massage.getJSONArray("HandCardList"));
-                        jsonString = massage.toString();
+                        message.put("MessageIdentified", "YES");
+                        message.put("Order", tmp_massage.getInt("Order"));
+                        message.put("HeroId", tmp_massage.getInt("HeroId"));
+                        message.put("enemyHeroId", tmp_massage.getInt("enemyHeroId"));
+                        message.put("HandCardList", tmp_massage.getJSONArray("HandCardList"));
+                        jsonString = message.toString();
                         //打印对应信息
                         System.out.println(jsonString);
-                        massage.clear();
+                        message.clear();
                         sendMessageToClient(clientSocket, jsonString);
                         break;
                     }
@@ -193,23 +193,41 @@ public class GameServer {
                         //收到
                         System.out.println("收到1011");
                         //向另一台主机发信息
-                        massage.put("NetCode",1012);
-                        jsonString = massage.toString();
-                        System.out.println("向另一台主机 "+(clientId+1)%2+" 发送");
-                        sendMessageToClientById(2,jsonString);
-                        sendMessageToClientById(3,jsonString);
+                        message.put("ResponseCode",1000);
+                        //再带一个信息("display","1")
 
+                        //
+                        jsonString = message.toString();
+                        message.clear();
+                        System.out.println("客户端A: "+clientId+" 发送");
+                        System.out.println("客户端B: "+(clientId+1)%2+" 发送");
+                        System.out.println(jsonString);
+
+                        //发送信息
+
+                        broadcastMessage(jsonString);
                         sendMessageToClient(clientSocket, jsonString);
-//                        sendMessageToClientById((clientId+1)%2,jsonString);
+                        sendMessageToClientById(clientId,jsonString);
+                        sendMessageToClientById((clientId+1)%2,jsonString);
+
                         break;
                     }
 
+                    case 1111:
+                    {
+                        System.out.println("收到1111");
+                        message.put("Msg","1" );
+                        jsonString = message.toString();
+                        System.out.println(jsonString);
+                        message.clear();
+                        break;
+                    }
                     //出闪
                     case 1012:
                     {
                         System.out.println("收到1012");
                         //向另一台主机发送是否出闪
-                        massage.put("NetCode",1026);
+                        message.put("Display",2);
                         break;
                     }
 
@@ -217,6 +235,11 @@ public class GameServer {
                     case 1013:
                     {
                         System.out.println("收到");
+                        message.put("Display",3);
+                        jsonString = message.toString();
+                        System.out.println(jsonString);
+                        message.clear();
+                        //发信息给另一个客户端
                         break;
                     }
 
@@ -224,6 +247,11 @@ public class GameServer {
                     case 1014:
                     {
                         System.out.println("收到");
+                        message.put("Display",4);
+                        jsonString = message.toString();
+                        System.out.println(jsonString);
+                        message.clear();
+                        //发信息给另一个客户端
                         break;
                     }
 

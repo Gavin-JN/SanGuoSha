@@ -73,9 +73,6 @@ public class StartController extends Client{
                 }
             }
             massage.clear();
-            out.close();
-            in.close();
-            socket.close();
             isPlayGame = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,9 +95,7 @@ public class StartController extends Client{
                 massage.put("NetCode",1010);
                 String jsonString = massage.toString();
                 out.println(jsonString);
-//            out.close();
                 massage.clear();
-
 
                 //读从服务器来的信息
                 jsonString = in.readLine();
@@ -110,12 +105,6 @@ public class StartController extends Client{
                 if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
                     System.out.println(response);
                 }
-//            while ((response = massage.getString("Order" )) != null) {
-//                if(response.equals("0")||response.equals("1")) {
-//
-//                    break;
-//                }
-//            }
 
                 System.out.println(jsonString);
                 massage = new JSONObject(jsonString);
@@ -136,58 +125,73 @@ public class StartController extends Client{
                 }
                 System.out.println(jsonArray.length());
                 System.out.println(we.handCardList.size());
-                out.close();
-                in.close();
-                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
 
-            //传入两个玩家
-            fireWindow game = new fireWindow(we, enemy);  //传入两个玩家
-            int curCardId =0;
-            curCardId = game.outCard;
 
 
-            System.out.println(room.status);
-            //进行判定
-            room.update();
 
-            System.out.println(room.status);
-            //进入摸牌阶段
-            room.update();
 
-            //测试手牌的数量
-            for (int i = 0; i < we.handCardList.size(); i++) {
-                System.out.println(we.handCardList.get(i).getTypeId() + "");
+
+
+
+
+
+            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+
+                //传入两个玩家
+                massage.put("NetCode",1111);
+                String jsonString = massage.toString();
+                out.println(jsonString);
+                massage.clear();
+
+                fireWindow game = new fireWindow(we, enemy);  //传入两个玩家
+                System.out.println(room.status);
+                //进行判定
+                room.update();
+
+                System.out.println(room.status);
+                //进入摸牌阶段
+                room.update();
+
+                //测试手牌的数量
+                for (int i = 0; i < we.handCardList.size(); i++) {
+                    System.out.println(we.handCardList.get(i).getTypeId() + "");
+                }
+                //摸牌之后更新手牌
+                game.renderPlayerCards(game.cardContainer, we);
+                System.out.println(room.status);
+                //进入出牌阶段
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            //摸牌之后更新手牌
-            game.renderPlayerCards(game.cardContainer, we);
-
-            System.out.println(room.status);
-            //进入出牌阶段
 
 
+            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+                System.out.println("Connected to server");
+                // 启动一个线程用于读取服务器的响应
+                new Thread(() -> {
+                    try {
+                        String response = in.readLine();
+                        while ((response == "12345")) {
+                            System.out.println("没有点击按钮也获得了回应");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
 //
 //
 //
