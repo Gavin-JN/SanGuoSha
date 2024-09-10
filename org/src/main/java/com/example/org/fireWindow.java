@@ -21,25 +21,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class fireWindow extends Parent {
 
-    private  Pane player1Pane;
-    private Pane player2Pane;
-    private Pane gameAreaPane;
-    private Pane heroCardPane;
-    private  Pane equipmentPane;
-    private   Pane heroCardPane2;
-    private List <Integer> checkedCardFromTarget;
-    private List<Integer> checkedCards;
-    private BorderPane root;
-    private StackPane bloodPone1;
-    private StackPane bloodPone2;
-    private ProgressBar healthBar1;
-    private ProgressBar healthBar2;
-    private Label healthLabel1;
-    private Label healthLabel2;
-    private Pane equipmentContainer;
-    private int checkedSeatId;
-    private Pane targetContainer;
-    private List
+    public  Pane player1Pane;
+    public Pane player2Pane;
+    public Pane gameAreaPane;
+    public Pane heroCardPane;
+    public  Pane equipmentPane;
+    public   Pane heroCardPane2;
+    public List <Integer> checkedCardFromTarget;
+    public List<Integer> checkedCards;
+    public BorderPane root;
+    public StackPane bloodPone1;
+    public StackPane bloodPone2;
+    public ProgressBar healthBar1;
+    public ProgressBar healthBar2;
+    public Label healthLabel1;
+    public Label healthLabel2;
+    public Pane equipmentContainer;
+    public int checkedSeatId;
+    public Pane targetContainer;
+    public Pane cardContainer;
+//    private List
 
     public fireWindow(Player player1, Player targetPlayer) {
         //己方
@@ -114,7 +115,7 @@ public class fireWindow extends Parent {
         //限制每次出牌只可以出一张
         AtomicBoolean ifPlayCard=new AtomicBoolean(false);//己方卡牌区
 
-        Pane cardContainer = new Pane();  //卡牌区域
+        cardContainer = new Pane();  //卡牌区域
         cardContainer.setPrefSize(900, 150);
         cardContainer.setLayoutX(340);
         cardContainer.setLayoutY(0);
@@ -330,6 +331,9 @@ public class fireWindow extends Parent {
                 }
                 //在gameArea区域展示
                 showCardInArea(cardContainer2, player1, checkedCards);
+                for(int i=0;i<checkedCards.size();i++) {
+                    player1.handCardList.remove((int)(checkedCards.get(i)));
+                }
                 //玩家手牌列表更新之后再展示手牌
                 renderPlayerCards(cardContainer, player1);
                 checkedCards.clear();
@@ -348,7 +352,8 @@ public class fireWindow extends Parent {
                 cardoutAlert.setHeaderText(null);
                 cardoutAlert.setContentText("当前阶段无法出牌！");
                 cardoutAlert.showAndWait();
-                ifPlayCard.set(false);            }
+                ifPlayCard.set(false);
+            }
 
         });
 
@@ -595,7 +600,7 @@ public class fireWindow extends Parent {
     }
 
     //更新己方玩家的卡牌区域
-    private void renderPlayerCards(Pane cardContainer, Player player) {
+  public void renderPlayerCards(Pane cardContainer, Player player) {
         // 清空卡牌容器
         cardContainer.getChildren().clear();
 

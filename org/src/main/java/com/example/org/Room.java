@@ -75,7 +75,7 @@ public class Room {
         turn=0;
         for(int i=0;i< players.size();i++){
             players.get(i).handCardList.clear();
-            players.get(i).equipCardList=null;
+            players.get(i).equipCardList=new Card[3];
             players.get(i).judgeCardList[0]=false;
             players.get(i).judgeCardList[1]=false;
         }
@@ -108,7 +108,10 @@ public class Room {
     }
 
     public Player getPlayerBySeatId(int seatId){
-        return players.get(seatId);
+        for(Player player : players){
+            if(player.seatId==seatId) return player;
+        }
+        return null;
     }
     public void RespWithTarget(Player player,Player targetPlayer,int typeId){
         player.room.respPlayers.add(targetPlayer);
@@ -169,7 +172,7 @@ public class Room {
                     }
                 }
                 status=roomStatus.DrawStatus;
-                return;
+                break;
             }
             case DrawStatus:{
                 if(!getPlayerBySeatId(turn).isAbleToDraw){
@@ -178,10 +181,11 @@ public class Room {
                 }
                 else{
                     for(int i=0;i<2;i++) {
-                        getPlayerBySeatId(turn).DrawCard(cardList);
+                        getPlayerBySeatId(turn).handCardList.add(getPlayerBySeatId(turn).getCardByType(getPlayerBySeatId(turn).DrawCard(cardList)));
                     }
                     status=roomStatus.PlayStatus;
                 }
+                break;
             }
             case PlayStatus:{
                 if(!getPlayerBySeatId(turn).isAbleToPlay){
@@ -191,6 +195,7 @@ public class Room {
                 else{
                     //出牌直到Abandon
                 }
+                break;
             }
             case DiscardStatus:{
                 //弃牌至当前血量
@@ -198,6 +203,7 @@ public class Room {
                 turn = nextTurn;
                 status= Room.roomStatus.JudgeStatus;
             }
+            break;
         }
     }
     //初始化时分配英雄

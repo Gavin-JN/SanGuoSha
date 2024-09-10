@@ -180,20 +180,27 @@ class Sha extends Card{
    //若杀被闪响应则返回true
    public boolean Resp(Player targetPlayer,int id){
       if(AbandonResp(targetPlayer)) {
-         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==15
-               ||targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).hero.getHeroId()==4){
-            targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
+         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0]!=null){
+            if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==15){
+               targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
+            }
+            else targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=false;
          }
+         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).hero.getHeroId()==4)
+            targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
          else targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=false;
          return false;
       }
       if(targetPlayer.handCardList.get(id).getTypeId()==2) {
          targetPlayer.handCardList.remove(id);
          targetPlayer.room.respPlayers.remove(targetPlayer);
-         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==18){
-            targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
+         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0]!=null){
+            if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==18){
+               targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
+            }
+            else targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=false;
          }
-         else targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=false;
+
          targetPlayer.room.status= Room.roomStatus.PlayStatus;
          return true;
       }
@@ -208,8 +215,11 @@ class Sha extends Card{
          damage++;
          targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).isNextShaAddDamage=false;
       }
-      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==17
-            &&targetPlayer.handCardList.size()==0)    damage++;
+      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0]!=null){
+         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==17
+                 &&targetPlayer.handCardList.size()==0)
+            damage++;
+      }
       targetPlayer.hp-=damage;
       // 创建媒体对象，指定音乐文件路径
       javafx.scene.media.Media media = new Media(this.getClass().getResource("music/NiGanMa.mp3").toString());
