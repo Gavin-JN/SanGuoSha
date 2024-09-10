@@ -15,8 +15,8 @@ public class GameEventHandlingImpl implements GameEventHandling {
     public static int Number_of_Player = 0;
 
     //游戏玩家
-    public Player player0 =new Player();
-    public Player player1 =new Player();
+    public Player player0 = new Player();
+    public Player player1 = new Player();
     public List<Player> players = new ArrayList<Player>();
     public Room room = new Room(1);
     //传输信息
@@ -30,102 +30,113 @@ public class GameEventHandlingImpl implements GameEventHandling {
     @Override
     public boolean Matching(int count) {
         Number_of_Player = Number_of_Player + count;
-        if(Number_of_Player < 2){
+        if (Number_of_Player < 2) {
             System.out.println(Number_of_Player);
             return false;
-        }
-        else{
+        } else {
             System.out.println(Number_of_Player);
             Number_of_Player = 0;
             return true;
         }
     }
 
-    public void InitGame(){
+    public void InitGame() {
         //这里初始化游戏的玩家出牌顺序，我方武将，敌方武将，手牌
         players.add(player0);
         players.add(player1);
-        if(players.get(0).seatId==0)
-        {
+        if (players.get(0).seatId == 0) {
             players.get(1).setSeatId(1);
-        }
-        else {
+        } else {
             players.get(1).setSeatId(0);
         }
         room.Init(players);
         //这里可以操控武将选择便于测试
         msg0.put("Order",player0.seatId);
-        msg0.put("HeroId",player0.getHero().getHeroId());
-        msg0.put("enemyHeroId",player1.getHero().getHeroId());
-        for(int i=0;i<4;i++){
-            jsonArray0.put(player0.handCardList.get(i).getTypeId());
-        }
-        msg0.put("HandCardList",jsonArray0);
+        msg0.put("HeroId",1);
+        msg0.put("enemyHeroId",1);
+        jsonArray0.put(0,1);
+        jsonArray0.put(1,1);
+        jsonArray0.put(2,5);
+        jsonArray0.put(3,14);
+//        for (int i = 0; i < 4; i++) {
+//            jsonArray0.put(i,16);
+//        }
+        msg0.put("HandCardList", jsonArray0);
+
 
         //加入卡牌
 
         msg1.put("Order",player1.seatId);
-        msg1.put("HeroId",player1.getHero().getHeroId());
-        msg1.put("enemyHeroId",player0.getHero().getHeroId());
-        for(int i=0;i<4;i++){
-            jsonArray1.put(i,player1.handCardList.get(i).getTypeId());
-        }
-        msg1.put("HandCardList",jsonArray1);
+        msg1.put("HeroId",1);
+        msg1.put("enemyHeroId",1);
+        jsonArray1.put(0,1);
+        jsonArray1.put(1,1);
+        jsonArray1.put(2,5);
+        jsonArray1.put(3,14);
+//        for (int i = 0; i < 4; i++) {
+//            jsonArray1.put(i, 16);
+//        }
+        msg1.put("HandCardList", jsonArray1);
 //        jsonArray1.clear();
     }
 
-    public JSONObject Getmsg0(){
+    public JSONObject Getmsg0() {
         return msg0;
     }
-    public JSONObject Getmsg1(){
+
+    public JSONObject Getmsg1() {
         return msg1;
     }
-
-    public static void main(String[] args) {
-        int Number_of_Player = 0;
-
-        //游戏玩家
-        Player player0 =new Player();
-        Player player1 =new Player();
-         List<Player> players = new ArrayList<Player>();
-         Room room = new Room(1);
-        //传输信息
-        JSONObject msg0 = new JSONObject();
-        JSONObject msg1 = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-        //这里初始化游戏的玩家出牌顺序，我方武将，敌方武将，手牌
-        players.add(player0);
-        players.add(player1);
-        if(players.get(0).seatId==0)
-        {
-            players.get(1).setSeatId(1);
-        }
-        else {
-            players.get(1).setSeatId(0);
-        }
-        room.Init(players);
-        //这里可以操控武将选择便于测试
-        msg0.put("Order",player0.seatId);
-        msg0.put("HeroId",player0.getHero().getHeroId());
-        msg0.put("enemyHeroId",player1.getHero().getHeroId());
-        for(int i=0;i<4;i++){
-            jsonArray.put(player0.handCardList.get(i).getTypeId());
-        }
-        msg0.put("HandCardList",jsonArray);
-        System.out.println(jsonArray.toString());
-        jsonArray.clear();
-
-        //加入卡牌
-
-        msg1.put("Order",player1.seatId);
-        msg1.put("HeroId",player1.getHero().getHeroId());
-        msg1.put("enemyHeroId",player0.getHero().getHeroId());
-        for(int i=0;i<4;i++){
-            jsonArray.put(i,player1.handCardList.get(i).getTypeId());
-        }
-        msg1.put("HandCardList",jsonArray);
-        System.out.println(jsonArray.toString());
-        jsonArray.clear();
-    }
 }
+//    public static void main(String[] args) {
+//        int Number_of_Player = 0;
+//
+//        //游戏玩家
+//        Player player0 =new Player();
+//        Player player1 =new Player();
+//         List<Player> players = new ArrayList<Player>();
+//         Room room = new Room(1);
+//        //传输信息
+//        JSONObject msg0 = new JSONObject();
+//        JSONObject msg1 = new JSONObject();
+//        JSONArray jsonArray = new JSONArray();
+//        //这里初始化游戏的玩家出牌顺序，我方武将，敌方武将，手牌
+//        players.add(player0);
+//        players.add(player1);
+//        if(players.get(0).seatId==0)
+//        {
+//            players.get(1).setSeatId(1);
+//        }
+//        else {
+//            players.get(1).setSeatId(0);
+//        }
+//        room.Init(players);
+//        //这里可以操控武将选择便于测试
+//
+//        msg0.put("Order",player0.seatId);
+//        msg0.put("HeroId",player0.getHero().getHeroId());
+//        msg0.put("enemyHeroId",player1.getHero().getHeroId());
+//        for(int i=0;i<4;i++){
+//            jsonArray.put(i,1);
+//            //player0.handCardList.get(i).getTypeId()
+//        }
+//        //
+//        msg0.put("HandCardList",jsonArray);
+//        System.out.println(jsonArray.toString());
+//        jsonArray.clear();
+//
+//        //加入卡牌
+//
+//        msg1.put("Order",player1.seatId);
+//        msg1.put("HeroId",player1.getHero().getHeroId());
+//        msg1.put("enemyHeroId",player0.getHero().getHeroId());
+//        for(int i=0;i<4;i++){
+//            jsonArray.put(i,1);
+//            //player1.handCardList.get(i).getTypeId()
+//        }
+//        msg1.put("HandCardList",jsonArray);
+//        System.out.println(jsonArray.toString());
+//        jsonArray.clear();
+//    }
+//}
 

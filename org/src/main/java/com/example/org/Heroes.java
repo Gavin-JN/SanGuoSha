@@ -106,15 +106,18 @@ class sunQuan extends Heroes {
                 System.out.println("手牌不足以弃牌！");
                 return;
             }
+
             for(int i=0;i<checkedCard.size();i++) {
-                player.handCardList.remove(checkedCard.get(i));
+                player.handCardList.remove((int)checkedCard.get(i));
             }
+
           for(int i=0;i<discardCards;i++) {   //抽取与弃牌数量相同的新牌
               int typeOfCard=player.DrawCard(cardList);  //cardList为待抽取的剩余的所有卡牌
               Card cardIn=player.getCardByType(typeOfCard);
               player.handCardList.add(cardIn);
           }
             balanceUsed = true;
+          checkedCard.clear();
             System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
         }
 }

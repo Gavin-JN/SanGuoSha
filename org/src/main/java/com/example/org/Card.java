@@ -25,9 +25,11 @@ public class Card {
       return typeId;
    }
 
-   public Card() {
-   }
+   public Card() {}
 
+   public Card(String cardPhotoPath) {
+      this.cardPhotoPath = cardPhotoPath;
+   }
    //该牌能否主动使用
    public boolean CanInitiative(){
       return false;
@@ -145,6 +147,9 @@ public class Card {
       }
       return new Card();
    }
+   public boolean Abandon(Player player){
+      return false;
+   }
 }
 
 /*所有牌共98张，
@@ -170,7 +175,7 @@ class Sha extends Card{
    }
 
       //根据攻击距离，限制出杀次数，装备武器效果执行杀的效果
-      public boolean Use(Player player,Player targetPlayer , int id){
+   public boolean Use(Player player,Player targetPlayer , int id){
          if(!Card.distance(player,targetPlayer,true)) return false;
          if(!player.canUseSha) return false;
          if(targetPlayer.hero.getHeroId()==5&&targetPlayer.handCardList.size()==0) return false;
@@ -193,7 +198,7 @@ class Sha extends Card{
       }
       if(targetPlayer.handCardList.get(id).getTypeId()==2) {
          targetPlayer.handCardList.remove(id);
-         targetPlayer.room.respPlayers.remove(targetPlayer);
+         //targetPlayer.room.respPlayers.remove(targetPlayer);
          if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0]!=null){
             if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==18){
                targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
@@ -237,22 +242,31 @@ class Sha extends Card{
       if(targetPlayer.hero.getHeroId()==2){
          targetPlayer.handCardList.add(targetPlayer.room.currentCard);
       }
-      if(targetPlayer.hp<=0){
-         List<Player> playerList = targetPlayer.room.players;
-         boolean add = false;
-         targetPlayer.room.helpPlayers.clear();
-         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
-               i%=targetPlayer.room.players.size();
-               if(playerList.get(i)==targetPlayer) add=true;
-               if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
+//      if(targetPlayer.hp<=0){
+//         List<Player> playerList = targetPlayer.room.players;
+//         boolean add = false;
+//         targetPlayer.room.helpPlayers.clear();
+//         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
+//               i%=targetPlayer.room.players.size();
+//               if(playerList.get(i)==targetPlayer) add=true;
+//               if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
+//         }
+//      }
+      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0]!=null){
+         if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).equipCardList[0].getTypeId()==15){
+            targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
          }
+         else targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=false;
       }
+      if(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).hero.getHeroId()==4)
+         targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=true;
+      else targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).canUseSha=false;
       return targetPlayer.hp<=0;
    }
    public boolean setResp(Player player,Player targetPlayer,Card card){
-      player.room.status= Room.roomStatus.RespStatus;
-      player.room.currentCard=card;
-      player.room.respPlayers.add(targetPlayer);
+//      player.room.status= Room.roomStatus.RespStatus;
+//      player.room.currentCard=card;
+//      player.room.respPlayers.add(targetPlayer);
       return true;
    }
 }
@@ -276,20 +290,20 @@ class Tao extends Card{
    public boolean Use(Player player,int id) {
       Card card = player.handCardList.get(id);
       if (card == null || card.getTypeId() != 3) return false;
-      if (player.room.dyingPlayer == null || player.hp == player.hpLimit) return false;
-      if (player.room.dyingPlayer != null) {
-         player.room.dyingPlayer.hp++;
-         player.handCardList.remove(id);
-         if(player.room.dyingPlayer.hp<=0) player.room.GameOver(player.room);
-         else{
-            player.room.helpPlayers.clear();
-            player.room.dyingPlayer=null;
-         }
-      }
-      else if(player.hp<player.hpLimit){
-         player.hp++;
-      }
-      player.handCardList.remove(id);
+//      if (player.room.dyingPlayer == null || player.hp == player.hpLimit) return false;
+//      if (player.room.dyingPlayer != null) {
+//         player.room.dyingPlayer.hp++;
+//         player.handCardList.remove(id);
+//         if(player.room.dyingPlayer.hp<=0) player.room.GameOver(player.room);
+//         else{
+//            player.room.helpPlayers.clear();
+//            player.room.dyingPlayer=null;
+//         }
+//      }
+//      else if(player.hp<player.hpLimit){
+//         player.hp++;
+//      }
+      //player.handCardList.remove(id);
       return true;
    }
 
@@ -305,16 +319,16 @@ class Jiu extends Card{
       super.setCardPhotoPath("controller/img/ShouPai/Jiu.jpg");
    }
    public boolean Use(Player player,int id) {
-      if (player.hp <= 0&&player.room.status== Room.roomStatus.RescueStatus) {//濒死回血
-         player.hp++;
-         player.handCardList.remove(id);
-         return true;
-      }
+//      if (player.hp <= 0&&player.room.status== Room.roomStatus.RescueStatus) {//濒死回血
+//         player.hp++;
+//         //player.handCardList.remove(id);
+//         return true;
+//      }
       //杀的伤害+1
       if (player.room.status == Room.roomStatus.PlayStatus && player.seatId==player.room.turn && player.isUseJiu==false) {
          player.isUseJiu = true;
          player.isNextShaAddDamage = true;
-         player.handCardList.remove(id);
+         //player.handCardList.remove(id);
          return true;
       }
       return false;
@@ -340,51 +354,51 @@ class ShunShouQianYang extends Card {
    }
    public void setResp(Player player){
       int cTurn=player.room.turn;
-      addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
+      //addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
    }
    public void wxkjResp(Player targetPlayer,boolean success){
-      if(success){
-         targetPlayer.room.respPlayers.remove(0);
-         addWxkj(targetPlayer);
-      }
+//      if(success){
+//         targetPlayer.room.respPlayers.remove(0);
+//         addWxkj(targetPlayer);
+//      }
    }
    public boolean Abandon(Player targetPlayer){
-      targetPlayer.room.respPlayers.remove(0);
-      if(targetPlayer.room.wxkjPlayers.size()==0){
+      //targetPlayer.room.respPlayers.remove(0);
+      //if(targetPlayer.room.wxkjPlayers.size()==0){
          targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).DrawCard(targetPlayer.handCardList);
-      }
+      //}
       return true;
    }
    public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
+//      addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
    }
    public boolean Use(Player player,Player targetPlayer){
       if(!Card.distance(player,targetPlayer,false)) return false;
       return true;
    }
-   public boolean Resp(Player targetPlayer,int id){
-      if(Abandon(targetPlayer)) return false;
-      if(targetPlayer.handCardList.get(id).getTypeId()==10) {
-         targetPlayer.handCardList.remove(id);
-         targetPlayer.room.respPlayers.remove(targetPlayer);
-         if(targetPlayer.room.respPlayers.size()==0){
-            targetPlayer.room.status= Room.roomStatus.PlayStatus;
-         }
-         return true;
-      }
+   public boolean Resp(Player targetPlayer,int id) {
+      if (Abandon(targetPlayer)) return false;
+//      if(targetPlayer.handCardList.get(id).getTypeId()==10) {
+//         targetPlayer.handCardList.remove(id);
+      //targetPlayer.room.respPlayers.remove(targetPlayer);
+      //if (targetPlayer.room.respPlayers.size() == 0) {
+         targetPlayer.room.status = Room.roomStatus.PlayStatus;
+      //}
+      //        return true;
+      //     }
       return false;
+//   }
    }
-
 }
 
 //过河拆桥：可弃置对手手牌区域内一张牌，  typeId 6
-class GuoHeChaiQiao extends Card{
+class GuoHeChaiQiao extends Card {
    public GuoHeChaiQiao(int typeId) {
       super(typeId);
       super.setCardPhotoPath("controller/img/ShouPai/GuoHeChaiQiao.png");
@@ -398,46 +412,50 @@ class GuoHeChaiQiao extends Card{
       return true;
    }
 
-   public void setResp(Player player){
-      int cTurn=player.room.turn;
-      addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
+   public void setResp(Player player) {
+      int cTurn = player.room.turn;
+      //addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
    }
-   public void wxkjResp(Player targetPlayer,boolean success){
-      if(success){
-         targetPlayer.room.respPlayers.remove(0);
-         addWxkj(targetPlayer);
-      }
+
+   public void wxkjResp(Player targetPlayer, boolean success) {
+//      if(success){
+//         targetPlayer.room.respPlayers.remove(0);
+//         addWxkj(targetPlayer);
+//      }
    }
-   public boolean Abandon(Player player){
-      player.room.respPlayers.remove(0);
-      if(player.room.wxkjPlayers.size()==0){
+
+   public boolean Abandon(Player player) {
+      //player.room.respPlayers.remove(0);
+      //if (player.room.wxkjPlayers.size() == 0) {
          player.setIfUseGuoHeChaiQiao(true);
-      }
+      //}
       return true;
    }
-   public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
+
+   public void setwxkjResp(Player player) {
+      //addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
    }
-   public boolean Resp(Player targetPlayer,int id){
-      if(Abandon(targetPlayer)) return false;
-      if(targetPlayer.handCardList.get(id).getTypeId()==10) {
-         targetPlayer.handCardList.remove(id);
-         targetPlayer.room.respPlayers.remove(targetPlayer);
-         if(targetPlayer.room.respPlayers.size()==0){
-            targetPlayer.room.status= Room.roomStatus.PlayStatus;
-         }
-         return true;
-      }
+
+   public boolean Resp(Player targetPlayer, int id) {
+      if (Abandon(targetPlayer)) return false;
+//      if(targetPlayer.handCardList.get(id).getTypeId()==10) {
+//         targetPlayer.handCardList.remove(id);
+      //targetPlayer.room.respPlayers.remove(targetPlayer);
+      //if (targetPlayer.room.respPlayers.size() == 0) {
+         targetPlayer.room.status = Room.roomStatus.PlayStatus;
+      //}
+//         return true;
+//      }
       return false;
+//   }
    }
 }
-
 //无中生有：摸两张牌， typeId 7
 class WuZhongShengYou extends Card{
    public WuZhongShengYou(int typeId) {
@@ -449,9 +467,9 @@ class WuZhongShengYou extends Card{
       return true;
    }
    public boolean Use(Player player ,int id){
-      player.room.status= Room.roomStatus.RespStatus;
+      //player.room.status= Room.roomStatus.RespStatus;
       player.room.currentCard=player.handCardList.get(id);
-      player.handCardList.remove(id);
+      //player.handCardList.remove(id);
       player.room.respPlayers.clear();
       int cTurn=player.room.turn;
       Player next = player.room.getPlayerBySeatId((++cTurn)%player.room.players.size());
@@ -459,48 +477,48 @@ class WuZhongShengYou extends Card{
          if(player.seatId==next.seatId){
             break;
          }
-         if(next.hp>0){
-            player.room.respPlayers.add(next);
-         }
+//         if(next.hp>0){
+//            player.room.respPlayers.add(next);
+//         }
       }
       return true;
    }
    public void setResp(Player player){
       int cTurn=player.room.turn;
-      addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
+      //addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
    }
    public void wxkjResp(Player targetPlayer,boolean success){
-      if(success){
-         targetPlayer.room.respPlayers.remove(0);
-         addWxkj(targetPlayer);
-      }
+//      if(success){
+//         targetPlayer.room.respPlayers.remove(0);
+//         addWxkj(targetPlayer);
+//      }
    }
    public boolean Abandon(Player player){
-      player.room.respPlayers.remove(0);
-      if(player.room.wxkjPlayers.size()==0){
+      //player.room.respPlayers.remove(0);
+      //if(player.room.wxkjPlayers.size()==0){
          for(int i=0;i<2;i++){
-            player.DrawCard(player.room.cardList);
+            player.handCardList.add(player.getCardByType(player.DrawCard(player.room.cardList)));
          }
-      }
+      //}
       return true;
    }
    public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
+//      addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
    }
    public boolean Resp(Player targetPlayer,int id){
       if(Abandon(targetPlayer)) return false;
       if(targetPlayer.handCardList.get(id).getTypeId()==10) {
-         targetPlayer.handCardList.remove(id);
-         targetPlayer.room.respPlayers.remove(targetPlayer);
-         if(targetPlayer.room.respPlayers.size()==0){
+         //targetPlayer.handCardList.remove(id);
+         //targetPlayer.room.respPlayers.remove(targetPlayer);
+         //if(targetPlayer.room.respPlayers.size()==0){
             targetPlayer.room.status= Room.roomStatus.PlayStatus;
-         }
+         //}
          return true;
       }
       return false;
@@ -524,39 +542,39 @@ class JieDaoShaRen extends Card{
    }
    public boolean setResp(Player player,Player targetPlayer,Card card){
       if(targetPlayer.equipCardList[0]==null) return false;
-      player.room.status= Room.roomStatus.RespStatus;
+      //player.room.status= Room.roomStatus.RespStatus;
       player.room.currentCard=card;
-      addWxkj(targetPlayer);
-      player.room.respPlayers.add(targetPlayer);
-      player.handCardList.remove(card);
-      if(player.room.wxkjPlayers.size()>0){
-
-      }
-      else{
-         wxkjResp(targetPlayer,false);
-      }
+//      addWxkj(targetPlayer);
+//      player.room.respPlayers.add(targetPlayer);
+//      player.handCardList.remove(card);
+//      if(player.room.wxkjPlayers.size()>0){
+//
+//      }
+//      else{
+//        wxkjResp(targetPlayer,false);
+//      }
       return true;
    }
    public void wxkjResp(Player targetPlayer,boolean success) {
-      targetPlayer.room.wxkjPlayers.clear();
-      if (success) {
-         targetPlayer.room.respPlayers.remove(0);
-         targetPlayer.room.jdsrPlayer=null;
-      } else {
-
-         }
+//      targetPlayer.room.wxkjPlayers.clear();
+//      if (success) {
+//         targetPlayer.room.respPlayers.remove(0);
+//         targetPlayer.room.jdsrPlayer=null;
+//      } else {
+//
+//         }
       }
 
    public boolean Resp(Player targetPlayer,int id){
       if(AbandonResp(targetPlayer)) return false;
       if(targetPlayer.handCardList.get(id).getTypeId()==1) {
-         targetPlayer.room.currentCard=targetPlayer.handCardList.remove(id);
+        // targetPlayer.room.currentCard=targetPlayer.handCardList.remove(id);
          targetPlayer.room.respPlayers.clear();
-         targetPlayer.room.respPlayers.add(targetPlayer.room.jdsrPlayer);
-         targetPlayer.room.respPlayers.remove(targetPlayer);
-         if(targetPlayer.room.respPlayers.size()==0){
+         //targetPlayer.room.respPlayers.add(targetPlayer.room.jdsrPlayer);
+         //targetPlayer.room.respPlayers.remove(targetPlayer);
+         //if(targetPlayer.room.respPlayers.size()==0){
             targetPlayer.room.status= Room.roomStatus.PlayStatus;
-         }
+         //}
          return true;
       }
       return false;
@@ -568,13 +586,13 @@ class JieDaoShaRen extends Card{
          return true;
    }
    public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
+      //addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
    }
 }
 
@@ -594,38 +612,39 @@ class JueDou extends Card{
    }
    public boolean Use(Player player,Player targetPlayer , int id){
       if(targetPlayer.hero.getHeroId()==5&&targetPlayer.handCardList.size()==0) return false;
-      player.room.status= Room.roomStatus.RespStatus;
+      //player.room.status= Room.roomStatus.RespStatus;
       player.room.currentCard=player.handCardList.get(id);
-      addWxkj(targetPlayer);
-      player.room.respPlayers.add(targetPlayer);
-      if(player.room.wxkjPlayers.size()>0) {}
-      else{
-         wxkjResp(targetPlayer,false);
-      }
+      //addWxkj(targetPlayer);
+      //player.room.respPlayers.add(targetPlayer);
+      //if(player.room.wxkjPlayers.size()>0) {}
+//      else{
+//         wxkjResp(targetPlayer,false);
+//      }
       return true;
    }
    public void wxkjResp(Player targetPlayer,boolean success) {
-      targetPlayer.room.wxkjPlayers.clear();
-      if (success) {
-         targetPlayer.room.respPlayers.remove(0);
-      } else {
+      //targetPlayer.room.wxkjPlayers.clear();
+//      if (success) {
+//         targetPlayer.room.respPlayers.remove(0);
+//      }
+//      else {
          int num1 = targetPlayer.handCardList.size();
          int num2 = targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn).handCardList.size();
          int min = num1 < num2 ? num1 : num2;
          for (int i = 0; i < min; i++) {
-            targetPlayer.room.respPlayers.add(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn));
-            targetPlayer.room.respPlayers.add(targetPlayer);
-         }
+//            targetPlayer.room.respPlayers.add(targetPlayer.room.getPlayerBySeatId(targetPlayer.room.turn));
+//            targetPlayer.room.respPlayers.add(targetPlayer);
+//         }
       }
    }
       public boolean Resp(Player targetPlayer,int id){
          if(AbandonResp(targetPlayer)) return false;
          if(targetPlayer.handCardList.get(id).getTypeId()==1) {
-            targetPlayer.handCardList.remove(id);
-            targetPlayer.room.respPlayers.remove(targetPlayer);
-            if(targetPlayer.room.respPlayers.size()==0){
+            //targetPlayer.handCardList.remove(id);
+            //targetPlayer.room.respPlayers.remove(targetPlayer);
+            //if(targetPlayer.room.respPlayers.size()==0){
                targetPlayer.room.status= Room.roomStatus.PlayStatus;
-            }
+            //}
             return true;
          }
          return false;
@@ -647,27 +666,27 @@ class JueDou extends Card{
       if(targetPlayer.hero.getHeroId()==2){
          targetPlayer.handCardList.add(targetPlayer.room.currentCard);
       }
-      if(targetPlayer.hp<=0){
-         List<Player> playerList = targetPlayer.room.players;
-         boolean add = false;
-         targetPlayer.room.helpPlayers.clear();
-         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
-            i%=targetPlayer.room.players.size();
-            if(playerList.get(i)==targetPlayer) add=true;
-            if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
-         }
-      }
+//      if(targetPlayer.hp<=0){
+//         List<Player> playerList = targetPlayer.room.players;
+//         boolean add = false;
+//         targetPlayer.room.helpPlayers.clear();
+//         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
+//            i%=targetPlayer.room.players.size();
+//            if(playerList.get(i)==targetPlayer) add=true;
+//            if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
+//         }
+//      }
       return targetPlayer.hp<=0;
    }
    public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
-   }
+//      addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
+  }
 }
 
 //无懈可击：可使敌方打出的锦囊牌无效， typeId 10
@@ -676,44 +695,44 @@ class WuXieKeJi extends Card {
       super(typeId);
       super.setCardPhotoPath("controller/img/ShouPai/WuXieKeJi.jpg");
    }
-
-   public boolean CanInitiative() {
-      return true;
-   }
-
-   @Override
-   public boolean Use(Player player, int id) {
-      Card card = player.handCardList.get(id);
-      if (card.getTypeId() != 10) return false;
-      player.handCardList.remove(id);
-      Player respPlayer = player.room.respPlayers.get(0);
-      boolean value = respPlayer.Wxkj;
-      addWxkj(player.room.getPlayerBySeatId(player.seatId++));
-      for (int i = 0; i < player.room.wxkjPlayers.size(); i++) {
-         if (player.room.wxkjPlayers.get(i).getSeatId() == player.seatId) {
-            player.room.wxkjPlayers.remove(i);
-            break;
-         }
-      }
-      if (player.room.wxkjPlayers.size() > 0) {
-         respPlayer.Wxkj = !respPlayer.Wxkj;
-         value = respPlayer.Wxkj;
-      } else {
-         respPlayer.Wxkj = false;
-         Card cCard = player.room.currentCard;
-         cCard.wxkjResp(respPlayer, !value);
-      }
-      return true;
-   }
-   public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
-   }
+//
+//   public boolean CanInitiative() {
+//      return true;
+//   }
+//
+//   @Override
+//   public boolean Use(Player player, int id) {
+//      Card card = player.handCardList.get(id);
+//      if (card.getTypeId() != 10) return false;
+//      player.handCardList.remove(id);
+//      Player respPlayer = player.room.respPlayers.get(0);
+//      boolean value = respPlayer.Wxkj;
+//      addWxkj(player.room.getPlayerBySeatId(player.seatId++));
+//      for (int i = 0; i < player.room.wxkjPlayers.size(); i++) {
+//         if (player.room.wxkjPlayers.get(i).getSeatId() == player.seatId) {
+//            player.room.wxkjPlayers.remove(i);
+//            break;
+//         }
+//      }
+//      if (player.room.wxkjPlayers.size() > 0) {
+//         respPlayer.Wxkj = !respPlayer.Wxkj;
+//         value = respPlayer.Wxkj;
+//      } else {
+//         respPlayer.Wxkj = false;
+//         Card cCard = player.room.currentCard;
+//         cCard.wxkjResp(respPlayer, !value);
+//      }
+//      return true;
+//   }
+//   public void setwxkjResp(Player player){
+//      addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
+//   }
 }
 
 
@@ -732,8 +751,8 @@ class LeBuSiShu extends Card{
       return true;
    }
    public void wxkjResp(Player player,boolean success){
-      player.room.wxkjPlayers.clear();
-      player.room.respPlayers.remove(0);
+      //player.room.wxkjPlayers.clear();
+      //player.room.respPlayers.remove(0);
       player.buffStatus=2;
       if(success){
          player.judgeCardList[0]=false;
@@ -747,17 +766,17 @@ class LeBuSiShu extends Card{
       }
    }
    public void setResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
+      //addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
    }
    public boolean Use(Player player,Player targetPlayer,int id){
       targetPlayer.judgeCardList[0]=true;
-      player.handCardList.remove(id);
+      //player.handCardList.remove(id);
       return true;
    }
 }
@@ -778,7 +797,7 @@ class BingLiangCunDuan extends Card{
    }
    public void wxkjResp(Player player,boolean success){
       player.room.wxkjPlayers.clear();
-      player.room.respPlayers.remove(0);
+      //player.room.respPlayers.remove(0);
       player.buffStatus=2;
       if(success){
          player.judgeCardList[1]=false;
@@ -794,18 +813,18 @@ class BingLiangCunDuan extends Card{
    public boolean Use(Player player,Player targetPlayer,int id){
       if(!Card.distance(player,targetPlayer,false)) return false;
       targetPlayer.judgeCardList[1]=true;
-      player.handCardList.remove(id);
+      //player.handCardList.remove(id);
       return true;
    }
    public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
-   }
+//      addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
+}
 }
 
 //南蛮入侵：使用后其余所有角色需打出一张杀相应，否则受到一点伤害， typeId 13
@@ -819,9 +838,9 @@ class NanManRuQin extends Card{
       return true;
    }
    public boolean Use(Player player ,int id){
-      player.room.status= Room.roomStatus.RespStatus;
+      //player.room.status= Room.roomStatus.RespStatus;
       player.room.currentCard=player.handCardList.get(id);
-      player.handCardList.remove(id);
+      //player.handCardList.remove(id);
       player.room.respPlayers.clear();
       int cTurn=player.room.turn;
       Player next = player.room.getPlayerBySeatId((cTurn)%player.room.players.size());
@@ -829,20 +848,20 @@ class NanManRuQin extends Card{
          if(player.seatId==next.seatId){
             break;
          }
-         if(next.hp>0){
-            player.room.respPlayers.add(next);
-         }
+//         if(next.hp>0){
+//            player.room.respPlayers.add(next);
+//         }
       }
       return true;
    }
    public boolean Resp(Player targetPlayer, int id){
       Card card = targetPlayer.handCardList.get(id);
       if(card.getTypeId()==1){
-         targetPlayer.room.respPlayers.remove(targetPlayer);
-         if(targetPlayer.room.respPlayers.size()>0){
-            addWxkj(targetPlayer);
-         }
-         else{}
+         //targetPlayer.room.respPlayers.remove(targetPlayer);
+//         if(targetPlayer.room.respPlayers.size()>0){
+//            addWxkj(targetPlayer);
+//         }
+//         else{}
          return true;
       }
       return false;
@@ -852,13 +871,13 @@ class NanManRuQin extends Card{
       addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
    }
    public void wxkjResp(Player targetPlayer,boolean success){
-      if(success){
-         targetPlayer.room.respPlayers.remove(0);
-         addWxkj(targetPlayer);
-      }
+//      if(success){
+//         targetPlayer.room.respPlayers.remove(0);
+//         addWxkj(targetPlayer);
+//      }
    }
    public boolean Abandon(Player targetPlayer){
-      targetPlayer.room.respPlayers.remove(0);
+      //targetPlayer.room.respPlayers.remove(0);
       targetPlayer.hp--;
       // 创建媒体对象，指定音乐文件路径
       javafx.scene.media.Media media = new Media(this.getClass().getResource("music/NiGanMa.mp3").toString());
@@ -874,26 +893,26 @@ class NanManRuQin extends Card{
       if(targetPlayer.hero.getHeroId()==2){
          targetPlayer.handCardList.add(targetPlayer.room.currentCard);
       }
-      if(targetPlayer.hp<=0){
-         List<Player> playerList = targetPlayer.room.players;
-         boolean add = false;
-         targetPlayer.room.helpPlayers.clear();
-         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
-            i%=targetPlayer.room.players.size();
-            if(playerList.get(i)==targetPlayer) add=true;
-            if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
-         }
-      }
+//      if(targetPlayer.hp<=0){
+//         List<Player> playerList = targetPlayer.room.players;
+//         boolean add = false;
+//         targetPlayer.room.helpPlayers.clear();
+//         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
+//            i%=targetPlayer.room.players.size();
+//            if(playerList.get(i)==targetPlayer) add=true;
+//            if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
+//         }
+//      }
       return targetPlayer.hp<=0;
    }
    public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
+//      addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
    }
 }
 
@@ -908,9 +927,9 @@ class WanJianQiFa extends Card{
       return true;
    }
    public boolean Use(Player player ,int id){
-      player.room.status= Room.roomStatus.RespStatus;
+      //player.room.status= Room.roomStatus.RespStatus;
       player.room.currentCard=player.handCardList.get(id);
-      player.handCardList.remove(id);
+      //player.handCardList.remove(id);
       player.room.respPlayers.clear();
       int cTurn=player.room.turn;
       Player next = player.room.getPlayerBySeatId((++cTurn)%player.room.players.size());
@@ -918,20 +937,20 @@ class WanJianQiFa extends Card{
          if(player.seatId==next.seatId){
             break;
          }
-         if(next.hp>0){
-            player.room.respPlayers.add(next);
-         }
+//         if(next.hp>0){
+//            player.room.respPlayers.add(next);
+//         }
       }
       return true;
    }
    public boolean Resp(Player targetPlayer, int id){
       Card card = targetPlayer.handCardList.get(id);
       if(card.getTypeId()==2){
-         targetPlayer.room.respPlayers.remove(targetPlayer);
-         if(targetPlayer.room.respPlayers.size()>0){
-            addWxkj(targetPlayer);
-         }
-         else{}
+         //targetPlayer.room.respPlayers.remove(targetPlayer);
+//         if(targetPlayer.room.respPlayers.size()>0){
+//            addWxkj(targetPlayer);
+//         }
+//         else{}
          return true;
       }
       return false;
@@ -941,13 +960,13 @@ class WanJianQiFa extends Card{
       addWxkj(player.room.getPlayerBySeatId((++cTurn)%player.room.players.size()));
    }
    public void wxkjResp(Player targetPlayer,boolean success){
-      if(success){
-         targetPlayer.room.respPlayers.remove(0);
-         addWxkj(targetPlayer);
-      }
+//      if(success){
+//         targetPlayer.room.respPlayers.remove(0);
+//         addWxkj(targetPlayer);
+//      }
    }
    public boolean Abandon(Player targetPlayer){
-      targetPlayer.room.respPlayers.remove(0);
+      //targetPlayer.room.respPlayers.remove(0);
       targetPlayer.hp--;
       // 创建媒体对象，指定音乐文件路径
       javafx.scene.media.Media media = new Media(this.getClass().getResource("music/NiGanMa.mp3").toString());
@@ -963,27 +982,27 @@ class WanJianQiFa extends Card{
       if(targetPlayer.hero.getHeroId()==2){
          targetPlayer.handCardList.add(targetPlayer.room.currentCard);
       }
-      if(targetPlayer.hp<=0){
-         List<Player> playerList = targetPlayer.room.players;
-         boolean add = false;
-         targetPlayer.room.helpPlayers.clear();
-         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
-            i%=targetPlayer.room.players.size();
-            if(playerList.get(i)==targetPlayer) add=true;
-            if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
-         }
-      }
+//      if(targetPlayer.hp<=0){
+//         List<Player> playerList = targetPlayer.room.players;
+//         boolean add = false;
+//         targetPlayer.room.helpPlayers.clear();
+//         for(int i=0; targetPlayer.room.helpPlayers.size()<playerList.size();i++){
+//            i%=targetPlayer.room.players.size();
+//            if(playerList.get(i)==targetPlayer) add=true;
+//            if(add) targetPlayer.room.helpPlayers.add(playerList.get(i));
+//         }
+//      }
       return targetPlayer.hp<=0;
    }
    public void setwxkjResp(Player player){
-      addWxkj(player);
-      if(player.room.wxkjPlayers.size()>0){
-         player.Wxkj=false;
-      }
-      else{
-         wxkjResp(player,false);
-      }
-   }
+//      addWxkj(player);
+//      if(player.room.wxkjPlayers.size()>0){
+//         player.Wxkj=false;
+//      }
+//      else{
+//         wxkjResp(player,false);
+//      }
+  }
 }
 
 //诸葛连弩；攻击距离为1，装备后使用杀无次数限制， typeId 15
@@ -997,7 +1016,7 @@ class ZhuGeLianNu extends Card{
       return true;
    }
    public boolean Use(Player player,int id){
-      Card card = player.handCardList.remove(id);
+      Card card = player.handCardList.get(id);
       if(player.equipCardList[0]!=null){
          player.equipCardList[0]=null;
       }
@@ -1019,7 +1038,7 @@ class GuDingDao extends Card{
       return true;
    }
    public boolean Use(Player player,int id){
-      Card card = player.handCardList.remove(id);
+      Card card = player.handCardList.get(id);
       if(player.equipCardList[0]!=null){
          player.equipCardList[0]=null;
       }
@@ -1040,7 +1059,7 @@ class QingLongYanYueDao extends Card{
       return true;
    }
    public boolean Use(Player player,int id){
-      Card card = player.handCardList.remove(id);
+      Card card = player.handCardList.get(id);
       if(player.equipCardList[0]!=null){
          player.equipCardList[0]=null;
       }
@@ -1061,7 +1080,7 @@ class HorseIncrease1 extends Card{
       return true;
    }
    public boolean Use(Player player,int id){
-      Card card = player.handCardList.remove(id);
+      Card card = player.handCardList.get(id);
       if(player.equipCardList[1]!=null){
          player.equipCardList[1]=null;
       }
@@ -1081,7 +1100,7 @@ class HorseDecrease1 extends Card{
       return true;
    }
    public boolean Use(Player player,int id){
-      Card card = player.handCardList.remove(id);
+      Card card = player.handCardList.get(id);
       if(player.equipCardList[2]!=null){
          player.equipCardList[2]=null;
       }

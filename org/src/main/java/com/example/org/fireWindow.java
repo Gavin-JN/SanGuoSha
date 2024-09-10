@@ -31,6 +31,8 @@ public class fireWindow extends Parent {
     public Pane heroCardPane;
     //己方玩家装备区
     public  Pane equipmentPane;
+    //敌方玩家装备区
+    public  Pane equipmentPane2;
     //敌方玩家英雄区
     public   Pane heroCardPane2;
     //选择的敌方玩家手牌索引
@@ -49,6 +51,8 @@ public class fireWindow extends Parent {
     public Label healthLabel2;
     //己方玩家 仅装备容器
     public Pane equipmentContainer;
+    //敌方玩家 仅装备容器
+    public Pane equipmentContainer2;
     //敌方玩家座位号
     public int checkedSeatId;
     //仅敌方玩家手牌容器
@@ -59,6 +63,11 @@ public class fireWindow extends Parent {
     public Pane cardContainer2;
 
     public boolean IsPlay = false;
+
+    public  AtomicBoolean ifPlayCard;
+
+    public boolean balanceUsed=false;
+
     public int outCard=-1;
     public FireWindowController fireWindowController = new FireWindowController();
 
@@ -74,7 +83,6 @@ public class fireWindow extends Parent {
         //对战区域
         gameAreaPane = new Pane();
         heroCardPane = new Pane();
-        equipmentPane = new Pane();
         checkedCardFromTarget =new ArrayList<>(); //选中的对方玩家的牌的列表
         //记录选中卡片的编号
         checkedCards = new ArrayList<Integer>();
@@ -109,6 +117,7 @@ public class fireWindow extends Parent {
         Background background2 = new Background(backgroundImage2);
         player1Pane.setBackground(background2);
 
+
         //编辑己方区域的内容
         heroCardPane.setPrefSize(100, 150);
         Image imageHero = new Image(getClass().getResourceAsStream(player1.getHero().getHeroPhotoPath()));
@@ -120,22 +129,26 @@ public class fireWindow extends Parent {
         heroCardPane.setLayoutY(0);
         player1Pane.getChildren().add(heroCardPane);
         //己方装备
+
         equipmentContainer = new Pane();
-        equipmentContainer.setPrefSize(100,150);
-        equipmentContainer.setLayoutX(180);
-        equipmentPane.setPrefSize(100, 150);
+        equipmentContainer.setPrefSize(300,150);
+        equipmentContainer.setLayoutX(150);
         player1Pane.getChildren().add(equipmentContainer);
-        Image imageEquipment = new Image(getClass().getResourceAsStream("img/zhuangBei.jpg"));
-        BackgroundSize backgroundSizeEquipment = new BackgroundSize(100, 150, false, false, false, false);
-        BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment);
-        Background equipmentBackground = new Background(equipmentImage);
-        equipmentPane.setBackground(equipmentBackground);
-        equipmentPane.setLayoutX(0);
-        equipmentPane.setLayoutY(0);
-        equipmentContainer.getChildren().add(equipmentPane);
+        for(int i=0;i<player1.equipCardList.length;i++) {
+            equipmentPane = new Pane();
+            equipmentPane.setPrefSize(100, 150);
+            Image imageEquipment = new Image(getClass().getResourceAsStream(player1.equipCardList[i].getCardPhotoPath()));
+            BackgroundSize backgroundSizeEquipment = new BackgroundSize(100, 150, false, false, false, false);
+            BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment);
+            Background equipmentBackground = new Background(equipmentImage);
+            equipmentPane.setBackground(equipmentBackground);
+            equipmentPane.setLayoutX(0+i*35);
+            equipmentPane.setLayoutY(0);
+            equipmentContainer.getChildren().add(equipmentPane);
+        }
 
         //限制每次出牌只可以出一张
-        AtomicBoolean ifPlayCard=new AtomicBoolean(false);//己方卡牌区
+        ifPlayCard=new AtomicBoolean(false);//己方卡牌区
 
         cardContainer = new Pane();  //卡牌区域
         cardContainer.setPrefSize(900, 150);
@@ -170,9 +183,27 @@ public class fireWindow extends Parent {
                         checkedCards.add(finalI);
                         //将玩家出的牌的索引赋给玩家  putId
                         player1.setPutId(finalI);
+
                         player1.chooseCard=finalI;
+
                         ifPlayCard.set(true);
                         outCard=player1.handCardList.get(player1.putId).getTypeId();
+
+                        if(outCard==1)
+                        {
+                            if(player1.canUseSha)
+                            {
+                            }
+                            else {
+                                cardPane.setTranslateY(0);
+                                isClicked.set(false);
+                                checkedCards.remove(finaLi);
+                                //还将玩家的 putId初始化
+                                player1.setPutId(-1);
+                                ifPlayCard.set(false);
+                                outCard=-1;
+                            }
+                        }
 
                     } else {
                         cardPane.setTranslateY(0);
@@ -198,7 +229,7 @@ public class fireWindow extends Parent {
         BackgroundImage heroImage2 = new BackgroundImage(imageHero2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeHero2);
         Background heroBackground2 = new Background(heroImage2);
         heroCardPane2.setBackground(heroBackground2);
-        heroCardPane2.setLayoutX(450);
+        heroCardPane2.setLayoutX(300);
         heroCardPane2.setLayoutY(0);
         player2Pane.getChildren().add(heroCardPane2);
         heroCardPane2.setOnMouseClicked(event -> {
@@ -206,11 +237,30 @@ public class fireWindow extends Parent {
                     checkedSeatId = targetPlayer.seatId;
                 });
 
-        //敌方卡牌信息
+        //敌方
+        equipmentContainer2 = new Pane();
+        equipmentContainer2.setPrefSize(100,150);
+        equipmentContainer2.setLayoutX(450);
+        player2Pane.getChildren().add(equipmentContainer2);
 
+        for(int i=0;i<targetPlayer.equipCardList.length;i++) {
+            equipmentPane2 = new Pane();
+            equipmentPane2.setPrefSize(100, 150);
+            Image imageEquipment2 = new Image(getClass().getResourceAsStream(targetPlayer.equipCardList[i].getCardPhotoPath()));
+            BackgroundSize backgroundSizeEquipment2 = new BackgroundSize(100, 150, false, false, false, false);
+            BackgroundImage equipmentImage2 = new BackgroundImage(imageEquipment2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment2);
+            Background equipmentBackground2 = new Background(equipmentImage2);
+            equipmentPane2.setBackground(equipmentBackground2);
+            equipmentPane2.setLayoutX(0+i*35);
+            equipmentPane2.setLayoutY(0);
+            equipmentContainer2.getChildren().add(equipmentPane2);
+        }
+
+
+        //敌方卡牌信息
         targetContainer=new Pane();
         targetContainer.setPrefSize(400, 150);
-        targetContainer.setLayoutX(650);
+        targetContainer.setLayoutX(700);
         targetContainer.setLayoutY(0);
         player2Pane.getChildren().add(targetContainer);
         for (int i = 0; i < targetPlayer.handCardList.size(); i++) {    //根据对方玩家的卡牌的数量循环对应的次数
@@ -253,6 +303,10 @@ public class fireWindow extends Parent {
         Button up = new Button();
         up.setPrefSize(80, 40);
         up.setText("出牌");
+        Image buttonBackgroundImage = new Image(getClass().getResourceAsStream("img/buttonBackground.jpg"));
+        BackgroundSize buttonBackgroundSize = new BackgroundSize(80, 40, false, false, false, false);
+        BackgroundImage backgroundImg = new BackgroundImage(buttonBackgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, buttonBackgroundSize);
+        up.setBackground(new Background(backgroundImg));
         up.setLayoutX(300);
         up.setLayoutY(420);
         up.backgroundProperty();
@@ -263,20 +317,20 @@ public class fireWindow extends Parent {
             //将checkedCard 中编号的卡牌在玩家目前已有的卡牌列表中 先展示在对战区域，之后再从玩家的卡牌列表中remove
             //player属性中putId为玩家出的牌在自己手牌列表中的索引
             //执行所处的牌的作用
-
             if((player1.room.status== Room.roomStatus.PlayStatus&&player1.seatId==player1.room.turn)||
                     (player1.room.status== Room.roomStatus.RespStatus&&player1.seatId==player1.room.respPlayers.get(0).seatId)) {
 
                 for (int i = 0; i < checkedCards.size(); i++) {
                     Card cardOut = player1.handCardList.get(checkedCards.get(i));
+                    boolean ab;
 
                     switch (cardOut.getTypeId()) {
                         //所出的牌为杀
                         case 1:
-                            if (!cardOut.Use(player1, checkedCards.get(0))) return;
+                            if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             else {
                                 player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
-                                cardOut.Resp(targetPlayer, targetPlayer.chooseCard);
+                                cardOut.AbandonResp(targetPlayer);
                             }
                             break;
                         case 3:
@@ -292,71 +346,112 @@ public class fireWindow extends Parent {
                         case 5:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab= cardOut.Abandon(targetPlayer);
                             break;
                         //
                         case 6:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab = cardOut.Abandon(targetPlayer);
+                            player1.ifUseGuoHeChaiQiao=true;
                             break;
                         //
                         case 7:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithoutTarget(player1, checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab = cardOut.Abandon(player1);
                             break;
                         //
                         case 8:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab = cardOut.Abandon(targetPlayer);
                             break;
                         //
                         case 9:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab = cardOut.Abandon(targetPlayer);
                             break;
                         //
                         case 11:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab = cardOut.Abandon(targetPlayer);
                             break;
                         //
                         case 12:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithTarget(player1, targetPlayer.seatId, checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab = cardOut.Abandon(targetPlayer);
                             break;
                         //
                         case 13:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithoutTarget(player1,  checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab = cardOut.Abandon(targetPlayer);
                             break;
                         //
                         case 14:
                             if (!cardOut.Use(player1, checkedCards.get(0))) break;
                             player1.room.receiver.PlayCardWithoutTarget(player1, checkedCards.get(0));
-                            cardOut.setwxkjResp(targetPlayer);
-                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+
+//                            cardOut.setwxkjResp(targetPlayer);
+//                            targetPlayer.room.receiver.PlayCardWithoutTarget(targetPlayer, targetPlayer.chooseCard);
+                            ab = cardOut.Abandon(targetPlayer);
                             break;
+                        case 15:
+                            cardOut.Use(player1,checkedCards.get(0));
+                            break;
+                        case 16:
+                            cardOut.Use(player1,checkedCards.get(0));
+                            break;
+                        case 17:
+                            cardOut.Use(player1,checkedCards.get(0));
+                            break;
+                        case 18:
+                            cardOut.Use(player1,checkedCards.get(0));
+                            break;
+                        case 19:
+                            cardOut.Use(player1,checkedCards.get(0));
+                            break;
+                        //加装备
                         default:
                             break;
                     }
                 }
                 //在gameArea区域展示
-                showCardInArea(cardContainer2, player1, checkedCards);
+                if(player1.handCardList.get(checkedCards.get(0)).getTypeId()<15) {
+                    showCardInArea(cardContainer2, player1, checkedCards);
+                }
+                else {
+                    showEquipment(equipmentContainer,player1);
+                }
+
+
 
                 for(int i=0;i<checkedCards.size();i++) {
                     player1.handCardList.remove((int)(checkedCards.get(i)));
@@ -366,6 +461,16 @@ public class fireWindow extends Parent {
                 checkedCards.clear();
                 //更新地方卡牌区域
                 updateTarget(targetContainer,targetPlayer);
+
+                if(targetPlayer.getHp()<0)
+                {
+                    Alert outOfUp=new Alert(Alert.AlertType.WARNING);
+                    outOfUp.setContentText("游戏结束！");
+                    outOfUp.showAndWait();
+                    return;
+                }
+
+
                 //更新己方血条
                 upDateAllBlood(bloodPone1, player1, healthBar1, healthLabel1);
                 //更新敌方血条
@@ -373,6 +478,7 @@ public class fireWindow extends Parent {
                 //更新ifPlayCard
                 ifPlayCard.set(false);
             }
+
             else {
                 Alert cardoutAlert = new Alert(Alert.AlertType.WARNING);
                 cardoutAlert.setTitle("警告");
@@ -380,7 +486,9 @@ public class fireWindow extends Parent {
                 cardoutAlert.setContentText("当前阶段无法出牌！");
                 cardoutAlert.showAndWait();
                 ifPlayCard.set(false);
+                checkedCards.clear();
             }
+
             IsPlay = true;
             fireWindowController.SendMessage(IsPlay,outCard);
         });
@@ -388,55 +496,48 @@ public class fireWindow extends Parent {
         //结束回合按钮
         Button down = new Button();
         down.setPrefSize(80, 40);
-        down.setText("结束回合");
+        down.setText("取消");
+        down.setBackground(new Background(backgroundImg));
         down.setLayoutX(900);
         down.setLayoutY(420);
         down.backgroundProperty();
         down.setStyle("-fx-background-color: #000fff");
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         down.setOnAction(event -> {
+            if(player1.room.status== Room.roomStatus.PlayStatus&&player1.room.turn==player1.seatId)
+                player1.room.update();
+            if(player1.room.status== Room.roomStatus.RespStatus&&player1.seatId==player1.room.respPlayers.get(0).getSeatId())
+                player1.room.currentCard.AbandonResp(player1);
 
-            if(player1.handCardList.size()>player1.getHp())
-            {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("警告");
-                alert.setHeaderText(null);
-                alert.setContentText("您目前的手牌数量仍大于血量无法进入下一回合，请弃牌或出牌！");
 
-                alert.showAndWait();
-              System.out.println("手牌数量超过血量无法进入下一回合");
-            }
-
-            else {
-               player1.room.turn= (player1.room.turn+1)%player1.room.players.size();
-            }
-            System.out.println("回合结束进入下一回合");
-            checkedCards.clear();
+            System.out.println("status:::"+player1.room.status);
         });
 
         //弃牌按钮
         Button fold = new Button();
         fold.setPrefSize(80, 40);
         fold.setText("决定弃牌");
+        fold.setBackground(new Background(backgroundImg));
         fold.setLayoutX(600);
         fold.setLayoutY(420);
-        fold.backgroundProperty();
-        fold.setStyle("-fx-background-color: #000fff");
         fold.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         fold.setOnAction(event -> {
 
             //需要判断是弃自己的牌还是其对方的牌，看是否使用了过河拆桥
             if(player1.isIfUseGuoHeChaiQiao())   //使用的是过河拆桥，故此时弃对方玩家的牌
             {
+                //此时show出去的牌不分装备牌还是...
                 showCardInArea(cardContainer2,targetPlayer,checkedCardFromTarget); //在gameArea区域展示
 
                 for(int i=0;i<checkedCardFromTarget.size();i++) {
                     targetPlayer.handCardList.remove((int)checkedCardFromTarget.get(i));//删除对方玩家的被选中的手牌
                 }
+                updateTarget(targetContainer,targetPlayer);
                 player1.setIfUseGuoHeChaiQiao(false);
             }
             else {  //不是过河 拆桥，则删除己方玩家的被选中的卡牌
 
+                //此时show出去的牌不分装备牌还是...
                 showCardInArea(cardContainer2,player1,checkedCards);
                 for(int i=0;i<checkedCards.size();i++) {
                     player1.handCardList.remove((int)(checkedCards.get(i)));
@@ -467,7 +568,7 @@ public class fireWindow extends Parent {
         healthBar1.setLayoutX(0);
         //文字标签
         healthLabel1 = new Label();
-        healthLabel1.setTextFill(Color.WHITE);  // 设置标签文字颜色
+        healthLabel1.setTextFill(Color.BLACK);  // 设置标签文字颜色
         healthLabel1.setStyle("-fx-font-weight: bold;");  // 设置字体粗体
         String Limithp1=String.valueOf(player1.getHpLimit());
         healthLabel1.setText(Limithp1);
@@ -484,7 +585,7 @@ public class fireWindow extends Parent {
         healthBar2.setLayoutX(0);
 
         healthLabel2 = new Label();
-        healthLabel2.setTextFill(Color.WHITE);  // 设置标签文字颜色
+        healthLabel2.setTextFill(Color.BLACK);  // 设置标签文字颜色
         healthLabel2.setStyle("-fx-font-weight: bold;");  // 设置字体粗体
         String Limithp2=String.valueOf(targetPlayer.getHpLimit());
         healthLabel2.setText(Limithp2);
@@ -523,12 +624,35 @@ public class fireWindow extends Parent {
             {
                 case 1:
                     if(checkedCards.size()!=0) {
-                        sunQuan sun = new sunQuan();
+//                        sunQuan sun = new sunQuan();
                         //此时该按钮充当出牌
                         //展示要弃的牌
                         showCardInArea(cardContainer2, player1, checkedCards);
                         //弃牌并摸等量牌
-                        sun.zhiheng(player1, player1.room.cardList, checkedCards);
+                        int discardCards=checkedCards.size();
+                        if (balanceUsed) {
+                            System.out.println("本回合制衡已经使用过了！");
+                            return;
+                        }
+                        if (discardCards > player1.handCardList.size()) {
+                            System.out.println("手牌不足以弃牌！");
+                            return;
+                        }
+
+                        for(int i=0;i<checkedCards.size();i++) {
+                            player1.handCardList.remove((int)checkedCards.get(i));
+                        }
+
+                        for(int i=0;i<discardCards;i++) {   //抽取与弃牌数量相同的新牌
+                            int typeOfCard=player1.DrawCard(player1.room.cardList);  //cardList为待抽取的剩余的所有卡牌
+                            Card cardIn=player1.getCardByType(typeOfCard);
+                            player1.handCardList.add(cardIn);
+                        }
+                        balanceUsed = true;
+                        checkedCards.clear();
+
+                        System.out.println("孙权使用了制衡，弃了" + discardCards + "张牌，摸了" + discardCards + "张牌。");
+
                         //更新玩家手牌区域
                         renderPlayerCards(cardContainer, player1);
                     }
@@ -627,6 +751,7 @@ public class fireWindow extends Parent {
         stage.show();
     }
 
+
     //更新己方玩家的卡牌区域
     public void renderPlayerCards(Pane cardContainer, Player player) {
         // 清空卡牌容器
@@ -669,6 +794,27 @@ public class fireWindow extends Parent {
                     //检查outCard是否成功获得当前打出手牌
                     outCard=player.handCardList.get(finalI).getTypeId();
                     System.out.println("outCard为："+outCard);
+
+                    if(outCard==1)
+                    {
+                        if(player.canUseSha)
+                        {
+                        }
+                        else {
+                            cardPane.setTranslateY(0);
+                            isClicked.set(false);
+                            checkedCards.remove(finalI);
+                            //还将玩家的 putId初始化
+                            player.setPutId(-1);
+                            ifPlayCard.set(false);
+                            outCard=-1;
+
+                            Alert shaAlert = new Alert(Alert.AlertType.WARNING);
+                            shaAlert.setContentText("您已无法再次出“杀！");
+                            shaAlert.showAndWait();
+
+                        }
+                    }
                 } else {
                     cardPane.setTranslateY(0);
                     isClicked.set(false);
@@ -682,12 +828,11 @@ public class fireWindow extends Parent {
         }
     }
 
-    //将出的牌展示在对战区域
+    //将出的牌展示在对战区域,非装备牌（出牌按钮）/所有选中（弃牌区）
     public void showCardInArea(Pane cardContainer2,Player player,List<Integer> checked)  //仅展示出牌，不删除
     {
             cardContainer2.getChildren().clear();
             for (int i = 0; i < checked.size(); i++) {
-                if(player.handCardList.get(checked.get(i)).getTypeId()<15) {
                     Pane showCardPane = new Pane();
                     showCardPane.setPrefSize(100, 150);
                     Image imageShowCard = new Image(getClass().getResourceAsStream(player.handCardList.get(checked.get(i)).getCardPhotoPath()));
@@ -698,19 +843,7 @@ public class fireWindow extends Parent {
                     showCardPane.setLayoutX(0 + i * 30);
                     showCardPane.setLayoutY(0);
                     cardContainer2.getChildren().add(showCardPane);
-                }
-                //当出的牌为装备牌时，将装备牌展示在装备牌处
-                else {
-                    equipmentContainer.getChildren().clear();
-                    Image imageEquipment = new Image(getClass().getResourceAsStream(player.handCardList.get(checked.get(i)).getCardPhotoPath()));
-                    BackgroundSize backgroundSizeEquipment = new BackgroundSize(100, 150, false, false, false, false);
-                    BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment);
-                    Background equipmentBackground = new Background(equipmentImage);
-                    equipmentPane.setBackground(equipmentBackground);
-                    equipmentPane.setLayoutX(0);
-                    equipmentPane.setLayoutY(0);
-                    equipmentContainer.getChildren().add(equipmentPane);
-                }
+
             }
 
     }
@@ -799,5 +932,26 @@ public class fireWindow extends Parent {
                 equipmentContainer.getChildren().add(equipmentPane);
             }
         }
+
+    //更新装备区
+    public void showEquipment(Pane equipmentContainer,Player player)
+    {
+        equipmentContainer.getChildren().clear();
+        for(int i=0;i<player.equipCardList.length;i++) {
+            equipmentPane = new Pane();
+            equipmentPane.setPrefSize(100, 150);
+            Image imageEquipment = new Image(getClass().getResourceAsStream(player.equipCardList[i].getCardPhotoPath()));
+            BackgroundSize backgroundSizeEquipment = new BackgroundSize(100, 150, false, false, false, false);
+            BackgroundImage equipmentImage = new BackgroundImage(imageEquipment, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSizeEquipment);
+            Background equipmentBackground = new Background(equipmentImage);
+            equipmentPane.setBackground(equipmentBackground);
+            equipmentPane.setLayoutX(0+i*35);
+            equipmentPane.setLayoutY(0);
+            equipmentContainer.getChildren().add(equipmentPane);
+
+
+            System.out.println("hsadgjhgcjhs"+player.equipCardList.length);
+        }
+    }
 
 }

@@ -67,7 +67,7 @@ public class Room {
         this.players = playerList;
         respPlayers = new ArrayList<>();
         helpPlayers = new ArrayList<>();
-        wxkjPlayers = new ArrayList<>();
+        //wxkjPlayers = new ArrayList<>();
         jdsrPlayer = new Player();
         setStatus(roomStatus.InitStatus);
         CardManager.CreateCardList();
@@ -76,6 +76,9 @@ public class Room {
         for(int i=0;i< players.size();i++){
             players.get(i).handCardList.clear();
             players.get(i).equipCardList=new Card[3];
+            for(int m=0;m<players.get(i).equipCardList.length;m++) {
+            players.get(i).equipCardList[m]=new Card("img/zhuangbei.jpg");
+            }
             players.get(i).judgeCardList[0]=false;
             players.get(i).judgeCardList[1]=false;
         }
@@ -159,8 +162,8 @@ public class Room {
                     int status = getPlayerBySeatId(turn).buffStatus;
                     if(status == 0){
                         currentCard=new BingLiangCunDuan(12);
-                        respPlayers.add(getPlayerBySeatId(turn));
-                        currentCard.setwxkjResp(getPlayerBySeatId(turn));
+                        //respPlayers.add(getPlayerBySeatId(turn));
+                        //currentCard.setwxkjResp(getPlayerBySeatId(turn));
                         getPlayerBySeatId(turn).buffStatus=1;
                         return;
                     }
@@ -193,7 +196,7 @@ public class Room {
                     status=roomStatus.DiscardStatus;
                 }
                 else{
-                    //出牌直到Abandon
+                    status=roomStatus.DiscardStatus;
                 }
                 break;
             }
