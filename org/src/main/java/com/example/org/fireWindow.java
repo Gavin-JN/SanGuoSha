@@ -40,6 +40,7 @@ public class fireWindow extends Parent {
     public int checkedSeatId;
     public Pane targetContainer;
     public Pane cardContainer;
+
 //    private List
 
     public fireWindow(Player player1, Player targetPlayer) {
@@ -327,6 +328,7 @@ public class fireWindow extends Parent {
                             break;
                         default:
                             break;
+
                     }
                 }
                 //在gameArea区域展示
