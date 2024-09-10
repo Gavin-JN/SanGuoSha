@@ -357,33 +357,24 @@ public class fireWindow extends Parent {
 
         });
 
-        //结束回合按钮
+        //取消按钮
         Button down = new Button();
         down.setPrefSize(80, 40);
-        down.setText("结束回合");
+        down.setText("取消");
         down.setLayoutX(900);
         down.setLayoutY(420);
         down.backgroundProperty();
         down.setStyle("-fx-background-color: #000fff");
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         down.setOnAction(event -> {
-
-            if(player1.handCardList.size()>player1.getHp())
-            {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("警告");
-                alert.setHeaderText(null);
-                alert.setContentText("您目前的手牌数量仍大于血量无法进入下一回合，请弃牌或出牌！");
-
-                alert.showAndWait();
-              System.out.println("手牌数量超过血量无法进入下一回合");
+            //自己回合
+            if(player1.room.status== Room.roomStatus.PlayStatus&&player1.room.turn==player1.seatId){
+                player1.room.update();
             }
 
-            else {
-               player1.room.turn= (player1.room.turn+1)%player1.room.players.size();
+            if(player1.room.status== Room.roomStatus.RespStatus&&player1.seatId==player1.room.respPlayers.get(0).seatId){
+                player1.room.currentCard.AbandonResp(targetPlayer);
             }
-            System.out.println("回合结束进入下一回合");
-            checkedCards.clear();
         });
 
         //弃牌按钮
@@ -408,13 +399,24 @@ public class fireWindow extends Parent {
                 player1.setIfUseGuoHeChaiQiao(false);
             }
             else {  //不是过河 拆桥，则删除己方玩家的被选中的卡牌
+                if((player1.getHp()+1)>=player1.handCardList.size())
+                {
+                    showCardInArea(cardContainer2,player1,checkedCards);
+                    for(int i=0;i<checkedCards.size();i++) {
+                        player1.handCardList.remove((int) (checkedCards.get(i)));
+                        renderPlayerCards(cardContainer, player1);
+                    }
 
+                    player1.room.update();
+                }
+                else
+                {
                 showCardInArea(cardContainer2,player1,checkedCards);
                 for(int i=0;i<checkedCards.size();i++) {
-                    player1.handCardList.remove((int)(checkedCards.get(i)));
+                    player1.handCardList.remove((int) (checkedCards.get(i)));
+                    renderPlayerCards(cardContainer,player1);
                 }
-
-                renderPlayerCards(cardContainer,player1);
+                }
 
             }
 
