@@ -1,5 +1,6 @@
 package com.example.org;
 
+import com.example.org.controller.FireWindowController;
 import javafx.animation.PauseTransition;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,8 +13,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.json.JSONObject;
 
-import java.io.InputStream;
+import java.io.*;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +43,10 @@ public class fireWindow extends Parent {
     public int checkedSeatId;
     public Pane targetContainer;
     public Pane cardContainer;
+    public boolean IsPlay = false;
+    public int outCard=-1;
+    public FireWindowController fireWindowController = new FireWindowController();
+
 
 //    private List
 
@@ -140,7 +147,7 @@ public class fireWindow extends Parent {
             AtomicBoolean isClicked = new AtomicBoolean(false);
             int finalI = i;
             Integer finaLi=i;
-            //鼠标悬浮以及点击事件
+            //鼠标点击事件
             cardPane.setOnMouseClicked(event -> {
                 if(!ifPlayCard.get()) {
                     if (!isClicked.get()) {
@@ -151,6 +158,7 @@ public class fireWindow extends Parent {
                         player1.setPutId(finalI);
                         player1.chooseCard=finalI;
                         ifPlayCard.set(true);
+                        outCard=player1.handCardList.get(player1.putId).getTypeId();
 
                     } else {
                         cardPane.setTranslateY(0);
@@ -159,6 +167,9 @@ public class fireWindow extends Parent {
                         //还将玩家的 putId初始化
                         player1.setPutId(-1);
                         ifPlayCard.set(false);
+                        outCard=-1;
+
+
                     }
                 }
                 //被点击后标记事件，即该张牌可能会出
@@ -328,11 +339,11 @@ public class fireWindow extends Parent {
                             break;
                         default:
                             break;
-
                     }
                 }
                 //在gameArea区域展示
                 showCardInArea(cardContainer2, player1, checkedCards);
+
                 for(int i=0;i<checkedCards.size();i++) {
                     player1.handCardList.remove((int)(checkedCards.get(i)));
                 }
@@ -356,27 +367,37 @@ public class fireWindow extends Parent {
                 cardoutAlert.showAndWait();
                 ifPlayCard.set(false);
             }
-
+            IsPlay = true;
+            fireWindowController.SendMessage(IsPlay,outCard);
         });
 
-        //取消按钮
+        //结束回合按钮
         Button down = new Button();
         down.setPrefSize(80, 40);
-        down.setText("取消");
+        down.setText("结束回合");
         down.setLayoutX(900);
         down.setLayoutY(420);
         down.backgroundProperty();
         down.setStyle("-fx-background-color: #000fff");
         down.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
         down.setOnAction(event -> {
-            //自己回合
-            if(player1.room.status== Room.roomStatus.PlayStatus&&player1.room.turn==player1.seatId){
-                player1.room.update();
+
+            if(player1.handCardList.size()>player1.getHp())
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("警告");
+                alert.setHeaderText(null);
+                alert.setContentText("您目前的手牌数量仍大于血量无法进入下一回合，请弃牌或出牌！");
+
+                alert.showAndWait();
+              System.out.println("手牌数量超过血量无法进入下一回合");
             }
 
-            if(player1.room.status== Room.roomStatus.RespStatus&&player1.seatId==player1.room.respPlayers.get(0).seatId){
-                player1.room.currentCard.AbandonResp(targetPlayer);
+            else {
+               player1.room.turn= (player1.room.turn+1)%player1.room.players.size();
             }
+            System.out.println("回合结束进入下一回合");
+            checkedCards.clear();
         });
 
         //弃牌按钮
@@ -401,24 +422,13 @@ public class fireWindow extends Parent {
                 player1.setIfUseGuoHeChaiQiao(false);
             }
             else {  //不是过河 拆桥，则删除己方玩家的被选中的卡牌
-                if((player1.getHp()+1)>=player1.handCardList.size())
-                {
-                    showCardInArea(cardContainer2,player1,checkedCards);
-                    for(int i=0;i<checkedCards.size();i++) {
-                        player1.handCardList.remove((int) (checkedCards.get(i)));
-                        renderPlayerCards(cardContainer, player1);
-                    }
 
-                    player1.room.update();
-                }
-                else
-                {
                 showCardInArea(cardContainer2,player1,checkedCards);
                 for(int i=0;i<checkedCards.size();i++) {
-                    player1.handCardList.remove((int) (checkedCards.get(i)));
-                    renderPlayerCards(cardContainer,player1);
+                    player1.handCardList.remove((int)(checkedCards.get(i)));
                 }
-                }
+
+                renderPlayerCards(cardContainer,player1);
 
             }
 
@@ -633,9 +643,6 @@ public class fireWindow extends Parent {
             cardPane.setLayoutX(0 + i * 110);
             cardPane.setLayoutY(0);
 
-            // 添加卡牌的交互事件，如悬浮效果、点击效果等
-            cardPane.setOnMouseEntered(event -> cardPane.setLayoutY(-20));
-            cardPane.setOnMouseExited(event -> cardPane.setLayoutY(0));
 
             AtomicBoolean isClicked = new AtomicBoolean(false);
             int finalI = i;
@@ -645,11 +652,15 @@ public class fireWindow extends Parent {
                     isClicked.set(true);
                     // 添加选中的卡牌编号
                     checkedCards.add(finalI);
+                    //检查outCard是否成功获得当前打出手牌
+                    outCard=player.handCardList.get(finalI).getTypeId();
+                    System.out.println("outCard为："+outCard);
                 } else {
                     cardPane.setTranslateY(0);
                     isClicked.set(false);
                     // 移除选中的卡牌编号
                     checkedCards.remove(Integer.valueOf(finalI));
+                    System.out.println("outCars有问题");
                 }
             });
             // 将卡牌添加到卡牌容器中
