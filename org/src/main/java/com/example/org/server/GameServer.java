@@ -59,6 +59,7 @@ public class GameServer {
         clientMap.clear();
         clientMap_everyone.clear();
         clientIdCounter = 0;
+        violent = 0;
         //服务器启动提示
         System.out.println("---服务端启动成功---");
         //创建服务端Socket对象，同时注册端口
@@ -184,6 +185,7 @@ public class GameServer {
                             }
                         }
                         break;
+                    //初始化界面
                     case 1010:    //第二个信息
                     {
                         System.out.println("执行了");
@@ -197,15 +199,16 @@ public class GameServer {
                             tmp_massage = Game_msg[violent];
                         }
                         //
+
                         massage.put("MessageIdentified", "YES");
                         massage.put("Order",tmp_massage.getInt("Order"));
                         massage.put("HeroId",tmp_massage.getInt("HeroId"));
                         massage.put("enemyHeroId",tmp_massage.getInt("enemyHeroId"));
+                        massage.put("HandCardList",tmp_massage.getJSONArray("HandCardList"));
                         jsonString = massage.toString();
-                        //这里应该会输出
+                        //打印对应信息
                         System.out.println(jsonString);
                         massage.clear();
-//                        broadcastMessage(jsonString);
                         sendMessageToClient(clientSocket, jsonString);
                     }
 
