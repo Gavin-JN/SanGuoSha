@@ -95,7 +95,7 @@ public class StartController extends Client{
                  PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                  BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
                 // 发送消息到服务器
-                massage.put("NetCode", 1010);
+                massage.put("NetCode",1010);
                 String jsonString = massage.toString();
                 out.println(jsonString);
 //            out.close();
@@ -136,15 +136,6 @@ public class StartController extends Client{
                 }
                 System.out.println(jsonArray.length());
                 System.out.println(we.handCardList.size());
-
-//            List<Player> players = new ArrayList<Player>();
-//            //玩家1
-//            players.add(we);
-//            //玩家2
-//            players.add(enemy);
-//            Room room=new Room(1);
-//            room.Init(players);
-
                 out.close();
                 in.close();
                 socket.close();
@@ -155,6 +146,8 @@ public class StartController extends Client{
 
             //传入两个玩家
             fireWindow game = new fireWindow(we, enemy);  //传入两个玩家
+            int curCardId =0;
+            curCardId = game.outCard;
 
 
             System.out.println(room.status);
@@ -176,70 +169,527 @@ public class StartController extends Client{
             //进入出牌阶段
 
 
-            int curCardId = we.getPutId();
-            switch (curCardId){
-                //出杀
-                case 1:
 
-                case 2:
-                    //发信息
-                case 3:
-                    //发信息
-                case 4:
-                    //发信息
-                case 5:
-                    //发信息
-                case 6:
-                    //发信息
-                case 7:
-                    //发信息
-                case 8:
-                    //发信息
-                case 9:
-                    //发信息
-                case 10:
-                    //发信息
-                case 11:
-                    //发信息
-                case 12:
-                    //发信息
-                case 13:
-                    //发信息
-                case 14:
-                    //发信息
-                case 15:
-                    //发信息
-                case 16:
-                    //发信息
-                case 17:
-                    //发信息
-                case 18:
-                    //发信息
-                case 19:
-                    //发信息
-                case 20:
-                    //发信息
-                case 21:
-                    //发信息
-                case 22:
-                    //发信息
-                case 23:
-                    //发信息
-                case 24:
-                    //发信息
 
-            }
 
-            //游戏一直循环 直到有玩家死亡游戏结束
-//            while (true) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
-////            如果有玩家死亡结束游戏
-//                if (false) {
-//                    break;
+//
+//
+//
+//            //出牌之后更新curCarId
+//            //这里要while一直进行
+//            while(true){
+//                if(game.IsPlay){
+//                    game.IsPlay = false;
+//                    curCardId = game.outCard;
+//                    System.out.println(curCardId);
+//                    switch (curCardId){
+//                        //出杀
+//                        case 1:
+//                            System.out.println("出了杀 获得了杀信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//                        //出闪
+//                        case 2:
+//                            System.out.println("出了杀 获得了杀信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//                        //桃
+//                        case 3:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//                        //酒
+//                        case 4:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //顺手牵羊
+//                        case 5:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //过河拆桥
+//                        case 6:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //无中生有
+//                        case 7:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //借刀杀人
+//                        case 8:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //决斗
+//                        case 9:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //无懈可击
+//                        case 10:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //乐不思蜀
+//                        case 11:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //兵粮寸断
+//                        case 12:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //南蛮入侵
+//                        case 13:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //万箭齐发
+//                        case 14:
+//                            System.out.println("出了闪 获得了闪信息");
+//                            try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+//                                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+//                                // 发送消息到服务器
+//                                massage.put("NetCode",1011);
+//                                String jsonString = massage.toString();
+//                                out.println(jsonString);
+//                                massage.clear();
+//
+//                                //读从服务器来的信息
+//                                jsonString = in.readLine();
+//                                massage = new JSONObject(jsonString);
+//                                //测试
+//                                int response;
+//                                if ((response = massage.getInt("Order")) == 0 || (response = massage.getInt("Order")) == 1) {
+//                                    System.out.println(response);
+//                                }
+//
+//                                System.out.println(jsonString);
+//                                massage = new JSONObject(jsonString);
+//
+//                                out.close();
+//                                in.close();
+//                                socket.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        //
+//                        case 15:
+//                        //
+//                        case 16:
+//                        //
+//                        case 17:
+//                            //发信息
+//                        case 18:
+//                            //发信息
+//                        case 19:
+//                            //发信息
+//                        case 20:
+//                            //发信息
+//                        case 21:
+//                            //发信息
+//                        case 22:
+//                            //发信息
+//                        case 23:
+//                            //发信息
+//                        case 24:
+//                            //发信息
+//
+//                    }
+//
+//
+//
+//
 //                }
+//                //
+//                break;
 //            }
-            //游戏结束
-//            System.out.println("游戏结束");
+//
+//
+//
+//
+//
+//            //游戏一直循环 直到有玩家死亡游戏结束
+////            while (true) {
+////
+//////            如果有玩家死亡结束游戏
+////                if (false) {
+////                    break;
+////                }
+////            }
+//            //游戏结束
+////            System.out.println("游戏结束");
         }
     }
 }

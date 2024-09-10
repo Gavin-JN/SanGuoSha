@@ -19,47 +19,38 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GameServer {
     private static final int PORT = 1688;
 
-    //传输数据的JSON文件
-    public static JSONObject massage = new JSONObject();
-
-    //信号
-    public static int netCode;
-
-    //信号处理者
-    public static GameEventHandlingImpl gameEventHandling = new GameEventHandlingImpl();
-
     //游戏玩家数
     public static int count = 0;
-
-    public static int number = 0;
-
-    //游戏玩家的ip
-    public static String player0_ip;
-    public static String player1_ip;
-
-    //线程集存储所有的客户端
-    private static final ConcurrentHashMap<Socket, PrintWriter> clientMap = new ConcurrentHashMap<>();
-    //
-    private static final ConcurrentHashMap<Integer, PrintWriter> clientMap_everyone = new ConcurrentHashMap<>();
-
-    private static int clientIdCounter = 0;  // 用于分配唯一的客户端ID
-    private static String[] clientIpMap = new String[100];
+    //传输数据的JSON文件
+    public static JSONObject massage = new JSONObject();
+    //信号
+    public static int netCode;
+    //信号处理者
+    public static GameEventHandlingImpl gameEventHandling = new GameEventHandlingImpl();
 
     //是否进行初始化
     public static Boolean isInitGame = true;
     //初始化获得的msg0，msg1信息
     public static JSONObject Game_msg[];
-    //暴力使用参数
+    //暴力使用参数,一次性参数
     public static int violent = 0;
+
+    //线程集存储所有的客户端 通过Socket进行连接
+    private static final ConcurrentHashMap<Socket, PrintWriter> clientMapBySocket = new ConcurrentHashMap<>();
+    //用id进行标志
+    private static final ConcurrentHashMap<Integer, PrintWriter> clientMapById = new ConcurrentHashMap<>();
+
+    private static int clientIdCounter = 0;  // 用于分配唯一的客户端ID
+    private static String[] clientIpMap = new String[100];
 
 
     public static void main(String[] args) throws IOException {
         //线程集初始化
-        count = 0;
-        clientMap.clear();
-        clientMap_everyone.clear();
-        clientIdCounter = 0;
-        violent = 0;
+//        count = 0;
+//        clientMapBySocket.clear();
+//        clientMapById.clear();
+//        clientIdCounter = 0;
+//        violent = 0;
         //服务器启动提示
         System.out.println("---服务端启动成功---");
         //创建服务端Socket对象，同时注册端口
@@ -80,23 +71,24 @@ public class GameServer {
             }
             //连接客户端
             Socket clientSocket = serverSocket.accept();
-            //获取分配id
             int clientId = clientIdCounter++;
-            //clientIpMap[clientId] = clientSocket.getInetAddress().getHostAddress();
-            clientMap_everyone.put(clientId, new PrintWriter(clientSocket.getOutputStream(), true));
+            clientIpMap[clientId] = clientSocket.getInetAddress().getHostAddress();
+            System.out.println("用id来表示socket"+clientIpMap[clientId]+"    "+clientId);
+            clientMapById.put(clientId, new PrintWriter(clientSocket.getOutputStream(), true));
+            clientMapBySocket.put(clientSocket, new PrintWriter(clientSocket.getOutputStream(), true));
             new Thread(new ClientHandler(clientSocket,clientId)).start();
         }
     }//
 
     //统一发信息
     public static void broadcastMessage(String message) {
-        for (PrintWriter writer : clientMap.values()) {
+        for (PrintWriter writer : clientMapBySocket.values()) {
             writer.println(message);
         }
     }
 
     public static void sendMessageToClient(Socket clientSocket, String message) {
-        PrintWriter writer = clientMap.get(clientSocket);
+        PrintWriter writer = clientMapBySocket.get(clientSocket);
         if (writer != null) {
             writer.println(message);
             writer.flush(); // 确保消息立即发送
@@ -105,7 +97,7 @@ public class GameServer {
 
     //给特定客户端发信息
     public static void sendMessageToClientById(int clientId, String message) {
-        PrintWriter writer = clientMap_everyone.get(clientId);
+        PrintWriter writer = clientMapById.get(clientId);
         if (writer != null) {
             writer.println(message);
         }
@@ -134,7 +126,7 @@ public class GameServer {
                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
             ) {
-                clientMap.put(clientSocket, out);
+                clientMapBySocket.put(clientSocket, out);
                 String jsonString = in.readLine();
                 massage = new JSONObject(jsonString);
                 netCode = massage.getInt("NetCode");
@@ -142,92 +134,182 @@ public class GameServer {
                 switch(netCode){
                     //匹配
                     case 1002:
+                    {
                         //收信息
                         //看人数够了没有
                         int msg = massage.getInt("count");
 //                      Boolean is = gameEventHandling.Matching(msg);
                         count = count+msg;
-                        System.out.println(count);
+                        System.out.println("游戏人数"+count);
 
                         while(true){
                             if(count<2){
                                 out.println("0");
-//                                System.out.println(count);
                             }else {
-//                                System.out.println(count);
                                 count = 0;
                                 System.out.println("游戏开始");
-                                // 发送回消息或处理其他逻辑
+
                                 // 1表示开始游戏
                                 broadcastMessage("1");
+
                                 out.close();
                                 in.close();
                                 clientSocket.close();
+
                                 break;
                             }
                         }
                         break;
+                    }
                     //初始化界面
                     case 1010:    //第二个信息
                     {
-                        System.out.println("执行了");
                         //一定是这样的
                         JSONObject tmp_massage;
                         //暴力算法
-                        if((violent%2)==0){
+                        if ((violent % 2) == 0) {
                             tmp_massage = Game_msg[violent];
                             violent++;
-                        }else{
+                        } else {
                             tmp_massage = Game_msg[violent];
                         }
-                        //
 
+                        //算法得到的初始化信息
                         massage.put("MessageIdentified", "YES");
-                        massage.put("Order",tmp_massage.getInt("Order"));
-                        massage.put("HeroId",tmp_massage.getInt("HeroId"));
-                        massage.put("enemyHeroId",tmp_massage.getInt("enemyHeroId"));
-                        massage.put("HandCardList",tmp_massage.getJSONArray("HandCardList"));
+                        massage.put("Order", tmp_massage.getInt("Order"));
+                        massage.put("HeroId", tmp_massage.getInt("HeroId"));
+                        massage.put("enemyHeroId", tmp_massage.getInt("enemyHeroId"));
+                        massage.put("HandCardList", tmp_massage.getJSONArray("HandCardList"));
                         jsonString = massage.toString();
                         //打印对应信息
                         System.out.println(jsonString);
                         massage.clear();
                         sendMessageToClient(clientSocket, jsonString);
+                        break;
                     }
                     //出杀
                     case 1011:
+                    {
+                        //收到
+                        System.out.println("收到1011");
+                        //向另一台主机发信息
+                        massage.put("NetCode",1012);
+                        jsonString = massage.toString();
+                        System.out.println("向另一台主机 "+(clientId+1)%2+" 发送");
+                        sendMessageToClientById(2,jsonString);
+                        sendMessageToClientById(3,jsonString);
+
+                        sendMessageToClient(clientSocket, jsonString);
+//                        sendMessageToClientById((clientId+1)%2,jsonString);
+                        break;
+                    }
+
                     //出闪
                     case 1012:
+                    {
+                        System.out.println("收到1012");
+                        //向另一台主机发送是否出闪
+                        massage.put("NetCode",1026);
+                        break;
+                    }
+
                     //出桃
                     case 1013:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出酒
                     case 1014:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出顺手牵羊
                     case 1015:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出过河拆桥
                     case 1016:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出无中生有
                     case 1017:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出借刀杀人
                     case 1018:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出决斗
                     case 1019:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出无懈可击
                     case 1020:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出乐不思蜀
                     case 1021:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出兵粮寸断
                     case 1022:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出南蛮入侵
                     case 1023:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出万箭齐发
                     case 1024:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
                     //出诸葛连弩
                     case 1025:
+                    {
+                        System.out.println("收到");
+                        break;
+                    }
+
+                    
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                clientMap.remove(clientSocket);
+                clientMapBySocket.remove(clientSocket);
                 try {
                     clientSocket.close();
                 } catch (IOException e) {
