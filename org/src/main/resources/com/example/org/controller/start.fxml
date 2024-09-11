@@ -46,7 +46,7 @@
                   <Font size="52.0" />
                </font>
             </Label>
-            <Label fx:id="UserName" layoutX="802.0" layoutY="41.0" text="Name">
+            <Label fx:id="UserName" layoutX="802.0" layoutY="41.0" text="三国杀用户5512">
                <font>
                   <Font size="52.0" />
                </font>

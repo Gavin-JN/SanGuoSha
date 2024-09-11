@@ -217,7 +217,7 @@ class zhaoYun extends Heroes {
         public guoJia() {
             this.setSkillInitiate(false);
             this.setHpLimit(3);
-            this.setHeroPhotoPath("controller/img/heroPic/guoJia.jpg");
+            this.setHeroPhotoPath("controller/img/heroPic/kunkun.jpg");
             this.setHeroId(7);
         }
         //遗计——你每受到1点伤害，可摸两张牌

@@ -51,13 +51,13 @@ public class GameEventHandlingImpl implements GameEventHandling {
         }
         room.Init(players);
         //这里可以操控武将选择便于测试
-        msg0.put("Order",player0.seatId);
-        msg0.put("HeroId",1);
-        msg0.put("enemyHeroId",1);
+        msg0.put("Order",0);
+        msg0.put("HeroId",4);
+        msg0.put("enemyHeroId",7);
         jsonArray0.put(0,1);
         jsonArray0.put(1,1);
-        jsonArray0.put(2,5);
-        jsonArray0.put(3,14);
+        jsonArray0.put(2,6);
+        jsonArray0.put(3,13);
 //        for (int i = 0; i < 4; i++) {
 //            jsonArray0.put(i,16);
 //        }
@@ -66,13 +66,13 @@ public class GameEventHandlingImpl implements GameEventHandling {
 
         //加入卡牌
 
-        msg1.put("Order",player1.seatId);
-        msg1.put("HeroId",1);
-        msg1.put("enemyHeroId",1);
+        msg1.put("Order",1);
+        msg1.put("HeroId",7);
+        msg1.put("enemyHeroId",4);
         jsonArray1.put(0,1);
         jsonArray1.put(1,1);
-        jsonArray1.put(2,5);
-        jsonArray1.put(3,14);
+        jsonArray1.put(2,6);
+        jsonArray1.put(3,13);
 //        for (int i = 0; i < 4; i++) {
 //            jsonArray1.put(i, 16);
 //        }
