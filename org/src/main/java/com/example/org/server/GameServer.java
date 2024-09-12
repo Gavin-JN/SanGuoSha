@@ -164,9 +164,10 @@ public class GameServer {
                     //初始化界面
                     case 1010:    //第二个信息
                     {
-                        //一定是这样的
+
+                        //初始化
                         JSONObject tmp_massage;
-                        //暴力算法
+                        //算法
                         if ((violent % 2) == 0) {
                             tmp_massage = Game_msg[violent];
                             violent++;

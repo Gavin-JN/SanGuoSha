@@ -96,7 +96,7 @@ public class RegController {
         System.out.println("register");
         IUserDaoImpl user = new IUserDaoImpl();
         boolean isReg=user.UserRegister(txtName.getText(),"11110",txtPassword.getText(),txtConfirm.getText(),txtEmail.getText());
-        SQLExecImpl sql = new SQLExecImpl();
+//        SQLExecImpl sql = new SQLExecImpl();
 //        boolean is = sql.queryAccount(txtName.getText());
 //
 //

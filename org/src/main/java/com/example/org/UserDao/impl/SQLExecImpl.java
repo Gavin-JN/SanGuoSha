@@ -82,7 +82,7 @@ public class SQLExecImpl implements SQLExec
             System.out.println("No database connection available.");
             return;
         }
-        String sql="INSERT INTO account(username,account,password,email) value(?,?,?,?)";
+        String sql="INSERT INTO account(username,password,nickname,email) value(?,?,?,?)";
         PreparedStatement pstmt=conn.prepareStatement(sql);
 
         pstmt.setString(1,username);

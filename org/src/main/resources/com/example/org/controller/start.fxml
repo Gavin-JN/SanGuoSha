@@ -41,12 +41,12 @@
                   </RadialGradient>
                </textFill>
             </Button>
-            <Label layoutX="625.0" layoutY="41.0" prefHeight="66.0" prefWidth="209.0" text="用户名：">
+            <Label layoutX="460" layoutY="41.0" prefHeight="66.0" prefWidth="209.0" text="用户名：">
                <font>
                   <Font size="52.0" />
                </font>
             </Label>
-            <Label fx:id="UserName" layoutX="802.0" layoutY="41.0" text="三国杀用户5512">
+            <Label fx:id="UserName" layoutX="640.0" layoutY="41.0" text="三国杀用户5512">
                <font>
                   <Font size="52.0" />
                </font>

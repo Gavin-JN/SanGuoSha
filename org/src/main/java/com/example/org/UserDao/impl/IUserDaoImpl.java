@@ -24,6 +24,7 @@ public class IUserDaoImpl implements IUserDao {
     public boolean UserRegister(String username,String nickname, String pwd1, String pwd2,String email) throws SQLException, ClassNotFoundException {
         boolean isReg=false;
         SQLExecImpl sqlExec=new SQLExecImpl();
+        //
         if(!sqlExec.queryAccount(username)) {
             if(pwd1.equals(pwd2)){
                 sqlExec.addAccount(username,nickname,pwd1,email);
